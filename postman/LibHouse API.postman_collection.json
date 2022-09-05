@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "7cf1eb30-8dfe-4c48-b6a1-9e3839fb3a29",
+		"name": "LibHouse API",
+		"description": "Documentação dos endpoints da API construída para o front-end Angular do LibHouse.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "New Account",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Lucas\",\r\n    \"lastName\": \"Dirani\",\r\n    \"birthDate\": \"1998-08-12\",\r\n    \"gender\": 0,\r\n    \"phone\": \"11975257584\",\r\n    \"email\": \"{{api_username}}\",\r\n    \"cpf\": \"{{api_user_cpf}}\",\r\n    \"userType\": 1,\r\n    \"password\": \"{{api_user_password}}\",\r\n    \"confirmPassword\": \"{{api_user_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/new-account",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"new-account"
+							]
+						},
+						"description": "Este endpoint registra um novo usuário com os dados mínimos necessários: nome, sobrenome, cpf, telefone, data de nascimento, email, gênero, senha e tipo (morador ou proprietário).\n\nEm caso de sucesso, o usuário recebe um e-mail com um token de confirmação para se registrar na plataforma LibHouse.\n\nEm casos de erro (usuário já existente, dados inválidos), o endpoint retorna uma lista de notificações informando quais problemas ocorreram."
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm User Registration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BPykeuH+DRCpJAYVK0BLBQRLOkNtbNBH3dMYC4ASI75ZIbWUM+4YHfepuoLdJDyNiyBBzn/cuZ0toAsQzZExH0Km8TOUaVeisjjISsG9oe939vyD9twoudkqnXfD16kfQpLBspNTdq4Jh7ce7fwIgQ/3sIZqEagjfW29rCu5jGiULoWhnbsgksM+ypPjNxTysCMbqQ20yrSCReKty3NlJgLehN7+d8CukLWNf23ksHRqcNoG3kPZXRlyG1VYBDCrA==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"4ebc598d-933d-4c83-90fb-71383c5bdddd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/confirm-registration",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"confirm-registration"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Este endpoint recebe um token de confirmação enviado para o e-mail do usuário, de modo que a sua conta seja habilitada para uso na plataforma."
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{api_username}}\",\r\n    \"password\": \"{{api_user_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"login"
+							]
+						},
+						"description": "Este endpoint autentica um usuário registrado com base no seu endereço de e-mail e senha.\n\nEm caso de sucesso, um objeto é retornado contendo os principais dados do usuário, como o seu Id, nome completo, data de nascimento, gênero e assim por diante. Além disso, são retornados um token de acesso com o seu tempo de expiração, bem como todas as claims associadas ao usuário.\n\nEm caso de falha, uma lista de notificações detalhando os erros é retornada. Na maioria dos casos, isso significa que as credenciais do usuário estão inválidas, que os parâmetros enviados para o endpoint estão em um formato incorreto, ou até mesmo que a conta do usuário está bloqueada."
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{api_username}}\",\r\n    \"accessToken\": \"{{access_token}}\",\r\n    \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/refresh-token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"refresh-token"
+							]
+						},
+						"description": "Este endpoint renova o access token de um usuário que já está expirado.\n\nEm caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações."
+					},
+					"response": []
+				},
+				{
+					"name": "Request Password Reset",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cpf\": \"{{api_user_cpf}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/request-password-reset",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"request-password-reset"
+							]
+						},
+						"description": "Endpoint para solicitar a redefinição de senha de um usuário com base no seu CPF."
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm Password Reset",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"passwordResetToken\": \"CfDJ8BPykeuH+DRCpJAYVK0BLBRubwu+eZTwoW3PHMvNnz976g3Gr7kKvLuBxeDDgIoBjbf3nxzlilqKdEFgSJzzcSWfkAkcCp3d4ydIB37E6G9o5hsxXKs+KCBwdpctY7hWQyoJVtin5uSNoNGpbKQmZo6iK2ITkCB6PLibtD3E9NigX95ev9HNtQy54D0moXqXbdJRvKvMJy0bRagmzjKi4+wCjhuDnrdzH77P77tI6OYS\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"password\": \"{{api_user_password}}\",\r\n    \"confirmPassword\": \"{{api_user_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/confirm-password-reset",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"confirm-password-reset"
+							]
+						},
+						"description": "Endpoint que confirma a redefinição de senha de um usuário."
+					},
+					"response": []
+				},
+				{
+					"name": "User Logout",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{api_username}}\",\r\n    \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"logout"
+							]
+						},
+						"description": "Este endpoint realiza o logout de um usuário registrado com base no seu endereço de e-mail e valor de refresh token.\n\nEm caso de sucesso, um objeto vazio é retornado.\n\nEm caso de falha, uma lista de notificações detalhando os erros é retornada. Na maioria dos casos, isso significa que os parâmetros enviados para o endpoint estão em um formato incorreto."
+					},
+					"response": []
+				}
+			],
+			"description": "Todas as requisições para a rota de usuários (/users) estão agrupadas nesta pasta. As principais operações incluem registrar, autenticar e consultar os dados de cadastro dos usuários da aplicação LibHouse."
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"if (pm.variables.get(\"execute_pre_login_script\") === \"true\") {",
+					"    const tokenUrl = `${pm.variables.get(\"url\")}/api/${pm.variables.get(\"api_version\")}/users/login`;",
+					"",
+					"    const clientUserName = pm.variables.get(\"api_username\");",
+					"    const clientUserPassword = pm.variables.get(\"api_user_password\");",
+					"",
+					"    const getTokenRequest = {",
+					"        method: \"POST\",",
+					"        url: tokenUrl,",
+					"        header: {",
+					"            'Accept': 'application/json',",
+					"            'Content-Type': 'application/json'",
+					"        },",
+					"        body: {",
+					"            mode: 'raw',",
+					"            raw: JSON.stringify({\"email\": clientUserName, \"password\": clientUserPassword})",
+					"        }",
+					"    };",
+					"",
+					"    pm.sendRequest(getTokenRequest, (err, response) => {",
+					"        const jsonResponse = response.json();",
+					"        const newAccessToken = jsonResponse.accessToken;",
+					"        const newRefreshToken = jsonResponse.refreshToken;",
+					"",
+					"        pm.variables.set('access_token', newAccessToken);",
+					"        pm.variables.set('refresh_token', newRefreshToken);",
+					"    });",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

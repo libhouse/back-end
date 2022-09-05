@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<UserSecretsId>46a4d2bc-ca25-4d0e-aba0-e5e53df77806</UserSecretsId>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.17" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0" />
+		<PackageReference Include="coverlet.collector" Version="3.1.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Moq" Version="4.17.2" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\LibHouse.API\LibHouse.API.csproj" />
+		<ProjectReference Include="..\..\src\LibHouse.Business\LibHouse.Business.csproj" />
+		<ProjectReference Include="..\..\src\LibHouse.Data\LibHouse.Data.csproj" />
+		<ProjectReference Include="..\..\src\LibHouse.Infrastructure.Authentication\LibHouse.Infrastructure.Authentication.csproj" />
+		<ProjectReference Include="..\..\src\LibHouse.Infrastructure.Controllers\LibHouse.Infrastructure.Controllers.csproj" />
+	</ItemGroup>
+
+</Project>
