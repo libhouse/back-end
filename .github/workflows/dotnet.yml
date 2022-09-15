@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --verbosity normal ./src/LibHouse.API/LibHouse.API.csproj
     - name: Publish
-      run: dotnet publish -c Release -o ./src/LibHouse.API/LibHouse.API.csproj
+      run: dotnet publish -c Release ./src/LibHouse.API/LibHouse.API.csproj -o '${{ github.workspace }}/out'
       
     - name: Zip Package
       run: 
