@@ -27,7 +27,7 @@ jobs:
     - name: Zip Package
       run: 
         cd ${{ github.workspace }}/out
-        zip -r ${{ github.workspace }}/out.zip*
+        zip -r ${{ github.workspace }}/out.zip
         
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v20
