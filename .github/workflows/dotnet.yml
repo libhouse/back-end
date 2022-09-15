@@ -18,11 +18,9 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./src/LibHouse.API/LibHouse.API.csproj
     - name: Build
-      run: dotnet build --no-restore --verbosity normal
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet build --no-restore --verbosity normal ./src/LibHouse.API/LibHouse.API.csproj
     - name: Publish
       run: dotnet publish -c Release -o '${{ github.workspace }}/out'
       
