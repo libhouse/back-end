@@ -24,10 +24,10 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release ./src/LibHouse.API/LibHouse.API.csproj -o '${{ github.workspace }}/out'
       
+    - name: CD Path
+      run: cd ${{ github.workspace }}/out
     - name: Zip Package
-      run: 
-        cd ${{ github.workspace }}/out
-        zip -r ${{ github.workspace }}/out.zip
+      run: zip -r ${{ github.workspace }}/out.zip
         
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v20
