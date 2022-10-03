@@ -1,0 +1,42 @@
+name: Lib House AWS
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/LibHouse.API/LibHouse.API.csproj
+    - name: Build
+      run: dotnet build --no-restore --verbosity normal ./src/LibHouse.API/LibHouse.API.csproj
+    - name: Publish
+      run: dotnet publish -c Release ./src/LibHouse.API/LibHouse.API.csproj -o '${{ github.workspace }}/out'
+      
+    - name: CD Path
+      run: cd ${{ github.workspace }}/out
+    - name: Zip Package
+      run: zip -r ${{ github.workspace }}/out.zip
+        
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v20
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: LIB-HOUSE_API
+        environment_name: Libhouseapi-env
+        region: us-west-2
+        version_label: ${{ github.run_id }}
+        version_description: ${{ github.sha }}
+        deployment_package: ${{ github.workspace }}/out.zip
