@@ -1,0 +1,65 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Package
+      run: | 
+      cd src/LibHouse.API
+      dotnet new tool-manifest
+      dotnet tool install Amazon.Lambda.Tools
+      dotnet lambda package
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: deploy-package.zip
+          path: src/LibHouse.API/bin/serverless/
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-last
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: deploy-package.zip
+        path: src/LibHouse.API/bin/serverless/
+
+    - name: Display structure of download files
+      run: ls -R
+      working-directory: src/LibHouse.API/bin/serverless
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Deploy
+      run: |
+        cd src/LibHouse.API
+        npm install -g serverless
+        serverless deploy --stage production
+      env: 
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
