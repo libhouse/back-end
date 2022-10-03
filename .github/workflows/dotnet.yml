@@ -1,12 +1,11 @@
-name: Lib House AWS
+name: .NET
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
-jobs:
   build:
 
     runs-on: ubuntu-latest
@@ -14,29 +13,53 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore ./src/LibHouse.API/LibHouse.API.csproj
+      run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --verbosity normal ./src/LibHouse.API/LibHouse.API.csproj
-    - name: Publish
-      run: dotnet publish -c Release ./src/LibHouse.API/LibHouse.API.csproj -o '${{ github.workspace }}/out'
-      
-    - name: CD Path
-      run: cd ${{ github.workspace }}/out
-    - name: Zip Package
-      run: zip -r ${{ github.workspace }}/out.zip
-        
-    - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v20
+      run: dotnet build --no-restore
+    - name: Package
+      run: | 
+      cd src/LibHouse.API
+      dotnet new tool-manifest
+      dotnet tool install Amazon.Lambda.Tools
+      dotnet lambda package
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
       with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: LIB-HOUSE_API
-        environment_name: Libhouseapi-env
-        region: us-west-2
-        version_label: ${{ github.run_id }}
-        version_description: ${{ github.sha }}
-        deployment_package: ${{ github.workspace }}/out.zip
+          name: deploy-package.zip
+          path: src/LibHouse.API/bin/serverless/
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-last
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: deploy-package.zip
+        path: src/LibHouse.API/bin/serverless/
+
+    - name: Display structure of download files
+      run: ls -R
+      working-directory: src/LibHouse.API/bin/serverless
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Deploy
+      run: |
+        cd src/LibHouse.API
+        npm install -g serverless
+        serverless deploy --stage production
+      env: 
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
