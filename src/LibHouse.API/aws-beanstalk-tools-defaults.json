@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Debug",
+    "framework"     : "net5.0",
+    "self-contained" : false,
+    "application"    : "LibHouseAPI",
+    "environment"    : "LibHouseAPI-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-002e361a795c4e052,sg-058c1e9874e2456f6\";\"aws:ec2:vpc,Subnets\"=\"subnet-022d26f6c0e9d7663\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.4.0 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "libhouseapi-dev",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "ec2-libhouse-API",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}
