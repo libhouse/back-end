@@ -111,7 +111,7 @@ namespace LibHouse.API.Configurations.Dependencies
             this IServiceCollection services, 
             IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("LibHouseConnectionString");
+            string connectionString = configuration.GetValue<string>("LibHouseConnectionString");
 
             services.AddDbContext<LibHouseContext>(options => 
                 options.UseSqlServer(

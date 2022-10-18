@@ -51,11 +51,11 @@ namespace LibHouse.API.Configurations.Logging
             IConfiguration configuration)
         {
             options.Listeners.Add(new RequestLogsApiListener(new Application(
-                configuration["KissLog:KissLog.OrganizationId"],
-                configuration["KissLog:KissLog.ApplicationId"])
+                configuration["KissLog.OrganizationId"],
+                configuration["KissLog.ApplicationId"])
             )
             {
-                ApiUrl = configuration["KissLog:KissLog.ApiUrl"]
+                ApiUrl = configuration["KissLog.ApiUrl"]
             });
         }
     }

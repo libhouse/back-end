@@ -14,7 +14,7 @@ namespace LibHouse.API.Configurations.Authentication
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("LibHouseAuthConnectionString");
+            string connectionString = configuration.GetValue<string>("LibHouseAuthConnectionString");
 
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString));
 

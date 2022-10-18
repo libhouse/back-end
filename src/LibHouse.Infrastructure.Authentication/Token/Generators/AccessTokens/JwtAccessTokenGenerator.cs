@@ -3,7 +3,6 @@ using LibHouse.Infrastructure.Authentication.Token.Generators.RefreshTokens;
 using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,11 +21,11 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens
 
         public JwtAccessTokenGenerator(
             UserManager<IdentityUser> userManager,
-            IOptions<AccessTokenSettings> tokenSettings,
+            AccessTokenSettings tokenSettings,
             IRefreshTokenGenerator refreshTokenGenerator)
         {
             _userManager = userManager;
-            _tokenSettings = tokenSettings.Value;
+            _tokenSettings = tokenSettings;
             _refreshTokenGenerator = refreshTokenGenerator;
         }
 

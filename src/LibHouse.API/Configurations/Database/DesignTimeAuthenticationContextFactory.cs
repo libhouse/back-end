@@ -16,7 +16,7 @@ namespace LibHouse.API.Configurations.Database
 
             var builder = new DbContextOptionsBuilder<AuthenticationContext>();
 
-            string connectionString = configuration.GetConnectionString("LibHouseAuthConnectionString");
+            string connectionString = configuration.GetValue<string>("LibHouseAuthConnectionString");
 
             builder.UseSqlServer(connectionString);
 

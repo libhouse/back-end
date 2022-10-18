@@ -32,7 +32,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using System;
@@ -276,8 +275,8 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             userManager.Setup(u => u.GetRolesAsync(identityUser)).ReturnsAsync(new List<string>() { LibHouseUserRole.User, LibHouseUserRole.Resident });
             AccessTokenSettings accessTokenSettings = new() { ExpiresInSeconds = accessTokenExpiresInSeconds, Issuer = accessTokenIssuer, Secret = accessTokenSecret, ValidIn = accessTokenAudience };
             RefreshTokenSettings refreshTokenSettings = new() { ExpiresInMonths = 3, TokenLength = 35 };
-            IRefreshTokenGenerator refreshTokenGenerator = new JwtRefreshTokenGenerator(userManager.Object, authenticationContext, Options.Create(refreshTokenSettings));
-            IAccessTokenGenerator accessTokenGenerator = new JwtAccessTokenGenerator(userManager.Object, Options.Create(accessTokenSettings), refreshTokenGenerator);
+            IRefreshTokenGenerator refreshTokenGenerator = new JwtRefreshTokenGenerator(userManager.Object, authenticationContext, refreshTokenSettings);
+            IAccessTokenGenerator accessTokenGenerator = new JwtAccessTokenGenerator(userManager.Object, accessTokenSettings, refreshTokenGenerator);
             IUserLoginRenewalGateway userLoginRenewalGateway = new IdentityUserLoginRenewalGateway(
                 tokenParameters,
                 accessTokenGenerator,

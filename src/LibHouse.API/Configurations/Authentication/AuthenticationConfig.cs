@@ -17,14 +17,21 @@ namespace LibHouse.API.Configurations.Authentication
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            var tokenSettingsSection = configuration.GetSection("AccessTokenSettings");
-            services.Configure<AccessTokenSettings>(tokenSettingsSection);
+            services.AddSingleton(settings => new AccessTokenSettings()
+            {
+                ExpiresInSeconds = configuration.GetValue<int>("AccessTokenSettings.ExpiresInSeconds"),
+                Issuer = configuration.GetValue<string>("AccessTokenSettings.Issuer"),
+                Secret = configuration.GetValue<string>("AccessTokenSettings.Secret"),
+                ValidIn = configuration.GetValue<string>("AccessTokenSettings.ValidIn")
+            });
 
-            var refreshTokenSettingsSection = configuration.GetSection("RefreshTokenSettings");
-            services.Configure<RefreshTokenSettings>(refreshTokenSettingsSection);
+            services.AddSingleton(settings => new RefreshTokenSettings()
+            {
+                ExpiresInMonths = configuration.GetValue<int>("RefreshTokenSettings.ExpiresInMonths"),
+                TokenLength = configuration.GetValue<int>("RefreshTokenSettings.TokenLength")
+            });
 
-            var tokenSettings = tokenSettingsSection.Get<AccessTokenSettings>();
-            var key = Encoding.ASCII.GetBytes(tokenSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(configuration.GetValue<string>("AccessTokenSettings.Secret"));
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -32,8 +39,8 @@ namespace LibHouse.API.Configurations.Authentication
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
-                ValidAudience = tokenSettings.ValidIn,
-                ValidIssuer = tokenSettings.Issuer,
+                ValidAudience = configuration.GetValue<string>("AccessTokenSettings.ValidIn"),
+                ValidIssuer = configuration.GetValue<string>("AccessTokenSettings.Issuer"),
             };
 
             services.AddSingleton(tokenValidationParameters);

@@ -19,7 +19,7 @@ namespace LibHouse.API.Configurations.Database
 
             var builder = new DbContextOptionsBuilder<LibHouseContext>();
 
-            string connectionString = configuration.GetConnectionString("LibHouseConnectionString");
+            string connectionString = configuration.GetValue<string>("LibHouseConnectionString");
 
             builder
              .UseSqlServer(connectionString, s => s.CommandTimeout(180).EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null))

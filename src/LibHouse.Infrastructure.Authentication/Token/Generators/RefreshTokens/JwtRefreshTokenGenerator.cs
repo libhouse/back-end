@@ -3,7 +3,6 @@ using LibHouse.Infrastructure.Authentication.Helpers.String;
 using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -18,11 +17,11 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators.RefreshTokens
         public JwtRefreshTokenGenerator(
             UserManager<IdentityUser> userManager,
             AuthenticationContext authenticationContext,
-            IOptions<RefreshTokenSettings> refreshTokenSettings)
+            RefreshTokenSettings refreshTokenSettings)
         {
             _userManager = userManager;
             _authenticationContext = authenticationContext;
-            _refreshTokenSettings = refreshTokenSettings.Value;
+            _refreshTokenSettings = refreshTokenSettings;
         }
 
         public async Task<RefreshToken> GenerateRefreshTokenAsync(string userEmail, string accessTokenId)

@@ -39,6 +39,7 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 .UseEnvironment("Development")
                 .UseConfiguration(new ConfigurationBuilder()
                     .AddUserSecrets(Assembly.GetExecutingAssembly())
+                    .AddJsonFile("appsettings.json")
                     .Build())
                 .UseStartup<Startup>());
 

@@ -5,7 +5,6 @@ using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using LibHouse.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using System;
@@ -64,7 +63,7 @@ namespace LibHouse.IntegrationTests.Setup.Suite.Infrastructure.Authentication.To
         {
             UserManager<IdentityUser> userManager = SetupUserManager(userWhoOwnsTheToken);
 
-            IOptions<AccessTokenSettings> tokenSettings = SetupAccessTokenSettings(tokenExpirationInSeconds);
+            AccessTokenSettings tokenSettings = SetupAccessTokenSettings(tokenExpirationInSeconds);
 
             IRefreshTokenGenerator refreshTokenGenerator = SetupRefreshTokenGenerator(userManager, authenticationContext);
 
@@ -79,37 +78,29 @@ namespace LibHouse.IntegrationTests.Setup.Suite.Infrastructure.Authentication.To
             UserManager<IdentityUser> userManager,
             AuthenticationContext authenticationContext)
         {
-            IOptions<RefreshTokenSettings> refreshTokenSettings = SetupRefreshTokenSettings();
+            RefreshTokenSettings refreshTokenSettings = SetupRefreshTokenSettings();
 
             return new JwtRefreshTokenGenerator(userManager, authenticationContext, refreshTokenSettings);
         }
 
-        private static IOptions<AccessTokenSettings> SetupAccessTokenSettings(int tokenExpirationInSeconds)
+        private static AccessTokenSettings SetupAccessTokenSettings(int tokenExpirationInSeconds)
         {
-            Mock<IOptions<AccessTokenSettings>> tokenSettings = new();
-
-            tokenSettings.Setup(t => t.Value).Returns(new AccessTokenSettings()
+            return new AccessTokenSettings()
             {
                 Secret = _tokenKey,
                 ExpiresInSeconds = tokenExpirationInSeconds,
                 Issuer = _tokenIssuer,
                 ValidIn = _tokenValidIn
-            });
-
-            return tokenSettings.Object;
+            };
         }
 
-        private static IOptions<RefreshTokenSettings> SetupRefreshTokenSettings()
+        private static RefreshTokenSettings SetupRefreshTokenSettings()
         {
-            Mock<IOptions<RefreshTokenSettings>> refreshTokenSettings = new();
-
-            refreshTokenSettings.Setup(t => t.Value).Returns(new RefreshTokenSettings()
+            return new RefreshTokenSettings()
             {
                 ExpiresInMonths = _refreshTokenExpiresInMonths,
                 TokenLength = _refreshTokenLength
-            });
-
-            return refreshTokenSettings.Object;
+            };
         }
 
         private static UserManager<IdentityUser> SetupUserManager(IdentityUser userWhoOwnsTheToken)

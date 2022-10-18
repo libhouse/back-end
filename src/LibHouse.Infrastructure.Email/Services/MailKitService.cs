@@ -2,7 +2,6 @@
 using LibHouse.Infrastructure.Email.Settings.Shared;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
 using System.Threading.Tasks;
@@ -13,9 +12,9 @@ namespace LibHouse.Infrastructure.Email.Services
     {
         private readonly MailSettings _mailSettings;
 
-        public MailKitService(IOptions<MailSettings> mailSettings)
+        public MailKitService(MailSettings mailSettings)
         {
-            _mailSettings = mailSettings.Value;
+            _mailSettings = mailSettings;
         }
 
         public async Task<bool> SendEmailAsync(MailRequest mailRequest)
