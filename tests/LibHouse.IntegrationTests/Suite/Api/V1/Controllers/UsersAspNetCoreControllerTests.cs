@@ -14,12 +14,12 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -36,10 +36,10 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
         public UsersAspNetCoreControllerTests()
         {
             TestServer server = new(new WebHostBuilder()
-                .UseEnvironment("Development")
+                .UseEnvironment(Environments.Staging)
                 .UseConfiguration(new ConfigurationBuilder()
-                    .AddUserSecrets(Assembly.GetExecutingAssembly())
-                    .AddJsonFile("appsettings.json")
+                    .AddUserSecrets(typeof(UsersAspNetCoreControllerTests).Assembly)
+                    .AddJsonFile("appsettings.Staging.json")
                     .Build())
                 .UseStartup<Startup>());
 

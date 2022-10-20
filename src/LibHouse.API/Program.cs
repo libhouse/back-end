@@ -1,5 +1,8 @@
+using Amazon;
+using LibHouse.API.Configurations.Secrets;
 using LibHouse.API.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 namespace LibHouse.API
@@ -15,9 +18,13 @@ namespace LibHouse.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
                 {
-                    if (context.HostingEnvironment.IsProduction())
+                    if (context.HostingEnvironment.IsStaging())
                     {
-                        builder.AddAmazonSecretsManager("us-east-1", "secrets-libhouse");
+                        builder.AddUserSecrets<Startup>();
+                    }
+                    else
+                    {
+                        builder.AddAmazonSecretsManager(RegionEndpoint.USEast1.DisplayName, AmazonSecretName.Value);
                     }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

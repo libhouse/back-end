@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace LibHouse.API.Configurations.Core
 {
@@ -8,7 +9,12 @@ namespace LibHouse.API.Configurations.Core
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(name: "Development",
+                options.AddPolicy(name: Environments.Staging,
+                    configurePolicy: builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                );
+                options.AddPolicy(name: Environments.Development,
                     configurePolicy: builder => builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()

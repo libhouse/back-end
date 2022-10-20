@@ -9,14 +9,29 @@
     }
   },
   "profiles": {
-    "IIS Express": {
+    "IIS Express (Staging)": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      }
+    },
+    "IIS Express (Development)": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "LibHouse.API": {
+    "LibHouse.API (Staging)": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      }
+    },
+    "LibHouse.API (Development)": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",

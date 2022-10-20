@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 namespace LibHouse.API.V1.Controllers
 {
     [ApiVersion("1.0")]
+    [Produces("application/json")]
     [Route("api/v{version:apiVersion}/users")]
     public class UsersAspNetCoreController : MainController
     {

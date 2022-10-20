@@ -42,7 +42,11 @@ namespace LibHouse.API.Configurations.Core
 
             if (env.IsDevelopment())
             {
-                app.UseCors("Development");
+                app.UseCors(Environments.Development);
+            }
+            else
+            {
+                app.UseCors(Environments.Staging);
             }
 
             app.UseAuthentication();
