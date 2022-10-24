@@ -18,68 +18,52 @@ namespace LibHouse.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(
+            IConfiguration configuration, 
+            IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApiResponseCompressionConfig();
-
-            services.AddEmailConfig(Configuration);
-
+            services.AddEmailConfig(Configuration, Environment);
             services.ResolveGeneralDependencies();
-
             services.AddIdentityConfiguration(Configuration);
-
             services.AddAuthenticationConfiguration(Configuration);
-
             services.ResolveRepositories(Configuration);
-
             services.ResolveValidators();
-
             services.ResolveGateways();
-
             services.ResolveSenders(Configuration);
-
             services.ResolveServices();
-
             services.AddApiCachingConfig(Configuration);
-
             services.AddWebApiConfig();
-
             services.AddLoggingConfiguration();
-
             services.AddSwaggerConfig();
         }
 
         public void Configure(
             IApplicationBuilder app, 
-            IWebHostEnvironment env,
             IApiVersionDescriptionProvider provider)
         {
             app.UseResponseCompression();
-
-            if (env.IsDevelopment())
+            if (Environment.IsStaging())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor
                 | ForwardedHeaders.XForwardedProto,
             });
-
             app.UseMiddleware<ExceptionMiddleware>();
-
             app.UseLoggingConfiguration(Configuration);
-
-            app.UseMvcConfiguration(env);
-
+            app.UseMvcConfiguration(Environment);
             app.UseSwaggerConfig(provider);
         }
     }

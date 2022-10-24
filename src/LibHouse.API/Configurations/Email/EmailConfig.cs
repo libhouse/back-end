@@ -1,7 +1,9 @@
 ﻿using LibHouse.Infrastructure.Email.Services;
 using LibHouse.Infrastructure.Email.Settings.Shared;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace LibHouse.API.Configurations.Email
 {
@@ -9,7 +11,8 @@ namespace LibHouse.API.Configurations.Email
     {
         public static IServiceCollection AddEmailConfig(
             this IServiceCollection services,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             services.AddSingleton(settings => new MailSettings
             {
@@ -19,9 +22,14 @@ namespace LibHouse.API.Configurations.Email
                 Password = configuration.GetValue<string>("MailSettings.Password"),
                 Port = configuration.GetValue<int>("MailSettings.Port")
             });
-
-            services.AddSingleton<IMailService, MailKitService>();
-
+            if (environment.IsStaging())
+            {
+                services.AddSingleton<IMailService, StagingMailService>();
+            }
+            else
+            {
+                services.AddSingleton<IMailService, MailKitService>();
+            }
             return services;
         }
     }
