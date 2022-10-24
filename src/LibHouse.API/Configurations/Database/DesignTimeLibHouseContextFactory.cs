@@ -11,22 +11,21 @@ namespace LibHouse.API.Configurations.Database
 {
     public class DesignTimeLibHouseContextFactory : IDesignTimeDbContextFactory<LibHouseContext>
     {
-        const string AppSettingsPath = "/../LibHouse.API/appsettings.json";
-
         public LibHouseContext CreateDbContext(string[] args)
         {
-            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile(@Directory.GetCurrentDirectory() + AppSettingsPath).AddUserSecrets<Startup>().Build();
-
+            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../LibHouse.API/appsettings.json", false, true)
+                .AddJsonFile(@Directory.GetCurrentDirectory() + $"/../LibHouse.API/appsettings.{environment}.json", true)
+                .Build();
             var builder = new DbContextOptionsBuilder<LibHouseContext>();
-
             string connectionString = configuration.GetValue<string>("LibHouseConnectionString");
-
             builder
              .UseSqlServer(connectionString, s => s.CommandTimeout(180).EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null))
              .LogTo(Console.WriteLine, LogLevel.Information, DbContextLoggerOptions.LocalTime | DbContextLoggerOptions.SingleLine)
              .EnableDetailedErrors()
              .EnableSensitiveDataLogging();
-
             return new LibHouseContext(builder.Options);
         }
     }
