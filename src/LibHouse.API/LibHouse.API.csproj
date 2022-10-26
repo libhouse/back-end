@@ -11,10 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="LibHouse.API.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="LibHouse.API.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -27,7 +23,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.2.106" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.100" />
     <PackageReference Include="KissLog" Version="5.1.1" />
     <PackageReference Include="KissLog.AspNetCore" Version="5.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.14" />

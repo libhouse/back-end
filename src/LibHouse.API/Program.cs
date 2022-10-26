@@ -24,7 +24,7 @@ namespace LibHouse.API
                     }
                     else
                     {
-                        builder.AddAmazonSecretsManager(RegionEndpoint.USEast1.DisplayName, AmazonSecretName.Value);
+                        builder.AddAmazonSecretsManager(RegionEndpoint.USEast1.SystemName, AmazonSecretName.Value);
                     }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
