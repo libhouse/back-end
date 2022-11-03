@@ -74,6 +74,71 @@ Cabe salientar que as mudanças nos *schemas* são (e sempre devem ser) realizad
 
 # Configuração do projeto
 
+O primeiro passo para configurar localmente o projeto *back-end* do LibHouse é clonar o código-fonte na sua máquina. A branch *main* sempre terá a versão mais estável do serviço.
+
+```
+git clone https://github.com/libhouse/back-end.git
+```
+
+Uma vez que o projeto foi baixado, basta abrir o arquivo de extensão *.sln* localizado no diretório *src*. Certifique-se de que todas as dependências da solução foram recuperadas do *nuget*. Após isso, clique com o botão direito no serviço *LibHouse.Api* e selecione *Gerenciar Segredos do Usuário* para criar o arquivo *secrets.json* que possui alguns dados de configuração sensíveis.
+
+``` json5
+{
+  "AccessTokenSettings.ExpiresInSeconds": 0,
+  "AccessTokenSettings.Issuer": "",
+  "AccessTokenSettings.Secret": "",
+  "AccessTokenSettings.ValidIn": "",
+  "KissLog.ApiUrl": "",
+  "KissLog.ApplicationId": "",
+  "KissLog.OrganizationId": "",
+  "MailSettings.DisplayName": "",
+  "MailSettings.Host": "",
+  "MailSettings.Mail": "",
+  "MailSettings.Password": "",
+  "MailSettings.Port": 0,
+  "RefreshTokenSettings.ExpiresInMonths": 0,
+  "RefreshTokenSettings.TokenLength": 0
+}
+```
+O conteúdo do *secrets.json* deve possuir exatamente as chaves retratadas acima para que a aplicação seja inicializada e executada com sucesso.
+
+| Chave | Descrição | Tipo |
+| --- | --- | --- |
+| AccessTokenSettings.ExpiresInSeconds | Tempo de expiração em segundos do *access token* gerado pela *API*. | int |
+| AccessTokenSettings.Issuer | Nome do emissor do *access token* gerado pela *API*. O valor padrão para esta chave costuma ser *"LibHouse"*. | string |
+| AccessTokenSettings.Secret | O segredo usado para gerar o *access token* fornecido pela *API*. | string |
+| AccessTokenSettings.ValidIn | O endereço de validade do *access token* gerado pela *API*. O valor padrão para esta chave em ambiente local costuma ser *"https://localhost"*. | string |
+| KissLog.ApiUrl | O endereço da *API* do serviço de logs *KissLog* usado para registrar todas as ações realizadas no *back-end* do LibHouse. O valor padrão para esta chave costuma ser *"https://api.kisslog.net"*. | string |
+| KissLog.ApplicationId | O identificador único da aplicação no serviço de logs *KissLog*. Os detalhes sobre esta configuração estão disponíveis adiante nesta seção. | string |
+| KissLog.OrganizationId | O identificador único da organização no serviço de logs *KissLog*. Os detalhes sobre esta configuração estão disponíveis adiante nesta seção. | string |
+| MailSettings.DisplayName | O nome de contato que será exibido para os usuários que receberem um e-mail do serviço *back-end* do LibHouse. O valor padrão para esta chave costuma ser *"LibHouse Team"*. | string |
+| MailSettings.Host | O endereço do serviço do *host* utilizado para enviar e-mails aos usuários da plataforma LibHouse. O valor padrão para esta chave costuma ser *"smtp.gmail.com"*, caso o endereço de e-mail tenha sido criado no gmail. | string |
+| MailSettings.Mail | O endereço de e-mail utilizado para enviar e-mails aos usuários da plataforma LibHouse. | string |
+| MailSettings.Password | O *password* que autoriza a *API* acessar o serviço de e-mail para fazer o envio de mensagens aos usuários. Caso o gmail tenha sido escolhido como *host*, a configuração desta senha pode ser realizada [clicando aqui](https://support.google.com/mail/answer/185833?hl=en-GB).  | string |
+| MailSettings.Port | O número da porta do serviço do *host* utilizado para enviar e-mails aos usuários da plataforma LibHouse. O valor padrão para esta chave costuma ser *"587"*, caso o endereço de e-mail tenha sido criado no gmail. | int |
+| RefreshTokenSettings.ExpiresInMonths | Tempo de expiração em meses do *refresh token* gerado pela *API*. | int |
+| RefreshTokenSettings.TokenLength | Comprimento do *refresh token* gerado pela *API*. | int |
+
+Ainda no projeto *LibHouse.Api*, abra o arquivo de configuração do ambiente local, denominado *appsettings.Staging.json*. Nele, edite, se preciso, as chaves contendo as *strings de conexão* com o banco de dados. Elas estão identificadas como *LibHouseAuthConnectionString* e *LibHouseConnectionString*, e foram separadas caso haja uma necessidade de mover os *schemas* de autenticação e de negócio para bases distintas. Feito isso, já é possível rodar os comandos do *Entity Framework Core* que irão criar todas as tabelas do serviço *back-end* na sua instância do *Sql Server*.
+
+1. Configurar o ambiente para *Staging* 
+
+```
+$env:ASPNETCORE_ENVIRONMENT='Staging'
+```
+
+2. Aplicar todas as migrações do contexto de autenticação
+
+```
+dotnet ef database update -c AuthenticationContext -p .\LibHouse.Infrastructure.Authentication\LibHouse.Infrastructure.Authentication.csproj -s .\LibHouse.API\LibHouse.API.csproj
+```
+
+3. Aplicar todas as migrações do contexto de negócios
+
+```
+dotnet ef database update -c LibHouseContext -p .\LibHouse.Data\LibHouse.Data.csproj -s .\LibHouse.API\LibHouse.API.csproj
+```
+
 [(Voltar para o topo)](#índice)
 
 # Estrutura da solução
