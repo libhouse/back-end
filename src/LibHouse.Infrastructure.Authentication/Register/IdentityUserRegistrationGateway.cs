@@ -37,9 +37,9 @@ namespace LibHouse.Infrastructure.Authentication.Register
 
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
 
-            var signUpConfirmationToken = new SignUpConfirmationToken(token);
+            var signUpConfirmationToken = new SignUpConfirmationToken(token, true);
 
-            return new(IsSuccess: true, RegistrationToken: signUpConfirmationToken.Value);
+            return new(IsSuccess: true, RegistrationToken: signUpConfirmationToken.EncodedValue);
         }
     }
 }
