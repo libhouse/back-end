@@ -64,6 +64,12 @@ O *back-end* está sendo desenvolvido com a versão 9.0 da linguagem de programa
 
 # Banco de dados
 
+O banco de dados consumido pelo *back-end* foi criado no *Sql Server*, adotando portanto uma modelagem relacional. 
+
+A base está dividida em dois *schemas*, identificados como *Business* e *Authentication*. O primeiro deles define um conjunto de objetos (tabelas, visões, etc.) focados exclusivamente em persistir e gerenciar dados relacionados com o domínio da aplicação. Enquanto isso, o segundo *schema* citado se encarrega apenas de lidar com os dados voltados para a autenticação e autorização de usuários, separando assim as responsabilidades.
+
+Cabe salientar que as mudanças nos *schemas* são (e sempre devem ser) realizadas com o auxílio do *Entity Framework Core*, que reflete as alterações feitas nas classes da solução diretamente no banco de dados local. Já em ambiente de produção, as modificações nas tabelas e outras estruturas da base são executadas através do próprio script *SQL*, que pode ser gerado também com o suporte da linha de comando do *Entity Framework Core*. Inclusive, os scripts dos dois *schemas* descritos nesta seção estão acessíveis no [repositório do projeto](https://github.com/libhouse/back-end/tree/main/scripts).
+
 [(Voltar para o topo)](#índice)
 
 # Configuração do projeto
