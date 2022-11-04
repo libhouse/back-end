@@ -30,9 +30,9 @@ namespace LibHouse.Infrastructure.Authentication.Password
 
             string passwordResetTokenValue = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            PasswordResetToken passwordResetToken = new(passwordResetTokenValue);
+            PasswordResetToken passwordResetToken = new(passwordResetTokenValue, true);
 
-            return new(isSuccess: true, passwordResetToken: passwordResetToken.Value);
+            return new(isSuccess: true, passwordResetToken: passwordResetToken.EncodedValue);
         }
     }
 }
