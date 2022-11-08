@@ -19,9 +19,7 @@ namespace LibHouse.Infrastructure.Controllers.Http.Users.Adapters
         public async Task<Result<UserRegistrationResponse>> UserRegistration(UserRegistrationViewModel userRegistrationViewModel)
         {
             InputUserRegistration input = userRegistrationViewModel.Convert();
-
             OutputUserRegistration output = await OnUserRegistrationFunction(input);
-
             return output.IsSuccess ? Result.Success(output.Convert()) : Result.Fail<UserRegistrationResponse>(output.RegistrationMessage);
         }
 
@@ -33,9 +31,7 @@ namespace LibHouse.Infrastructure.Controllers.Http.Users.Adapters
             ConfirmUserRegistrationViewModel confirmUserRegistrationViewModel)
         {
             InputConfirmUserRegistration input = confirmUserRegistrationViewModel.Convert();
-
             OutputConfirmUserRegistration output = await OnConfirmUserRegistrationFunction(input);
-
             return output.IsSuccess ? Result.Success() : Result.Fail(output.ConfirmationMessage);
         }
 
@@ -46,9 +42,7 @@ namespace LibHouse.Infrastructure.Controllers.Http.Users.Adapters
         public async Task<Result<UserLoginResponse>> UserLogin(UserLoginViewModel userLoginViewModel)
         {
             InputUserLogin input = userLoginViewModel.Convert();
-
             OutputUserLogin output = await OnUserLoginFunction(input);
-
             return output.IsSuccess ? Result.Success(output.Convert()) : Result.Fail<UserLoginResponse>(output.LoginMessage);
         }
 
@@ -59,9 +53,7 @@ namespace LibHouse.Infrastructure.Controllers.Http.Users.Adapters
         public async Task<Result> UserLogout(UserLogoutViewModel userLogoutViewModel)
         {
             InputUserLogout input = userLogoutViewModel.Convert();
-
             OutputUserLogout output = await OnUserLogoutFunction(input);
-
             return output.IsSuccess ? Result.Success() : Result.Fail(output.LogoutMessage);
         }
 
@@ -73,9 +65,7 @@ namespace LibHouse.Infrastructure.Controllers.Http.Users.Adapters
             UserLoginRenewalViewModel userLoginRenewalViewModel)
         {
             InputUserLoginRenewal input = userLoginRenewalViewModel.Convert();
-
             OutputUserLoginRenewal output = await OnUserLoginRenewalFunction(input);
-
             return output.IsSuccess ? Result.Success(output.Convert()) : Result.Fail<UserLoginRenewalResponse>(output.LoginRenewalMessage);
         }
 
@@ -86,9 +76,7 @@ namespace LibHouse.Infrastructure.Controllers.Http.Users.Adapters
         public async Task<Result<UserPasswordResetResponse>> UserPasswordReset(UserPasswordResetViewModel userPasswordResetViewModel)
         {
             InputUserPasswordReset input = userPasswordResetViewModel.Convert();
-
             OutputUserPasswordReset output = await OnUserPasswordResetFunction(input);
-
             return output.IsSuccess ? Result.Success(output.Convert()) : Result.Fail<UserPasswordResetResponse>(output.UserPasswordResetMessage);
         }
 
@@ -99,9 +87,7 @@ namespace LibHouse.Infrastructure.Controllers.Http.Users.Adapters
         public async Task<Result> ConfirmUserPasswordReset(ConfirmUserPasswordResetViewModel confirmUserPasswordResetViewModel)
         {
             InputConfirmUserPasswordReset input = confirmUserPasswordResetViewModel.Convert();
-
             OutputConfirmUserPasswordReset output = await OnConfirmUserPasswordResetFunction(input);
-
             return output.IsSuccess ? Result.Success() : Result.Fail(output.ConfirmUserPasswordResetMessage);
         }
     }

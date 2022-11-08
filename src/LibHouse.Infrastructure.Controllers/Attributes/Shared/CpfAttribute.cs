@@ -14,13 +14,10 @@ namespace LibHouse.Infrastructure.Controllers.Attributes.Shared
             {
                 return new ValidationResult("O documento deve ser uma cadeia de caracteres.");
             }
-
             try
             {
                 var cpfDocumentNumber = value as string;
-
                 _ = Cpf.CreateFromDocument(cpfDocumentNumber);
-
                 return ValidationResult.Success;
             }
             catch (Exception ex)
