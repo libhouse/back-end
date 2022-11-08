@@ -12,13 +12,9 @@ namespace LibHouse.API.Extensions.Http
         public static async Task<bool> CheckIfUserAccessTokenIsRevokedAsync(this HttpContext context)
         {
             var tokenValidation = context.RequestServices.GetRequiredService<TokenValidationParameters>();
-
             string accessToken = context.Request.GetBearerTokenValueFromAuthorizationHeader();
-
             _ = new JwtSecurityTokenHandler().ValidateToken(accessToken, tokenValidation, out var securityToken);
-
             var refreshTokenService = context.RequestServices.GetRequiredService<IRefreshTokenService>();
-
             return await refreshTokenService.CheckIfRefreshTokenIsRevokedBasedOnAccessTokenIdAsync(securityToken.Id);
         }
     }

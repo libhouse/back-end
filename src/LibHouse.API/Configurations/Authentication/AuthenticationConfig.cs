@@ -24,13 +24,11 @@ namespace LibHouse.API.Configurations.Authentication
                 Secret = configuration.GetValue<string>("AccessTokenSettings.Secret"),
                 ValidIn = configuration.GetValue<string>("AccessTokenSettings.ValidIn")
             });
-
             services.AddSingleton(settings => new RefreshTokenSettings()
             {
                 ExpiresInMonths = configuration.GetValue<int>("RefreshTokenSettings.ExpiresInMonths"),
                 TokenLength = configuration.GetValue<int>("RefreshTokenSettings.TokenLength")
             });
-
             var key = Encoding.ASCII.GetBytes(configuration.GetValue<string>("AccessTokenSettings.Secret"));
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -42,9 +40,7 @@ namespace LibHouse.API.Configurations.Authentication
                 ValidAudience = configuration.GetValue<string>("AccessTokenSettings.ValidIn"),
                 ValidIssuer = configuration.GetValue<string>("AccessTokenSettings.Issuer"),
             };
-
             services.AddSingleton(tokenValidationParameters);
-
             services.AddAuthentication(x => {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,15 +50,10 @@ namespace LibHouse.API.Configurations.Authentication
                 x.SaveToken = true;
                 x.TokenValidationParameters = tokenValidationParameters;
             });
-
             services.AddScoped<IRefreshTokenGenerator, JwtRefreshTokenGenerator>();
-
             services.AddScoped<IAccessTokenGenerator, JwtAccessTokenGenerator>();
-
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
-
             services.AddScoped<IRefreshTokenService, IdentityRefreshTokenService>();
-
             return services;
         }
     }

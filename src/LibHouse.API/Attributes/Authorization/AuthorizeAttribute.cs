@@ -22,27 +22,20 @@ namespace LibHouse.API.Attributes.Authorization
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
-
             if (allowAnonymous) return;
-
             if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
                 context.Result = new StatusCodeResult(401);
-
                 return;
             }
-
             if (await context.HttpContext.CheckIfUserAccessTokenIsRevokedAsync())
             {
                 context.Result = new StatusCodeResult(401);
-
                 return;
             }
-
             if (!context.HttpContext.User.CheckIfUserHasOneOfTheseRoles(_roles))
             {
                 context.Result = new StatusCodeResult(403);
-
                 return;
             }           
         }

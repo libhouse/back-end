@@ -14,12 +14,10 @@ namespace LibHouse.API.Configurations.Logging
         public static IServiceCollection AddLoggingConfiguration(this IServiceCollection services)
         {
             services.AddScoped<IKLogger>((provider) => Logger.Factory.Get());
-
             services.AddLogging(logging =>
             {
                 logging.AddKissLog();
             });
-
             return services;
         }
 
@@ -30,7 +28,6 @@ namespace LibHouse.API.Configurations.Logging
             app.UseKissLogMiddleware(options => {
                 ConfigureKissLog(options, configuration);
             });
-
             return app;
         }
 
@@ -42,7 +39,6 @@ namespace LibHouse.API.Configurations.Logging
             {
                 Debug.WriteLine(message);
             };
-
             RegisterKissLogListeners(options, configuration);
         }
 

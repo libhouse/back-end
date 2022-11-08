@@ -69,20 +69,14 @@ namespace LibHouse.API.V1.Controllers
             {
                 return CustomResponseFor(ModelState);
             }
-
             Result<UserRegistrationResponse> userRegistrationResult = await _usersWebApiAdapter.UserRegistration(userRegistrationViewModel);
-
             if (userRegistrationResult.Failure)
             {
                 NotifyError("Registro do usuário", userRegistrationResult.Error);
-
                 Logger.Log(LogLevel.Error, $"Falha ao realizar o registro do usuário: {userRegistrationResult.Error}");
-
                 return CustomResponseForPostEndpoint();
             }
-
             Logger.Log(LogLevel.Information, $"Usuário {userRegistrationViewModel.Email} registrado com sucesso");
-
             return Ok(userRegistrationResult.Value);
         }
 
@@ -102,20 +96,14 @@ namespace LibHouse.API.V1.Controllers
             {
                 return CustomResponseFor(ModelState);
             }
-
             Result confirmUserRegistrationResult = await _usersWebApiAdapter.ConfirmUserRegistration(confirmUserRegistrationViewModel);
-
             if (confirmUserRegistrationResult.Failure)
             {
                 NotifyError("Confirmação do cadastro do usuário", confirmUserRegistrationResult.Error);
-
                 Logger.Log(LogLevel.Error, $"Erro ao confirmar o cadastro do usuário: {confirmUserRegistrationResult.Error}");
-
                 return CustomResponseForPatchEndpoint(confirmUserRegistrationResult);
             }
-
             Logger.Log(LogLevel.Information, $"Registro do usuário {confirmUserRegistrationViewModel.UserEmail} confirmado com sucesso");
-
             return CustomResponseForPatchEndpoint(confirmUserRegistrationResult);
         }
 
@@ -135,20 +123,14 @@ namespace LibHouse.API.V1.Controllers
             {
                 return CustomResponseFor(ModelState);
             }
-
             Result<UserLoginResponse> userLoginResult = await _usersWebApiAdapter.UserLogin(userLoginViewModel);
-
             if (userLoginResult.Failure)
             {
                 NotifyError("Falha na autenticação do usuário", userLoginResult.Error);
-
                 Logger.Log(LogLevel.Warning, userLoginResult.Error);
-
                 return CustomResponseForPostEndpoint();
             }
-
             Logger.Log(LogLevel.Information, $"Usuário {userLoginViewModel.Email} realizou login com sucesso: {DateTime.UtcNow}");
-
             return Ok(userLoginResult.Value);
         }
 
@@ -168,20 +150,14 @@ namespace LibHouse.API.V1.Controllers
             {
                 return CustomResponseFor(ModelState);
             }
-
             Result userLogoutResult = await _usersWebApiAdapter.UserLogout(userLogoutViewModel);
-
             if (userLogoutResult.Failure)
             {
                 NotifyError("Logout do usuário", userLogoutResult.Error);
-
                 Logger.Log(LogLevel.Error, $"Erro no logout para o usuário {userLogoutViewModel.Email}: {userLogoutResult.Error}");
-
                 return CustomResponseForPatchEndpoint(userLogoutResult);
             }
-
             Logger.Log(LogLevel.Information, $"Logout realizado para o usuário {userLogoutViewModel.Email}");
-
             return CustomResponseForPatchEndpoint(userLogoutResult);
         }
 
@@ -201,20 +177,14 @@ namespace LibHouse.API.V1.Controllers
             {
                 return CustomResponseFor(ModelState);
             }
-
             Result<UserLoginRenewalResponse> userLoginRenewalResult = await _usersWebApiAdapter.UserLoginRenewal(userLoginRenewalViewModel);
-
             if (userLoginRenewalResult.Failure)
             {
                 NotifyError("Falhar ao renovar o access token", userLoginRenewalResult.Error);
-
                 Logger.Log(LogLevel.Error, userLoginRenewalResult.Error);
-
                 return CustomResponseForPostEndpoint();
             }
-
             Logger.Log(LogLevel.Information, $"Usuário {userLoginRenewalViewModel.Email} renovou o seu login com sucesso: {DateTime.UtcNow}");
-
             return Ok(userLoginRenewalResult.Value);
         }
 
@@ -234,20 +204,14 @@ namespace LibHouse.API.V1.Controllers
             {
                 return CustomResponseFor(ModelState);
             }
-
             Result<UserPasswordResetResponse> userPasswordResetResult = await _usersWebApiAdapter.UserPasswordReset(userPasswordResetViewModel);
-
             if (userPasswordResetResult.Failure)
             {
                 NotifyError("Solicitar redefinição de senha", userPasswordResetResult.Error);
-
                 Logger.Log(LogLevel.Error, $"Falha ao criar o token de redefinição de senha para {LoggedUser.GetUserEmail()}");
-
                 return CustomResponseForPostEndpoint();
             }
-
             Logger.Log(LogLevel.Information, $"Redefinição de senha solicitada para {LoggedUser.GetUserEmail()}");
-
             return Ok(userPasswordResetResult.Value);
         }
 
@@ -267,20 +231,14 @@ namespace LibHouse.API.V1.Controllers
             {
                 return CustomResponseFor(ModelState);
             }
-
             Result confirmUserPasswordResetResult = await _usersWebApiAdapter.ConfirmUserPasswordReset(confirmUserPasswordResetViewModel);
-
             if (confirmUserPasswordResetResult.Failure)
             {
                 NotifyError("Aceitar redefinição de senha do usuário", confirmUserPasswordResetResult.Error);
-
                 Logger.Log(LogLevel.Error, $"Erro ao redefinir a senha do usuário {LoggedUser.GetUserEmail()}: {confirmUserPasswordResetResult.Error}");
-
                 return CustomResponseForPatchEndpoint(confirmUserPasswordResetResult);
             }
-
             Logger.Log(LogLevel.Information, $"Senha redefinida para o usuário {LoggedUser.GetUserEmail()}");
-
             return CustomResponseForPatchEndpoint(confirmUserPasswordResetResult);
         }
     }

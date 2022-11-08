@@ -20,7 +20,6 @@ namespace LibHouse.API.Configurations.Core
                         .AllowAnyHeader()
                 );
             });
-
             return services;
         }
     }

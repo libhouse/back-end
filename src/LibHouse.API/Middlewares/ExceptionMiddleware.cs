@@ -27,7 +27,6 @@ namespace LibHouse.API.Middlewares
             catch (Exception ex)
             {
                 await HandleExceptionAsync(ex, httpContext);
-
                 logger.Log(LogLevel.Error, ex);
             }
         }
@@ -39,11 +38,8 @@ namespace LibHouse.API.Middlewares
             if (!httpContext.Response.HasStarted)
             {
                 httpContext.Response.StatusCode = new StatusCodeResult(500).StatusCode;
-
                 httpContext.Response.ContentType = MediaTypeNames.Application.Json;
-
                 Notification exceptionResponse = new(exception.Message, $"Unexpected error on {httpContext.Request.Path.Value}");
-
                 await httpContext.Response.WriteAsync(exceptionResponse.ToJson());
             }
         }

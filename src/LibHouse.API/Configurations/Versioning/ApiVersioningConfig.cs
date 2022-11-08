@@ -15,13 +15,11 @@ namespace LibHouse.API.Configurations.Versioning
                 options.ReportApiVersions = true;
                 options.ErrorResponses = new ApiVersioningErrorResponseProvider();
             });
-
             services.AddVersionedApiExplorer(options =>
             {
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
-
             return services;
         }
     }

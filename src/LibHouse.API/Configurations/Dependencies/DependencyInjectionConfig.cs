@@ -35,20 +35,15 @@ namespace LibHouse.API.Configurations.Dependencies
         public static IServiceCollection ResolveGeneralDependencies(this IServiceCollection services)
         {
             services.AddScoped<INotifier, Notifier>();
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             services.AddScoped<ILoggedUser, AspNetLoggedUser>();
-
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-
             return services;
         }
 
         public static IServiceCollection ResolveValidators(this IServiceCollection services)
         {
             services.AddScoped<UserRegistrationValidator>();
-
             return services;
         }
 
@@ -58,52 +53,34 @@ namespace LibHouse.API.Configurations.Dependencies
         {
             services.Configure<UserRegistrationSenderSettings>(options
                 => configuration.GetSection("UserRegistrationSenderSettings").Bind(options));
-
             services.AddScoped<IUserRegistrationSender, MailKitUserRegistrationSender>();
-
             services.Configure<UserPasswordResetSenderSettings>(options
                 => configuration.GetSection("UserPasswordResetSenderSettings").Bind(options));
-
             services.AddScoped<IUserPasswordResetSender, MailKitUserPasswordResetSender>();
-
             return services;
         }
 
         public static IServiceCollection ResolveGateways(this IServiceCollection services)
         {
             services.AddScoped<IUserRegistrationGateway, IdentityUserRegistrationGateway>();
-
             services.AddScoped<IConfirmUserRegistrationGateway, IdentityConfirmUserRegistrationGateway>();
-
             services.AddScoped<IUserLoginGateway, IdentityUserLoginGateway>();
-
             services.AddScoped<IUserLogoutGateway, IdentityUserLogoutGateway>();
-
             services.AddScoped<IUserLoginRenewalGateway, IdentityUserLoginRenewalGateway>();
-
             services.AddScoped<IUserPasswordResetGateway, IdentityUserPasswordResetGateway>();
-
             services.AddScoped<IConfirmUserPasswordResetGateway, IdentityConfirmUserPasswordResetGateway>();
-
             return services;
         }
 
         public static IServiceCollection ResolveServices(this IServiceCollection services)
         {
             services.AddScoped<IUserRegistration, UserRegistration>();
-
             services.AddScoped<IConfirmUserRegistration, ConfirmUserRegistration>();
-
             services.AddScoped<IUserLogin, UserLogin>();
-
             services.AddScoped<IUserLogout, UserLogout>();
-
             services.AddScoped<IUserLoginRenewal, UserLoginRenewal>();
-
             services.AddScoped<IUserPasswordReset, UserPasswordReset>();
-
             services.AddScoped<IConfirmUserPasswordReset, ConfirmUserPasswordReset>();
-
             return services;
         }
 
@@ -112,7 +89,6 @@ namespace LibHouse.API.Configurations.Dependencies
             IConfiguration configuration)
         {
             string connectionString = configuration.GetValue<string>("LibHouseConnectionString");
-
             services.AddDbContext<LibHouseContext>(options => 
                 options.UseSqlServer(
                     connectionString,
@@ -124,11 +100,8 @@ namespace LibHouse.API.Configurations.Dependencies
                 ).EnableDetailedErrors()
                 .EnableSensitiveDataLogging()
             );
-
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
             services.AddScoped<IUserRepository, UserRepository>();
-
             return services;
         }
     }

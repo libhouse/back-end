@@ -34,13 +34,9 @@ namespace LibHouse.API.Configurations.Secrets
                 SecretId = _secretName,
                 VersionStage = "AWSCURRENT" 
             };
-
             using var client = new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(_region));
-
             var response = client.GetSecretValueAsync(request).Result;
-
             string secretString;
-
             if (response.SecretString != null)
             {
                 secretString = response.SecretString;
@@ -51,7 +47,6 @@ namespace LibHouse.API.Configurations.Secrets
                 var reader = new StreamReader(memoryStream);
                 secretString = Encoding.UTF8.GetString(Convert.FromBase64String(reader.ReadToEnd()));
             }
-
             return secretString;
         }
     }

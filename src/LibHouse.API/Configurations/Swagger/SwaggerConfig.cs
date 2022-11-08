@@ -15,10 +15,8 @@ namespace LibHouse.API.Configurations.Swagger
             services.AddSwaggerGen(c =>
             {
                 c.OperationFilter<SwaggerDefaultValues>();
-
                 c.IncludeXmlComments(GetSwaggerXmlCommentsPath());
             });
-
             return services;
         }
 
@@ -34,21 +32,17 @@ namespace LibHouse.API.Configurations.Swagger
                     {
                         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                     }
-
                     options.RoutePrefix = "";
                     options.EnableDeepLinking();
                     options.DisplayOperationId();
                 });
-
             return app;
         }
 
         private static string GetSwaggerXmlCommentsPath()
         {
             string xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-
             string xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
-
             return xmlCommentsFullPath;
         }
     }

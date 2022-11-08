@@ -13,22 +13,17 @@ namespace LibHouse.API.Configurations.Core
         public static IServiceCollection AddWebApiConfig(this IServiceCollection services)
         {
             services.AddCorsConfig();
-
             services.AddMvcCore(options =>
             {
                 options.ReturnHttpNotAcceptable = true;
             });
-
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
-
             services.AddApiVersioningConfig();
-
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
-
             return services;
         }
 
@@ -37,9 +32,7 @@ namespace LibHouse.API.Configurations.Core
             IWebHostEnvironment env)
         {
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             if (env.IsDevelopment())
             {
                 app.UseCors(Environments.Development);
@@ -48,16 +41,12 @@ namespace LibHouse.API.Configurations.Core
             {
                 app.UseCors(Environments.Staging);
             }
-
             app.UseAuthentication();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
             return app;
         }
     }

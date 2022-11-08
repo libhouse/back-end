@@ -11,7 +11,6 @@ namespace LibHouse.API.Extensions.Configuration
             string secretName)
         {
             AmazonSecretsManagerConfigurationSource configurationSource = new(region, secretName);
-
             configurationBuilder.Add(configurationSource);
         }
     }

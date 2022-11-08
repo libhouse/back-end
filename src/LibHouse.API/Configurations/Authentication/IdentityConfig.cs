@@ -15,9 +15,7 @@ namespace LibHouse.API.Configurations.Authentication
             IConfiguration configuration)
         {
             string connectionString = configuration.GetValue<string>("LibHouseAuthConnectionString");
-
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString));
-
             services
               .AddIdentity<IdentityUser, IdentityRole>(opt =>
               {
@@ -28,11 +26,8 @@ namespace LibHouse.API.Configurations.Authentication
               .AddEntityFrameworkStores<AuthenticationContext>()
               .AddDefaultTokenProviders()
               .AddTokenProvider<EmailConfirmationTokenProvider<IdentityUser>>("EmailConfirmation");
-
             services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromHours(1));
-
             services.Configure<EmailConfirmationTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromDays(2));
-
             return services;
         }
     }

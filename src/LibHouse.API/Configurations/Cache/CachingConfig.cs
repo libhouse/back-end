@@ -13,9 +13,7 @@ namespace LibHouse.API.Configurations.Cache
         {
             services.Configure<MemoryCachingConfiguration>(
                 options => configuration.GetSection("MemoryCachingConfiguration").Bind(options));
-
             services.AddSingleton<MemoryCaching>();
-
             return services;
         }
     }

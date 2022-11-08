@@ -34,7 +34,6 @@ namespace LibHouse.API.Configurations.Swagger
             IConfiguration configuration)
         {
             string mitLicense = configuration.GetSection("GeneralSettings").GetSection("MITLicense").Value;
-
             var info = new OpenApiInfo()
             {
                 Title = "LibHouse API",
@@ -43,12 +42,10 @@ namespace LibHouse.API.Configurations.Swagger
                 Contact = new OpenApiContact() { Name = "LibHouse Team", Email = "libhouseteam@gmail.com" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri(mitLicense) }
             };
-
             if (description.IsDeprecated)
             {
                 info.Description += " This version is deprecated.";
             }
-
             return info;
         }
     }

@@ -38,7 +38,6 @@ namespace LibHouse.API.BaseControllers
             {
                 return NotFound(_notifier.GetNotifications());
             }
-
             return CustomResponse(response);
         }
 
@@ -51,7 +50,6 @@ namespace LibHouse.API.BaseControllers
             {
                 return BadRequest(_notifier.GetNotifications());
             }
-
             return CreatedAtAction(resourceCreatedAt, new { id = resourceIdentifier }, response);
         }
 
@@ -61,7 +59,6 @@ namespace LibHouse.API.BaseControllers
             {
                 return NoContent();
             }
-
             return BadRequest(_notifier.GetNotifications());
         }
 
@@ -71,7 +68,6 @@ namespace LibHouse.API.BaseControllers
             {
                 NotifyErrorsForInvalidModelState(modelState);
             }
-
             return CustomResponse();
         }
 
@@ -81,20 +77,16 @@ namespace LibHouse.API.BaseControllers
             {
                 return Ok(response);
             }
-
             return BadRequest(_notifier.GetNotifications());
         }
 
         private void NotifyErrorsForInvalidModelState(ModelStateDictionary modelState)
         {
             var errors = modelState.Values.SelectMany(m => m.Errors);
-
             foreach (var error in errors)
             {
                 var errorMessage = error.Exception == null ? error.ErrorMessage : error.Exception.Message;
-
                 var errorTitle = error.Exception.Source;
-
                 NotifyError(errorTitle, errorMessage);
             }
         }

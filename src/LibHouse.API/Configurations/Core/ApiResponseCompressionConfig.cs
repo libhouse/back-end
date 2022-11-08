@@ -10,13 +10,11 @@ namespace LibHouse.API.Configurations.Core
         public static IServiceCollection AddApiResponseCompressionConfig(this IServiceCollection services)
         {
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
-
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
                 options.EnableForHttps = true;
             });
-
             return services;
         }
     }
