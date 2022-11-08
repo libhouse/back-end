@@ -23,22 +23,15 @@ namespace LibHouse.Infrastructure.Authentication.Register
         public async Task<OutputUserRegistrationGateway> RegisterUserAsync(InputUserRegistrationGateway input)
         {
             IdentityUser identityUser = input.AsNewIdentityUser();
-
             IdentityResult userCreation = await _userManager.CreateAsync(identityUser, input.Password);
-
             if (!userCreation.Succeeded)
             {
                 string userCreationError = userCreation.Errors.GetFirstErrorDescription();
-
                 return new(IsSuccess: false, RegistrationMessage: userCreationError);
             }
-
             await _userManager.AddToRolesAsync(identityUser, new[] { LibHouseUserRole.User, input.GetUserTypeRole() });
-
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-
             var signUpConfirmationToken = new SignUpConfirmationToken(token, true);
-
             return new(IsSuccess: true, RegistrationToken: signUpConfirmationToken.EncodedValue);
         }
     }

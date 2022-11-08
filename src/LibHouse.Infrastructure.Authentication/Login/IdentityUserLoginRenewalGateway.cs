@@ -39,24 +39,16 @@ namespace LibHouse.Infrastructure.Authentication.Login
             string refreshTokenValue)
         {
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
-
             AccessToken accessToken = new(accessTokenValue);
-
             ClaimsPrincipal accessTokenClaims = jwtSecurityTokenHandler.ValidateToken(accessToken.Value, _tokenValidationParameters, out var securityToken);
-
             RefreshToken refreshToken = await _refreshTokenService.GetRefreshTokenByValueAsync(refreshTokenValue);
-
             Result refreshTokenCanBeUsed = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, securityToken, accessTokenClaims);
-
             if (refreshTokenCanBeUsed.Failure)
             {
                 return new(isSuccess: false, loginRenewalMessage: refreshTokenCanBeUsed.Error);
             }
-
             _ = await _refreshTokenService.MarkRefreshTokenAsRevokedAsync(refreshToken);
-
             AccessToken newAccessToken = await _accessTokenGenerator.GenerateAccessTokenAsync(userName);
-
             return new(
                 isSuccess: true,
                 accessToken: newAccessToken.Value,

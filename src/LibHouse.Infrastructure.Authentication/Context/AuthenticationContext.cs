@@ -17,21 +17,13 @@ namespace LibHouse.Infrastructure.Authentication.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
             builder.ApplyConfiguration(new IdentityUserConfiguration());
-
             builder.ApplyConfiguration(new IdentityRoleConfiguration());
-
             builder.ApplyConfiguration(new IdentityUserClaimConfiguration());
-
             builder.ApplyConfiguration(new IdentityUserRoleConfiguration());
-
             builder.ApplyConfiguration(new IdentityUserLoginConfiguration());
-
             builder.ApplyConfiguration(new IdentityRoleClaimConfiguration());
-
             builder.ApplyConfiguration(new IdentityUserTokenConfiguration());
-
             builder.ApplyConfiguration(new RefreshTokenConfiguration());
         }
     }

@@ -20,18 +20,13 @@ namespace LibHouse.Infrastructure.Authentication.Password
         public async Task<OutputUserPasswordResetGateway> ResetUserPasswordAsync(string userEmail)
         {
             Guard.Against.NullOrEmpty(userEmail, nameof(userEmail), "O valor do e-mail é obrigatório");
-
             IdentityUser user = await _userManager.FindByEmailAsync(userEmail);
-
             if (user is null)
             {
                 return new(isSuccess: false, userPasswordResetMessage: $"O usuário {userEmail} não foi encontrado");
             }
-
             string passwordResetTokenValue = await _userManager.GeneratePasswordResetTokenAsync(user);
-
             PasswordResetToken passwordResetToken = new(passwordResetTokenValue, true);
-
             return new(isSuccess: true, passwordResetToken: passwordResetToken.EncodedValue);
         }
     }

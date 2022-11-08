@@ -26,14 +26,11 @@ namespace LibHouse.Infrastructure.Authentication.Logout
             {
                 return new(IsForbidden: true, LogoutMessage: $"Operação negada de logout: {userEmail}");
             }
-
             Result refreshTokenRevoked = await _refreshTokenService.MarkRefreshTokenAsRevokedAsync(userToken);
-
             if (refreshTokenRevoked.Failure)
             {
                 return new(IsSuccess: false, LogoutMessage: $"Falha ao revogar o token do usuário {userEmail}");
             }
-
             return new(IsSuccess: true);
         }
     }

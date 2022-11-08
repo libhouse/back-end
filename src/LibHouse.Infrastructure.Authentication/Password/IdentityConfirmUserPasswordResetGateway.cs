@@ -21,16 +21,12 @@ namespace LibHouse.Infrastructure.Authentication.Password
             InputConfirmUserPasswordResetGateway input)
         {
             IdentityUser identityUser = await _userManager.FindByEmailAsync(input.UserEmail);
-
             if (identityUser is null)
             {
                 return new(IsSuccess: false, $"O usuário {input.UserEmail} não foi encontrado");
             }
-
             PasswordResetToken passwordResetToken = new(input.PasswordResetToken, isEncoded: false);
-
             IdentityResult passwordResetResult = await _userManager.ResetPasswordAsync(identityUser, passwordResetToken.Value, input.NewPassword);
-
             return passwordResetResult.Succeeded ? new(IsSuccess: true) : new(IsSuccess: false, passwordResetResult.Errors.GetFirstErrorDescription());
         }
     }

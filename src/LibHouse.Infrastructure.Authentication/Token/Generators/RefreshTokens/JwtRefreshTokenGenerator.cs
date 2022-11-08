@@ -27,24 +27,16 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators.RefreshTokens
         public async Task<RefreshToken> GenerateRefreshTokenAsync(string userEmail, string accessTokenId)
         {
             IdentityUser user = await _userManager.FindByEmailAsync(userEmail);
-
             if (!user.EmailConfirmed || user.LockoutEnd is not null)
             {
                 throw new InvalidOperationException("O usuário não está apto para obter um refresh token");
             }
-
             string tokenValue = GenerateTokenSequence();
-
             DateTime tokenCreatedAt = DateTime.UtcNow;
-
             DateTime tokenExpiresIn = DateTime.UtcNow.AddMonths(_refreshTokenSettings.ExpiresInMonths);
-
             RefreshToken refreshToken = new(tokenValue, accessTokenId, user.Id, tokenCreatedAt, tokenExpiresIn);
-
             await _authenticationContext.RefreshTokens.AddAsync(refreshToken);
-
             await _authenticationContext.SaveChangesAsync();
-
             return refreshToken;
         }
 

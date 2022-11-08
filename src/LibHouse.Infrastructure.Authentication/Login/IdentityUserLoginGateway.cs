@@ -25,19 +25,15 @@ namespace LibHouse.Infrastructure.Authentication.Login
         public async Task<OutputUserLoginGateway> LoginAsync(string userName, string userPassword)
         {
             SignInResult loginResult = await _signInManager.PasswordSignInAsync(userName, userPassword, isPersistent: true, lockoutOnFailure: true);
-
             if (loginResult.IsLockedOut)
             {
                 return new(loginMessage: "O usuário está bloqueado.");
             }
-
             if (!loginResult.Succeeded)
             {
                 return new(loginMessage: "As credenciais são inválidas.");
             }
-
             AccessToken accessToken = await _accessTokenGenerator.GenerateAccessTokenAsync(userName);
-
             return new(
                 isSuccess: true,
                 accessToken: accessToken.Value, 

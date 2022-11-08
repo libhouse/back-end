@@ -19,17 +19,11 @@ namespace LibHouse.Infrastructure.Authentication.Token.Validations.RefreshTokens
             try
             {
                 Result tokenFormat = CheckAccessTokenFormat(accessToken);
-
                 Result tokenEncryption = CheckAccessTokenEncryption(accessToken);
-
                 Result tokenExpiration = CheckAccessTokenHasBeenExpired(accessTokenClaims);
-
                 Result tokenNotUsedAndRevoked = CheckRefreshTokenNotUsedAndNotRevoked(refreshToken);
-
                 Result tokenMatch = CheckRefreshTokenMatchesAccessToken(refreshToken, accessTokenClaims);
-
                 Result tokenIsActive = CheckRefreshTokenHasNotBeenExpired(refreshToken);
-
                 return Result.Combine(tokenFormat, tokenEncryption, tokenExpiration, tokenNotUsedAndRevoked, tokenMatch, tokenIsActive);
             }
             catch (Exception ex)
@@ -44,7 +38,6 @@ namespace LibHouse.Infrastructure.Authentication.Token.Validations.RefreshTokens
             {
                 return Result.Fail("O refresh token expirou");
             }
-
             return Result.Success();
         }
 
@@ -53,12 +46,10 @@ namespace LibHouse.Infrastructure.Authentication.Token.Validations.RefreshTokens
             ClaimsPrincipal validatedTokenClaims)
         {
             string accessTokenId = validatedTokenClaims.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
             if (refreshToken.JwtId != accessTokenId)
             {
                 return Result.Fail("O access token não está atrelado ao refresh token");
             }
-
             return Result.Success();
         }
 
@@ -68,31 +59,26 @@ namespace LibHouse.Infrastructure.Authentication.Token.Validations.RefreshTokens
             {
                 return Result.Fail("O refresh token não pode ser mais utilizado");
             }
-
             return Result.Success();
         }
 
         private static Result CheckAccessTokenHasBeenExpired(ClaimsPrincipal validatedTokenClaims)
         {
             long utcExpiryDate = long.Parse(validatedTokenClaims.Claims.FirstOrDefault(v => v.Type == JwtRegisteredClaimNames.Exp).Value);
-
             DateTime expiryDate = utcExpiryDate.UnixTimeStampToDateTime();
 
             if (expiryDate > DateTime.UtcNow)
             {
                 return Result.Fail("O token ainda não expirou");
             }
-
             return Result.Success();
         }
 
         private static Result CheckAccessTokenEncryption(SecurityToken validatedToken)
         {
             JwtSecurityToken jwtSecurityToken = validatedToken as JwtSecurityToken;
-
             bool isHmacSha256Encryption = jwtSecurityToken.Header.Alg
                 .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
-
             return isHmacSha256Encryption
                 ? Result.Success()
                 : Result.Fail("O token informado não está encriptado");

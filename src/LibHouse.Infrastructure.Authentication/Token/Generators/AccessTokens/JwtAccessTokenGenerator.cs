@@ -32,11 +32,8 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens
         public async Task<AccessToken> GenerateAccessTokenAsync(string userEmail)
         {
             IdentityUser user = await _userManager.FindByEmailAsync(userEmail);
-
             ClaimsIdentity identityClaims = await GenerateIdentityClaimsAsync(user);
-
             (SecurityToken securityToken, string accessToken) = GenerateAccessToken(identityClaims);
-
             return new AccessToken(
                 id: securityToken.Id,
                 value: accessToken,
@@ -49,13 +46,9 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens
         private (SecurityToken securityToken, string accessToken) GenerateAccessToken(ClaimsIdentity identityClaims)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-
             byte[] key = Encoding.ASCII.GetBytes(_tokenSettings.Secret);
-
             var symmetricKey = new SymmetricSecurityKey(key);
-
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature);
-
             SecurityToken token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = _tokenSettings.Issuer,
@@ -64,31 +57,24 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens
                 Expires = DateTime.UtcNow.AddSeconds(_tokenSettings.ExpiresInSeconds),
                 SigningCredentials = signingCredentials,
             });
-
             return (token, tokenHandler.WriteToken(token));
         }
 
         private async Task<ClaimsIdentity> GenerateIdentityClaimsAsync(IdentityUser identityUser)
         {
             var claims = await _userManager.GetClaimsAsync(identityUser);
-
             var userRoles = await _userManager.GetRolesAsync(identityUser);
-
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, identityUser.Id));
             claims.Add(new Claim(JwtRegisteredClaimNames.Email, identityUser.Email));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, DateTime.UtcNow.ToUnixEpochDate().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToUnixEpochDate().ToString(), ClaimValueTypes.Integer64));
-
             foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim(type: "role", userRole));
             }
-
             var identityClaims = new ClaimsIdentity();
-
             identityClaims.AddClaims(claims);
-
             return identityClaims;
         }
     }

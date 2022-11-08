@@ -21,16 +21,12 @@ namespace LibHouse.Infrastructure.Authentication.Register
             InputConfirmUserRegistrationGateway input)
         {
             IdentityUser user = await _userManager.FindByEmailAsync(input.UserEmail);
-
             if (user is null)
             {
                 return new(ConfirmationMessage: "O endereço de e-mail do usuário não foi localizado.");
             }
-
             SignUpConfirmationToken confirmationToken = new(input.RegistrationToken, isEncoded: false);
-
             IdentityResult userEmailConfirmed = await _userManager.ConfirmEmailAsync(user, confirmationToken.Value);
-
             return userEmailConfirmed.Succeeded
                 ? new(IsSuccess: true)
                 : new(ConfirmationMessage: userEmailConfirmed.Errors.GetFirstErrorDescription());
