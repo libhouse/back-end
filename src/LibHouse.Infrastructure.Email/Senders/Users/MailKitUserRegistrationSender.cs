@@ -23,9 +23,7 @@ namespace LibHouse.Infrastructure.Email.Senders.Users
         public async Task<OutputUserRegistrationSender> SendUserRegistrationDataAsync(InputUserRegistrationSender input)
         {
             string userRegistrationMessage = BuildMessageForUserRegistration(input);
-
             var mailRequest = new MailRequest(toEmail: input.Email, subject: "Confirme o seu e-mail", body: userRegistrationMessage);
-
             return await _mailService.SendEmailAsync(mailRequest)
                 ? new(IsSuccess: true)
                 : new(IsSuccess: false, SendingMessage: "Falha no serviço de e-mail");

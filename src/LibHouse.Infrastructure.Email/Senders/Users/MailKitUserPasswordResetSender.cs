@@ -24,9 +24,7 @@ namespace LibHouse.Infrastructure.Email.Senders.Users
             InputUserPasswordResetSender input)
         {
             string passwordResetTokenMessage = BuildMessageForSendPasswordResetTokenToUser(input);
-
             var mailRequest = new MailRequest(toEmail: input.UserEmail, subject: "Redefinição de senha", body: passwordResetTokenMessage);
-
             return await _mailService.SendEmailAsync(mailRequest)
                 ? new(IsSuccess: true)
                 : new(IsSuccess: false, SendingMessage: "Falha no serviço de e-mail");

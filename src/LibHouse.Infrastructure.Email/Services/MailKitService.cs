@@ -22,17 +22,11 @@ namespace LibHouse.Infrastructure.Email.Services
             try
             {
                 MimeMessage email = BuildMessageFromMailRequest(mailRequest);
-
                 using var smtp = new SmtpClient();
-
                 smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-
                 smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
-
                 await smtp.SendAsync(email);
-
                 smtp.Disconnect(true);
-
                 return true;
             }
             catch (Exception)
@@ -48,16 +42,12 @@ namespace LibHouse.Infrastructure.Email.Services
                 Sender = MailboxAddress.Parse(_mailSettings.Mail),
                 Subject = mailRequest.Subject,
             };
-
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
-
             var builder = new BodyBuilder
             {
                 HtmlBody = mailRequest.Body
             };
-
             email.Body = builder.ToMessageBody();
-
             return email;
         }
     }
