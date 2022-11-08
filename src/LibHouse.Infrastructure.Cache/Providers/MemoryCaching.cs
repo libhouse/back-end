@@ -15,7 +15,6 @@ namespace LibHouse.Infrastructure.Cache.Providers
             IOptions<MemoryCachingConfiguration> memoryCachingConfig)
         {
             _memoryCachingConfiguration = memoryCachingConfig.Value;
-
             _cache = new(new MemoryCacheOptions()
             {
                 SizeLimit = _memoryCachingConfiguration.CacheSizeLimit,
