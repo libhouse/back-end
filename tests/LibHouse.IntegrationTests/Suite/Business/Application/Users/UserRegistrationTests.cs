@@ -43,10 +43,8 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             Mock<IUserRegistrationSender> userRegistrationSender = new();
             userRegistrationSender.Setup(u => u.SendUserRegistrationDataAsync(It.IsAny<InputUserRegistrationSender>())).ReturnsAsync(new OutputUserRegistrationSender(IsSuccess: true));
             UserRegistration userRegistration = new(notifier, unitOfWork, userRegistrationGateway, userRegistrationSender.Object, userValidator);
-
             InputUserRegistration input = new("Lucas", "Dirani", new DateTime(1998, 8, 12), "Male", "(11) 98526-7981", "lucas.dirani@gmail.com", "450.104.530-29", "Resident", "Senh@123456");
             OutputUserRegistration output = await userRegistration.ExecuteAsync(input);
-
             Assert.True(output.IsSuccess);
         }
 
@@ -68,14 +66,12 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             Mock<IUserRegistrationSender> userRegistrationSender = new();
             userRegistrationSender.Setup(u => u.SendUserRegistrationDataAsync(It.IsAny<InputUserRegistrationSender>())).ReturnsAsync(new OutputUserRegistrationSender(IsSuccess: true));
             UserRegistration userRegistration = new(notifier, unitOfWork, userRegistrationGateway, userRegistrationSender.Object, userValidator);
-
             Resident existingUser = new("Matheus", "Jesus", new DateTime(1999, 5, 15), Gender.Male, "(11) 98641-8080", "matheus.jesus@gmail.com", "533.545.030-41");
             existingUser.Activate();
             await unitOfWork.UserRepository.AddAsync(existingUser);
             await unitOfWork.CommitAsync();
             InputUserRegistration input = new("Matheus", "Jesus", new DateTime(1999, 5, 15), "Male", "(11) 98641-8080", "matheus.jesus@gmail.com", "533.545.030-41", "Resident", "Senh@123456");
             OutputUserRegistration output = await userRegistration.ExecuteAsync(input);
-
             Assert.False(output.IsSuccess);
         }
     }

@@ -58,13 +58,11 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             UserLogin userLogin = new(notifier, userLoginGateway, userRepository);
-
             Resident registeredUser = new("Roberto", "Motta", new DateTime(1960, 8, 20), Gender.Male, "(11) 91633-9187", userEmail, "98598456039");
             registeredUser.Activate();
             await unitOfWork.UserRepository.AddAsync(registeredUser);
             await unitOfWork.CommitAsync();
             OutputUserLogin outputUserLogin = await userLogin.ExecuteAsync(new(userEmail, userPassword));
-
             Assert.True(outputUserLogin.IsSuccess);
             Assert.Equal(userEmail, outputUserLogin.UserEmail);
             Assert.Equal(registeredUser.UserType.GetDescription(), outputUserLogin.UserType);
@@ -87,9 +85,7 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
             IUserRepository userRepository = new UserRepository(libHouseContext);
             UserLogin userLogin = new(notifier, userLoginGateway, userRepository);
-
             OutputUserLogin outputUserLogin = await userLogin.ExecuteAsync(new(userEmail, userPassword));
-
             Assert.False(outputUserLogin.IsSuccess);
         }
     }

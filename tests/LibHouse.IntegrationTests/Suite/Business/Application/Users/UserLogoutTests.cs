@@ -31,7 +31,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             loggedUser.Setup(l => l.GetUserEmail()).Returns(userEmail);
             IUserLogoutGateway userLogoutGateway = new IdentityUserLogoutGateway(loggedUser.Object, refreshTokenService);
             UserLogout userLogout = new(notifier, userLogoutGateway);
-
             authenticationContext.Users.Add(new IdentityUser() {
                 Email = userEmail,
                 EmailConfirmed = true,
@@ -50,7 +49,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             ));
             await authenticationContext.SaveChangesAsync();
             OutputUserLogout outputUserLogout = await userLogout.ExecuteAsync(new(userEmail, userToken));
-
             Assert.True(outputUserLogout.IsSuccess);
         }
 
@@ -67,7 +65,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             loggedUser.Setup(l => l.GetUserEmail()).Returns("peterparker@gmail.com");
             IUserLogoutGateway userLogoutGateway = new IdentityUserLogoutGateway(loggedUser.Object, refreshTokenService);
             UserLogout userLogout = new(notifier, userLogoutGateway);
-
             authenticationContext.Users.Add(new IdentityUser()
             {
                 Email = userEmail,
@@ -87,7 +84,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             ));
             await authenticationContext.SaveChangesAsync();
             OutputUserLogout outputUserLogout = await userLogout.ExecuteAsync(new(userEmail, userToken));
-
             Assert.False(outputUserLogout.IsSuccess);
         }
 
@@ -104,7 +100,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             loggedUser.Setup(l => l.GetUserEmail()).Returns(userEmail);
             IUserLogoutGateway userLogoutGateway = new IdentityUserLogoutGateway(loggedUser.Object, refreshTokenService);
             UserLogout userLogout = new(notifier, userLogoutGateway);
-
             authenticationContext.Users.Add(new IdentityUser()
             {
                 Email = userEmail,
@@ -127,7 +122,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             ));
             await authenticationContext.SaveChangesAsync();
             OutputUserLogout outputUserLogout = await userLogout.ExecuteAsync(new(userEmail, userToken));
-
             Assert.False(outputUserLogout.IsSuccess);
         }
     }

@@ -43,11 +43,9 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             userManager.Setup(u => u.ResetPasswordAsync(identityUser, userPasswordResetToken, userNewPassword)).ReturnsAsync(IdentityResult.Success);
             IConfirmUserPasswordResetGateway confirmUserPasswordResetGateway = new IdentityConfirmUserPasswordResetGateway(userManager.Object);
             ConfirmUserPasswordReset confirmUserPasswordReset = new(notifier, confirmUserPasswordResetGateway);
-
             OutputConfirmUserPasswordReset output = await confirmUserPasswordReset.ExecuteAsync(
                 new InputConfirmUserPasswordReset(userEmail, userNewPassword, userPasswordResetToken)
             );
-
             Assert.True(output.IsSuccess);
         }
 
@@ -77,7 +75,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
                 IdentityResult.Failed(new IdentityError() { Description = "O usuário não solicitou a troca de senha" }));
             IConfirmUserPasswordResetGateway confirmUserPasswordResetGateway = new IdentityConfirmUserPasswordResetGateway(userManager.Object);
             ConfirmUserPasswordReset confirmUserPasswordReset = new(notifier, confirmUserPasswordResetGateway);
-
             Assert.ThrowsAnyAsync<Exception>(async() => await confirmUserPasswordReset.ExecuteAsync(
                 new InputConfirmUserPasswordReset(userEmail, userNewPassword, PasswordResetToken: string.Empty)
             ));

@@ -62,11 +62,8 @@ namespace LibHouse.IntegrationTests.Setup.Suite.Infrastructure.Authentication.To
             int tokenExpirationInSeconds)
         {
             UserManager<IdentityUser> userManager = SetupUserManager(userWhoOwnsTheToken);
-
             AccessTokenSettings tokenSettings = SetupAccessTokenSettings(tokenExpirationInSeconds);
-
             IRefreshTokenGenerator refreshTokenGenerator = SetupRefreshTokenGenerator(userManager, authenticationContext);
-
             return new JwtAccessTokenGenerator(
                 userManager, 
                 tokenSettings,
@@ -79,7 +76,6 @@ namespace LibHouse.IntegrationTests.Setup.Suite.Infrastructure.Authentication.To
             AuthenticationContext authenticationContext)
         {
             RefreshTokenSettings refreshTokenSettings = SetupRefreshTokenSettings();
-
             return new JwtRefreshTokenGenerator(userManager, authenticationContext, refreshTokenSettings);
         }
 
@@ -106,13 +102,9 @@ namespace LibHouse.IntegrationTests.Setup.Suite.Infrastructure.Authentication.To
         private static UserManager<IdentityUser> SetupUserManager(IdentityUser userWhoOwnsTheToken)
         {
             Mock<UserManager<IdentityUser>> userManager = MockHelper.CreateMockForUserManager();
-
             userManager.Setup(u => u.FindByEmailAsync(userWhoOwnsTheToken.Email)).ReturnsAsync(userWhoOwnsTheToken);
-
             userManager.Setup(u => u.GetClaimsAsync(userWhoOwnsTheToken)).ReturnsAsync(new List<Claim>());
-
             userManager.Setup(u => u.GetRolesAsync(userWhoOwnsTheToken)).ReturnsAsync(new List<string>());
-
             return userManager.Object;
         }
     }

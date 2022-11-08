@@ -76,7 +76,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 new Mock<IUserPasswordReset>().Object,
                 new Mock<IConfirmUserPasswordReset>().Object
             );
-
             UserRegistrationViewModel viewModel = new()
             {
                 BirthDate = new DateTime(1977, 7, 12),
@@ -91,7 +90,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 UserType = UserType.Owner
             };
             Result userRegistrationResult = await userWebApiAdapter.UserRegistration(viewModel);
-
             Assert.True(userRegistrationResult.IsSuccess);
         }
 
@@ -121,7 +119,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 new Mock<IUserPasswordReset>().Object,
                 new Mock<IConfirmUserPasswordReset>().Object
             );
-
             authenticationContext.Users.Add(new IdentityUser()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -147,7 +144,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 UserId = user.Id
             };
             Result confirmUserRegistrationResult = await userWebApiAdapter.ConfirmUserRegistration(viewModel);
-
             Assert.True(confirmUserRegistrationResult.IsSuccess);
         }
 
@@ -193,7 +189,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 new Mock<IUserPasswordReset>().Object,
                 new Mock<IConfirmUserPasswordReset>().Object
             );
-
             Owner registeredUser = new("Alberto", "Ayamashita", new DateTime(1970, 3, 25), Gender.Male, "(22) 99655-1134", userEmail, "23219514006");
             registeredUser.Activate();
             await unitOfWork.UserRepository.AddAsync(registeredUser);
@@ -203,7 +198,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 Email = userEmail,
                 Password = userPassword
             });
-
             Assert.True(userLoginResult.IsSuccess);
         }
 
@@ -227,9 +221,7 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 new Mock<IUserPasswordReset>().Object,
                 new Mock<IConfirmUserPasswordReset>().Object
             );
-
             Result userLogoutResult = await userWebApiAdapter.UserLogout(new() { Email = userEmail, RefreshToken = userToken });
-
             Assert.True(userLogoutResult.IsSuccess);
         }
 
@@ -295,7 +287,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 new Mock<IUserPasswordReset>().Object,
                 new Mock<IConfirmUserPasswordReset>().Object
             );
-
             authenticationContext.Users.Add(identityUser);
             await authenticationContext.SaveChangesAsync();
             User user = new Resident("Clara", "Alencar", new DateTime(1980, 5, 27), Gender.Female, "17995312518", userEmail, "21248528093");
@@ -310,7 +301,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 AccessToken = userExpiredAccessToken.Value,
                 RefreshToken = userExpiredAccessToken.RefreshToken.Token 
             });
-
             Assert.True(userLoginRenewalResult.IsSuccess);
         }
 
@@ -354,13 +344,11 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 userPasswordReset,
                 new Mock<IConfirmUserPasswordReset>().Object
             );
-
             Resident registeredUser = new("Marta", "Uchoa", new DateTime(1981, 5, 9), Gender.Female, "(19) 98344-9985", userEmail, userCpf);
             registeredUser.Activate();
             await libHouseContext.Users.AddAsync(registeredUser);
             await libHouseContext.SaveChangesAsync();
             Result userPasswordResetResult = await userWebApiAdapter.UserPasswordReset(new UserPasswordResetViewModel() { Cpf = userCpf });
-
             Assert.True(userPasswordResetResult.IsSuccess);
         }
 
@@ -401,7 +389,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 new Mock<IUserPasswordReset>().Object,
                 confirmUserPasswordReset
             );
-
             Result confirmUserPasswordResetResult = await userWebApiAdapter.ConfirmUserPasswordReset(new ConfirmUserPasswordResetViewModel()
             {
                 ConfirmPassword = userNewPassword,
@@ -409,7 +396,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 PasswordResetToken = userPasswordResetToken,
                 UserEmail = userEmail
             });
-
             Assert.True(confirmUserPasswordResetResult.IsSuccess);
         }
     }

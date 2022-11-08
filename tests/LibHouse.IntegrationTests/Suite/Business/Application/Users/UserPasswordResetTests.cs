@@ -50,13 +50,11 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             Mock<IUserPasswordResetSender> userPasswordResetSender = new();
             userPasswordResetSender.Setup(u => u.SendUserPasswordResetRequestAsync(It.IsAny<InputUserPasswordResetSender>())).ReturnsAsync(new OutputUserPasswordResetSender(IsSuccess: true));
             UserPasswordReset userPasswordReset = new(notifier, userRepository, userPasswordResetGateway, userPasswordResetSender.Object);
-
             Resident registeredUser = new("José", "Vessoni", new DateTime(1970, 2, 10), Gender.Male, "(11) 99951-8087", userEmail, userCpf);
             registeredUser.Activate();
             await libHouseContext.Users.AddAsync(registeredUser);
             await libHouseContext.SaveChangesAsync();
             OutputUserPasswordReset output = await userPasswordReset.ExecuteAsync(new(userCpf));
-
             Assert.True(output.IsSuccess);
         }
 
@@ -73,9 +71,7 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             IUserPasswordResetGateway userPasswordResetGateway = new IdentityUserPasswordResetGateway(userManager.Object);
             Mock<IUserPasswordResetSender> userPasswordResetSender = new();
             UserPasswordReset userPasswordReset = new(notifier, userRepository, userPasswordResetGateway, userPasswordResetSender.Object);
-
             OutputUserPasswordReset output = await userPasswordReset.ExecuteAsync(new(userCpf));
-
             Assert.False(output.IsSuccess);
         }
     }

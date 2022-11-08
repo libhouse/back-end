@@ -29,25 +29,15 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Authentication.Token.Va
         public async Task CheckIfRefreshTokenCanBeUsedWithAccessToken_ValidRefreshTokenWithExpiredAccessToken_ReturnsSuccess()
         {
             IdentityUser userWhoOwnsTheToken = new() { Id = Guid.NewGuid().ToString(), Email = "lucas.dirani@gmail.com", EmailConfirmed = true };
-
             int tokenExpirationInSeconds = 1;
-
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
-
             var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, authenticationContext, tokenExpirationInSeconds);
-
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
-
             AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
-
             ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
-
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken);
-
             await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
-
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
-
             Assert.True(refreshTokenValidation.IsSuccess);
         }
 
@@ -55,23 +45,14 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Authentication.Token.Va
         public async Task CheckIfRefreshTokenCanBeUsedWithAccessToken_ValidRefreshTokenWithNonExpiredAccessToken_ReturnsFailure()
         {
             IdentityUser userWhoOwnsTheToken = new() { Id = Guid.NewGuid().ToString(), Email = "lucas.dirani@gmail.com", EmailConfirmed = true };
-
             int tokenExpirationInSeconds = 600;
-
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
-
             var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, authenticationContext, tokenExpirationInSeconds);
-
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
-
             AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
-
             ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
-
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken);
-
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
-
             Assert.True(refreshTokenValidation.Failure);
         }
 
@@ -79,25 +60,15 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Authentication.Token.Va
         public async Task CheckIfRefreshTokenCanBeUsedWithAccessToken_UsedRefreshToken_ReturnsFailure()
         {
             IdentityUser userWhoOwnsTheToken = new() { Id = Guid.NewGuid().ToString(), Email = "lucas.dirani@gmail.com", EmailConfirmed = true };
-
             int tokenExpirationInSeconds = 1;
-
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
-
             var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, authenticationContext, tokenExpirationInSeconds);
-
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
-
             AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
-
             ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
-
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, isUsed: true);
-
             await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
-
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
-
             Assert.True(refreshTokenValidation.Failure);
         }
 
@@ -105,25 +76,15 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Authentication.Token.Va
         public async Task CheckIfRefreshTokenCanBeUsedWithAccessToken_RevokedRefreshToken_ReturnsFailure()
         {
             IdentityUser userWhoOwnsTheToken = new() { Id = Guid.NewGuid().ToString(), Email = "lucas.dirani@gmail.com", EmailConfirmed = true };
-
             int tokenExpirationInSeconds = 1;
-
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
-
             var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, authenticationContext, tokenExpirationInSeconds);
-
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
-
             AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
-
             ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
-
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, isRevoked: true);
-
             await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
-
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
-
             Assert.True(refreshTokenValidation.Failure);
         }
 
@@ -131,25 +92,15 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Authentication.Token.Va
         public async Task CheckIfRefreshTokenCanBeUsedWithAccessToken_RefreshTokenAndAccessTokenDontMatch_ReturnsFailure()
         {
             IdentityUser userWhoOwnsTheToken = new() { Id = Guid.NewGuid().ToString(), Email = "lucas.dirani@gmail.com", EmailConfirmed = true };
-
             int tokenExpirationInSeconds = 1;
-
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
-
             var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, authenticationContext, tokenExpirationInSeconds);
-
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
-
             AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
-
             ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
-
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, jwtId: Guid.NewGuid().ToString());
-
             await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
-
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
-
             Assert.True(refreshTokenValidation.Failure);
         }
 
@@ -157,29 +108,17 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Authentication.Token.Va
         public async Task CheckIfRefreshTokenCanBeUsedWithAccessToken_ExpiredRefreshToken_ReturnsFailure()
         {
             IdentityUser userWhoOwnsTheToken = new() { Id = Guid.NewGuid().ToString(), Email = "lucas.dirani@gmail.com", EmailConfirmed = true };
-
             int tokenExpirationInSeconds = 1;
-
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
-
             var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, authenticationContext, tokenExpirationInSeconds);
-
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
-
             AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
-
             ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
-
             DateTime refreshTokenCreatedAt = DateTime.UtcNow.AddDays(-30);
-
             DateTime refreshTokenExpiresIn = DateTime.UtcNow.AddDays(-1);
-
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, refreshTokenCreatedAt, refreshTokenExpiresIn);
-
             await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
-
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
-
             Assert.True(refreshTokenValidation.Failure);
         }
 

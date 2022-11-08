@@ -42,11 +42,8 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                     .AddJsonFile("appsettings.Staging.json")
                     .Build())
                 .UseStartup<Startup>());
-
             _libHouseContext = server.Services.GetRequiredService<LibHouseContext>();
-
             _authenticationContext = server.Services.GetRequiredService<AuthenticationContext>();
-
             _httpClient = server.CreateClient();
         }
 
@@ -70,9 +67,7 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 Phone = "11918314320",
                 UserType = UserType.Resident
             }), Encoding.UTF8, "application/json");
-
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
-
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
@@ -82,7 +77,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
         {
             await _libHouseContext.CleanContextDataAsync();
             await _authenticationContext.CleanContextDataAsync();
-
             string userEmail = "leonardo.jardim@gmail.com";
             HttpRequestMessage httpRequestUserRegistration = new(new HttpMethod("POST"), "/api/v1/users/new-account");
             httpRequestUserRegistration.Content = new StringContent(JsonSerializer.Serialize(new UserRegistrationViewModel
@@ -113,7 +107,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 UserId = registeredUser.Id
             }), Encoding.UTF8, "application/json");
             HttpResponseMessage httpResponseConfirmUserRegistration = await _httpClient.SendAsync(httpRequestConfirmUserRegistration);
-
             Assert.Equal(HttpStatusCode.NoContent, httpResponseConfirmUserRegistration.StatusCode);
         }
 
@@ -149,9 +142,7 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 Email = userEmail,
                 Password = "Senh@123456"
             }), Encoding.UTF8, "application/json");
-
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
-
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
@@ -187,7 +178,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 UserId = identityUser.Id
             });
             await _authenticationContext.SaveChangesAsync();
-
             HttpRequestMessage httpRequestLogin = new(new HttpMethod("POST"), "/api/v1/users/login");
             httpRequestLogin.Content = new StringContent(JsonSerializer.Serialize(new UserLoginViewModel
             {
@@ -208,7 +198,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             }), Encoding.UTF8, "application/json");
             httpRequestLogout.Headers.Authorization = new AuthenticationHeaderValue("Bearer", userLoginResponse.AccessToken);
             HttpResponseMessage httpResponseLogout = await _httpClient.SendAsync(httpRequestLogout);
-
             Assert.Equal(HttpStatusCode.NoContent, httpResponseLogout.StatusCode);
         }
 
@@ -244,7 +233,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 UserId = identityUser.Id
             });
             await _authenticationContext.SaveChangesAsync();
-
             HttpRequestMessage httpRequestLogin = new(new HttpMethod("POST"), "/api/v1/users/login");
             httpRequestLogin.Content = new StringContent(JsonSerializer.Serialize(new UserLoginViewModel
             {
@@ -266,7 +254,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             }), Encoding.UTF8, "application/json");
             httpRequestRefreshToken.Headers.Authorization = new AuthenticationHeaderValue("Bearer", userLoginResponse.AccessToken);
             HttpResponseMessage httpResponseRefreshToken = await _httpClient.SendAsync(httpRequestRefreshToken);
-
             Assert.Equal(HttpStatusCode.BadRequest, httpResponseRefreshToken.StatusCode);
         }
 
@@ -297,14 +284,12 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             };
             _authenticationContext.Users.Add(identityUser);
             await _authenticationContext.SaveChangesAsync();
-
             HttpRequestMessage httpRequestPasswordReset = new(new HttpMethod(method), route);
             httpRequestPasswordReset.Content = new StringContent(JsonSerializer.Serialize(new UserPasswordResetViewModel
             {
                 Cpf = userCpf
             }), Encoding.UTF8, "application/json");
             HttpResponseMessage httpResponsePasswordReset = await _httpClient.SendAsync(httpRequestPasswordReset);
-
             Assert.Equal(HttpStatusCode.OK, httpResponsePasswordReset.StatusCode);
         }
 
@@ -336,7 +321,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             };
             _authenticationContext.Users.Add(identityUser);
             await _authenticationContext.SaveChangesAsync();
-
             HttpRequestMessage httpRequestPasswordReset = new(new HttpMethod("POST"), "/api/v1/users/request-password-reset");
             httpRequestPasswordReset.Content = new StringContent(JsonSerializer.Serialize(new UserPasswordResetViewModel
             {
@@ -357,7 +341,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 PasswordResetToken = userPasswordResetResponse.PasswordResetToken
             }), Encoding.UTF8, "application/json");
             HttpResponseMessage httpResponseConfirmUserPasswordReset = await _httpClient.SendAsync(httpRequestConfirmUserPasswordReset);
-
             Assert.Equal(HttpStatusCode.NoContent, httpResponseConfirmUserPasswordReset.StatusCode);
         }
     }

@@ -82,7 +82,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
                 new RefreshTokenValidator()
             );
             UserLoginRenewal userLoginRenewal = new(notifier, userRepository, userLoginRenewalGateway);
-
             authenticationContext.Users.Add(identityUser);
             await authenticationContext.SaveChangesAsync();
             User user = new Resident("Ben", "Johnson", new DateTime(1987, 8, 21), Gender.Male, "15995211490", userEmail, "13515271007");
@@ -96,7 +95,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
                 userExpiredAccessToken.Value, 
                 userExpiredAccessToken.RefreshToken.Token)
             );
-
             Assert.True(output.IsSuccess);
         }
 
@@ -151,14 +149,12 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
                 new RefreshTokenValidator()
             );
             UserLoginRenewal userLoginRenewal = new(notifier, userRepository, userLoginRenewalGateway);
-
             AccessToken userActiveAccessToken = await accessTokenGenerator.GenerateAccessTokenAsync(userEmail);
             OutputUserLoginRenewal output = await userLoginRenewal.ExecuteAsync(new(
                 userEmail,
                 userActiveAccessToken.Value,
                 userActiveAccessToken.RefreshToken.Token)
             );
-
             Assert.False(output.IsSuccess);
         }
     }

@@ -38,7 +38,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             userManager.Setup(u => u.ConfirmEmailAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
             IConfirmUserRegistrationGateway confirmUserRegistrationGateway = new IdentityConfirmUserRegistrationGateway(userManager.Object);
             ConfirmUserRegistration confirmUserRegistration = new(notifier, unitOfWork, confirmUserRegistrationGateway);
-
             authenticationContext.Users.Add(new IdentityUser() { 
                 Id = Guid.NewGuid().ToString(),
                 Email = userEmail,
@@ -58,7 +57,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             await unitOfWork.CommitAsync();
             InputConfirmUserRegistration input = new(RegistrationToken: Guid.NewGuid().ToString(), UserEmail: userEmail, UserId: user.Id);
             OutputConfirmUserRegistration output = await confirmUserRegistration.ExecuteAsync(input);
-
             Assert.True(output.IsSuccess);
         }
 
@@ -74,7 +72,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             Mock<UserManager<IdentityUser>> userManager = new(userStore, null, new PasswordHasher<IdentityUser>(), null, null, null, null, null, null);
             IConfirmUserRegistrationGateway confirmUserRegistrationGateway = new IdentityConfirmUserRegistrationGateway(userManager.Object);
             ConfirmUserRegistration confirmUserRegistration = new(notifier, unitOfWork, confirmUserRegistrationGateway);
-
             string userEmail = "leila-araujo@gmail.com";
             authenticationContext.Users.Add(new IdentityUser()
             {
@@ -96,7 +93,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             await unitOfWork.CommitAsync();
             InputConfirmUserRegistration input = new(RegistrationToken: Guid.NewGuid().ToString(), UserEmail: userEmail, UserId: user.Id);
             OutputConfirmUserRegistration output = await confirmUserRegistration.ExecuteAsync(input);
-
             Assert.True(output.IsSuccess);
         }
 
@@ -112,11 +108,9 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             Mock<UserManager<IdentityUser>> userManager = new(userStore, null, new PasswordHasher<IdentityUser>(), null, null, null, null, null, null);
             IConfirmUserRegistrationGateway confirmUserRegistrationGateway = new IdentityConfirmUserRegistrationGateway(userManager.Object);
             ConfirmUserRegistration confirmUserRegistration = new(notifier, unitOfWork, confirmUserRegistrationGateway);
-
             string userEmail = "emilio-morgado@hotmail.com";
             InputConfirmUserRegistration input = new(RegistrationToken: Guid.NewGuid().ToString(), UserEmail: userEmail, UserId: Guid.NewGuid());
             OutputConfirmUserRegistration output = await confirmUserRegistration.ExecuteAsync(input);
-
             Assert.False(output.IsSuccess);
         }
 
@@ -135,7 +129,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             userManager.Setup(u => u.ConfirmEmailAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed(new IdentityError() { Description = "Token não encontrado" }));
             IConfirmUserRegistrationGateway confirmUserRegistrationGateway = new IdentityConfirmUserRegistrationGateway(userManager.Object);
             ConfirmUserRegistration confirmUserRegistration = new(notifier, unitOfWork, confirmUserRegistrationGateway);
-
             authenticationContext.Users.Add(new IdentityUser()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -156,7 +149,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             await unitOfWork.CommitAsync();
             InputConfirmUserRegistration input = new(RegistrationToken: Guid.NewGuid().ToString(), UserEmail: userEmail, UserId: user.Id);
             OutputConfirmUserRegistration output = await confirmUserRegistration.ExecuteAsync(input);
-
             Assert.False(output.IsSuccess);
         }
     }
