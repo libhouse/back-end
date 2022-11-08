@@ -39,22 +39,18 @@ namespace LibHouse.Data.Repositories.Shared
             int? take = null)
         {
             var query = _dbSet.AsQueryable<T>();
-
             if (expression != null)
             {
                 query = query.Where(expression);
             }
-
             if (skip.HasValue)
             {
                 query = query.Skip(skip.Value);
             }
-
             if (take.HasValue)
             {
                 query = query.Take(take.Value);
             }
-
             return await query.ToListAsync();
         }
 

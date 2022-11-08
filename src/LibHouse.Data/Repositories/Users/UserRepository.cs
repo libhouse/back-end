@@ -39,7 +39,6 @@ namespace LibHouse.Data.Repositories.Users
         public async Task<LoggedUser> GetUserLoginDataByEmailAsync(string email)
         {
             Expression<Func<User, bool>> queryExpression = user => user.Email.Value == email;
-
             Expression<Func<User, LoggedUser>> userLoginDataProjection = user 
                 => new LoggedUser(
                     user.Id, 
@@ -50,7 +49,6 @@ namespace LibHouse.Data.Repositories.Users
                     user.Email.Value,
                     user.UserType
                 );
-
             return await GetProjectionAsync(queryExpression, userLoginDataProjection);
         }
     }
