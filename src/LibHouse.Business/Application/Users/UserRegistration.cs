@@ -38,45 +38,31 @@ namespace LibHouse.Business.Application.Users
         public async Task<OutputUserRegistration> ExecuteAsync(InputUserRegistration input)
         {
             User user = input.Adapt();
-
             user.Inactivate();
-
             if (!ExecuteValidation(_userRegistrationValidator, user))
             {
                 Notify("Usuário registrado", $"O usuário {user.GetEmailAddress()} já está registrado.");
-
                 return new(registrationMessage: $"O usuário {user.GetEmailAddress()} já está registrado.");
             }
-
             OutputUserRegistrationGateway outputGateway = await _userRegistrationGateway.RegisterUserAsync(new(input.Email, input.Phone, user.UserType, input.Password));
-
             if (!outputGateway.IsSuccess)
             {
                 Notify("Registrar usuário", $"Falha ao registrar o usuário {user.GetEmailAddress()}: {outputGateway.RegistrationMessage}.");
-
                 return new(registrationMessage: $"Falha ao registrar o usuário {user.GetEmailAddress()}.");
             }
-
             await _unitOfWork.UserRepository.AddAsync(user);
-
             bool userDataHasBeenPersisted = await _unitOfWork.CommitAsync();
-
             if (!userDataHasBeenPersisted)
             {
                 Notify("Registrar usuário", $"Falha ao armazenar os dados do usuário {user.GetEmailAddress()}.");
-
                 return new(registrationMessage: $"Falha ao armazenar os dados do usuário {user.GetEmailAddress()}.");
             }
-
             OutputUserRegistrationSender outputSender = await _userRegistrationSender.SendUserRegistrationDataAsync(new(input.Email, input.Name, user.Id, outputGateway.RegistrationToken));
-
             if (!outputSender.IsSuccess)
             {
                 Notify("Comunicar usuário", $"Falha ao comunicar o usuário {user.GetEmailAddress()}: {outputSender.SendingMessage}.");
-
                 return new(registrationMessage: $"Falha ao comunicar o usuário {user.GetEmailAddress()}.");
             }
-
             return new(isSuccess: true, registrationToken: outputGateway.RegistrationToken);
         }
     }

@@ -30,16 +30,12 @@ namespace LibHouse.Business.Application.Users
         public async Task<OutputUserLoginRenewal> ExecuteAsync(InputUserLoginRenewal input)
         {
             OutputUserLoginRenewalGateway outputUserLoginRenewalGateway = await _userLoginRenewalGateway.RenewLoginAsync(input.UserEmail, input.UserLoginToken, input.UserLoginRenewalToken);
-
             if (!outputUserLoginRenewalGateway.IsSuccess)
             {
                 Notify("Falha ao renovar o login do usuário", outputUserLoginRenewalGateway.LoginRenewalMessage);
-
                 return new(isSuccess: false, loginRenewalMessage: $"Falha ao renovar o login do usuário {input.UserEmail}: {outputUserLoginRenewalGateway.LoginRenewalMessage}");
             }
-
             LoggedUser userLoginData = await _userRepository.GetUserLoginDataByEmailAsync(input.UserEmail);
-
             return outputUserLoginRenewalGateway.AdaptUsing(userLoginData);
         }
     }

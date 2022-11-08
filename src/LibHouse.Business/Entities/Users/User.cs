@@ -40,7 +40,6 @@ namespace LibHouse.Business.Entities.Users
         {
             Guard.Against.NullOrEmpty(name, nameof(name), "O nome do usuário é obrigatório");
             Guard.Against.NullOrEmpty(lastName, nameof(lastName), "O sobrenome do usuário é obrigatório");
-
             Name = name;
             LastName = lastName;
             BirthDate = birthDate;

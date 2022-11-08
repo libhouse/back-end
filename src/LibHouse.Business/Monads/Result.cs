@@ -16,12 +16,10 @@ namespace LibHouse.Business.Monads
             {
                 throw new InvalidOperationException("O erro não pode ser preenchido em caso de sucesso.");
             }
-
             if (!isSuccess && string.IsNullOrWhiteSpace(error))
             {
                 throw new InvalidOperationException("O erro não pode estar vazio em caso de fracasso.");
             }
-
             IsSuccess = isSuccess;
             Error = error;
         }
@@ -49,14 +47,11 @@ namespace LibHouse.Business.Monads
         public static Result Combine(string errorMessagesSeparator, params Result[] results)
         {
             List<Result> failedResults = results.Where(x => x.Failure).ToList();
-
             if (!failedResults.Any())
             {
                 return Success();
             }
-
             string errorMessage = string.Join(errorMessagesSeparator, failedResults.Select(x => x.Error).ToArray());
-
             return Fail(errorMessage);
         }
 

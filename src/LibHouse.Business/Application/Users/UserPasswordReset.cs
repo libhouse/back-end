@@ -32,36 +32,25 @@ namespace LibHouse.Business.Application.Users
         public async Task<OutputUserPasswordReset> ExecuteAsync(InputUserPasswordReset input)
         {
             Cpf cpf = Cpf.CreateFromDocument(input.UserCpf);
-
             bool userAccountNotExists = await _userRepository.CheckIfUserCpfIsNotRegisteredAsync(cpf);
-
             if (userAccountNotExists)
             {
                 Notify("Conta do usuário", $"A conta do usuário {input.UserCpf} não foi localizada");
-
                 return new(isSuccess: false, userPasswordResetMessage: $"A conta do usuário {input.UserCpf} não foi localizada");
             }
-
             User user = await _userRepository.GetUserByCpfAsync(cpf.Value);
-
             OutputUserPasswordResetGateway outputGateway = await _userPasswordResetGateway.ResetUserPasswordAsync(user.GetEmailAddress());
-
             if (!outputGateway.IsSuccess)
             {
                 Notify("Solicitar redefinição de senha", $"Falha ao solicitar a redefinição de senha do usuário {user.GetEmailAddress()}");
-
                 return new(isSuccess: false, userPasswordResetMessage: outputGateway.UserPasswordResetMessage);
             }
-
             OutputUserPasswordResetSender outputSender = await _userPasswordResetSender.SendUserPasswordResetRequestAsync(new(user.Id, user.Name, user.GetEmailAddress(), outputGateway.PasswordResetToken));
-
             if (!outputSender.IsSuccess)
             {
                 Notify("Enviar token de redefinição de senha", $"Falha ao enviar o token de redefinição de senha do usuário {user.GetEmailAddress()}");
-
                 return new(isSuccess: false, userPasswordResetMessage: outputSender.SendingMessage);
             }
-
             return new(isSuccess: true, passwordResetToken: outputGateway.PasswordResetToken);
         }
     }

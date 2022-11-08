@@ -25,16 +25,12 @@ namespace LibHouse.Business.Application.Users
         public async Task<OutputConfirmUserPasswordReset> ExecuteAsync(InputConfirmUserPasswordReset input)
         {
             InputConfirmUserPasswordResetGateway inputGateway = new(input.UserEmail, input.NewPassword, input.PasswordResetToken);
-
             OutputConfirmUserPasswordResetGateway outputGateway = await _confirmUserPasswordResetGateway.ConfirmUserPasswordResetAsync(inputGateway);
-
             if (!outputGateway.IsSuccess)
             {
                 Notify("Confirmar troca de senha", $"Falha ao confirmar a troca de senha para {input.UserEmail}");
-
                 return new(IsSuccess: false, outputGateway.ConfirmUserPasswordResetMessage);
             }
-
             return new(IsSuccess: true);
         }
     }

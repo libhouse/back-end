@@ -12,7 +12,6 @@ namespace LibHouse.Business.Notifiers
         {
             Guard.Against.NullOrEmpty(message, nameof(message), "A mensagem é obrigatória");
             Guard.Against.NullOrEmpty(title, nameof(title), "O título é obrigatório");
-
             Message = message;
             Title = title;
         }

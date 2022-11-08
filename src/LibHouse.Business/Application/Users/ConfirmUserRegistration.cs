@@ -29,39 +29,28 @@ namespace LibHouse.Business.Application.Users
         public async Task<OutputConfirmUserRegistration> ExecuteAsync(InputConfirmUserRegistration input)
         {
             User user = await _unitOfWork.UserRepository.GetByIdAsync(input.UserId);
-
             if (user is null)
             {
                 Notify("Confirmar cadastro", "O usuário não foi encontrado.");
-
                 return new(ConfirmationMessage: $"O usuário {input.UserEmail} não foi encontrado.");
             }
-
             if (user.IsActive)
             {
                 return new(IsSuccess: true);
             }
-
             OutputConfirmUserRegistrationGateway outputGateway = await _confirmUserRegistrationGateway.ConfirmUserRegistrationAsync(new(input.UserEmail, input.RegistrationToken));
-
             if (!outputGateway.IsSuccess)
             {
                 Notify("Aceitar confirmação do usuário", outputGateway.ConfirmationMessage);
-
                 return new(ConfirmationMessage: outputGateway.ConfirmationMessage);
             }
-
             user.Activate();
-
             bool isUserActivated = await _unitOfWork.CommitAsync();
-
             if (!isUserActivated)
             {
                 Notify("Confirmar cadastro", "Erro ao ativar o cadastro do usuário.");
-
                 return new(ConfirmationMessage: $"Erro ao ativar o cadastro do usuário {input.UserEmail}.");
             }
-
             return new(IsSuccess: true);
         }
     }

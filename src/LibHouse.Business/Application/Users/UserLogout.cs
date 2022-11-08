@@ -24,14 +24,11 @@ namespace LibHouse.Business.Application.Users
         public async Task<OutputUserLogout> ExecuteAsync(InputUserLogout input)
         {
             OutputUserLogoutGateway outputGateway = await _userLogoutGateway.LogoutAsync(input.UserEmail, input.UserToken);
-
             if (!outputGateway.IsSuccess)
             {
                 Notify("Falha no logout do usuário", $"O usuário {input.UserEmail} não realizou logout");
-
                 return new(IsSuccess: false, LogoutMessage: outputGateway.LogoutMessage);
             }
-
             return new(IsSuccess: true);
         }
     }

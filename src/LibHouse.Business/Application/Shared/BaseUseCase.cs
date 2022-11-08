@@ -32,11 +32,8 @@ namespace LibHouse.Business.Application.Shared
             where TE : Entity
         {
             var validation = validator.Validate(entity);
-
             if (validation.IsValid) return true;
-
             Notify(validation);
-
             return false;
         }
     }

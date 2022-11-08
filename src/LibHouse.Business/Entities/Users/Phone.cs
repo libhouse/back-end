@@ -19,21 +19,17 @@ namespace LibHouse.Business.Entities.Users
         public static Phone CreateFromNumber(string number)
         {
             Guard.Against.NullOrWhiteSpace(number, nameof(number), "O número é obrigatório.");
-
             bool isValidPhone = Validate(number);
-
             if (!isValidPhone)
             {
                 throw new ArgumentException("O número fornecido não é um telefone válido", nameof(number));
             }
-
             return new Phone(number);
         }
 
         private static bool Validate(string number)
         {
             string sanitizedNumber = Regex.Replace(number, @"[^\d]", "", RegexOptions.Compiled);
-
             return sanitizedNumber.Length >= NumberOfDigitsHomeTelephone 
                 && sanitizedNumber.Length <= NumberOfDigitsCellPhone;
         }

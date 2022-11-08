@@ -16,14 +16,11 @@ namespace LibHouse.Business.Entities.Users
         public static Email CreateFromAddress(string address)
         {
             Guard.Against.NullOrWhiteSpace(address, nameof(address), "O endereço é obrigatório.");
-
             bool isValidAddress = Validate(address);
-
             if (!isValidAddress)
             {
                 throw new ArgumentException("O endereço fornecido não é um e-mail válido", nameof(address));
             }
-
             return new Email(address);
         }
 

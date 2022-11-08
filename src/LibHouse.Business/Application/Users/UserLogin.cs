@@ -30,16 +30,12 @@ namespace LibHouse.Business.Application.Users
         public async Task<OutputUserLogin> ExecuteAsync(InputUserLogin input)
         {
             OutputUserLoginGateway outputUserLoginGateway = await _userLoginGateway.LoginAsync(input.UserEmail, input.UserPassword);
-
             if (!outputUserLoginGateway.IsSuccess)
             {
                 Notify("Falha na autenticação do usuário", outputUserLoginGateway.LoginMessage);
-
                 return new(isSuccess: false, loginMessage: $"Falha na autenticação do usuário {input.UserEmail}");
             }
-
             LoggedUser userLoginData = await _userRepository.GetUserLoginDataByEmailAsync(input.UserEmail);
-
             return outputUserLoginGateway.AdaptUsing(userLoginData);
         }
     }
