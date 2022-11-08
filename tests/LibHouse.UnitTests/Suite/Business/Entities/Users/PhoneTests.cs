@@ -13,7 +13,6 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Users
         public void CreateFromNumber_ValidNumber_ShouldCreatePhone(string number)
         {
             Phone phone = Phone.CreateFromNumber(number);
-
             Assert.Equal(number, phone.Value);
         }
 

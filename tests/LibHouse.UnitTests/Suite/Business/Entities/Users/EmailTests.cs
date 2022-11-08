@@ -13,7 +13,6 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Users
         public void CreateFromAddress_ValidAddress_ShouldCreateEmail(string address)
         {
             Email email = Email.CreateFromAddress(address);
-
             Assert.Equal(address, email.Value);
         }
 

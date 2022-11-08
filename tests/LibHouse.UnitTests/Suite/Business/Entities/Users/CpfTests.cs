@@ -13,7 +13,6 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Users
         public void CreateFromDocument_ValidDocumentNumber_ShouldCreateCpf(string documentNumber)
         {
             Cpf cpf = Cpf.CreateFromDocument(documentNumber);
-
             Assert.Equal(documentNumber, cpf.Value);
         }
 

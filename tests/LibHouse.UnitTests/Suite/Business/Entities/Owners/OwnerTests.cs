@@ -19,7 +19,6 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Owners
                 email: "jynerso@gmail.com", 
                 cpf: "96087950010"
             );
-
             Assert.Equal(Gender.Female, owner.Gender);
             Assert.Equal("Jyn", owner.Name);
             Assert.Equal("(54) 3424-4016", owner.GetPhoneNumber());
