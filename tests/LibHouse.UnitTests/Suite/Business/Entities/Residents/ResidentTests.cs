@@ -1,4 +1,5 @@
 ﻿using LibHouse.Business.Entities.Residents;
+using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Users;
 using System;
 using Xunit;
@@ -119,6 +120,28 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents
                     cpf: cpf
                 );
             });
+        }
+
+        [Fact]
+        public void AddRoomPreferences_ValidRoomPreferences_ShouldAddRoomPreferences()
+        {
+            Resident resident = new(
+                name: "Luke",
+                lastName: "Skywalker",
+                birthDate: new DateTime(1960, 5, 10),
+                gender: Gender.Male,
+                phone: "(11) 44245-9016",
+                email: "luke.skywalker@gmail.com",
+                cpf: "876.511.550-33"
+            );
+            RoomPreferences roomPreferences = new();
+            roomPreferences.AddBathroomPreferences(BathroomType.Shared);
+            roomPreferences.AddDormitoryPreferences(DormitoryType.Shared, requireFurnishedDormitory: true);
+            roomPreferences.AddGaragePreferences(garageIsRequired: true);
+            roomPreferences.AddKitchenPreferences(stoveIsRequired: true, microwaveIsRequired: true, refrigeratorIsRequired: true);
+            roomPreferences.AddOtherRoomPreferences(serviceAreaIsRequired: true, recreationAreaIsRequired: true);
+            resident.AddRoomPreferences(roomPreferences);
+            Assert.True(resident.HaveRoomPreferences());
         }
     }
 }

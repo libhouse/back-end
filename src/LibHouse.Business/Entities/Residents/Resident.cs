@@ -1,10 +1,14 @@
-﻿using LibHouse.Business.Entities.Users;
+﻿using LibHouse.Business.Entities.Residents.Preferences;
+using LibHouse.Business.Entities.Residents.Preferences.Rooms;
+using LibHouse.Business.Entities.Users;
 using System;
 
 namespace LibHouse.Business.Entities.Residents
 {
     public class Resident : User
     {
+        private ResidentPreferences ResidentPreferences { get; set; }
+
         public Resident(
             string name,
             string lastName,
@@ -18,6 +22,7 @@ namespace LibHouse.Business.Entities.Residents
             CPF = Cpf.CreateFromDocument(cpf);
             Phone = Phone.CreateFromNumber(phone);
             Email = Email.CreateFromAddress(email);
+            ResidentPreferences = new();
         }
 
         private Resident(
@@ -30,7 +35,16 @@ namespace LibHouse.Business.Entities.Residents
         {
         }
 
-        public override string ToString() =>
-            $"Resident {Id}: {Name} {LastName}";
+        public void AddRoomPreferences(RoomPreferences roomPreferences)
+        {
+            ResidentPreferences.AddRoomPreferences(roomPreferences);
+        }
+
+        public bool HaveRoomPreferences()
+        {
+            return ResidentPreferences.HaveRoomPreferences();
+        }
+
+        public override string ToString() => $"Resident {Id}: {Name} {LastName}";
     }
 }
