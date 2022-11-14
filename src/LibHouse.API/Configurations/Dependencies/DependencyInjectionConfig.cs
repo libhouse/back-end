@@ -1,4 +1,5 @@
 ﻿using LibHouse.API.Authentication;
+using LibHouse.API.Configurations.Contexts;
 using LibHouse.API.Configurations.Swagger;
 using LibHouse.Business.Application.Users;
 using LibHouse.Business.Application.Users.Gateways;
@@ -8,7 +9,6 @@ using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Notifiers;
 using LibHouse.Business.Validations.Users;
-using LibHouse.Data.Context;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Login;
@@ -18,15 +18,12 @@ using LibHouse.Infrastructure.Authentication.Password;
 using LibHouse.Infrastructure.Authentication.Register;
 using LibHouse.Infrastructure.Email.Senders.Users;
 using LibHouse.Infrastructure.Email.Settings.Users;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 
 namespace LibHouse.API.Configurations.Dependencies
 {
@@ -86,20 +83,11 @@ namespace LibHouse.API.Configurations.Dependencies
 
         public static IServiceCollection ResolveRepositories(
             this IServiceCollection services, 
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             string connectionString = configuration.GetValue<string>("LibHouseConnectionString");
-            services.AddDbContext<LibHouseContext>(options => 
-                options.UseSqlServer(
-                    connectionString,
-                    s => s.CommandTimeout(180).EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null)
-                ).LogTo(
-                    Console.WriteLine,
-                    LogLevel.Information,
-                    DbContextLoggerOptions.LocalTime | DbContextLoggerOptions.SingleLine
-                ).EnableDetailedErrors()
-                .EnableSensitiveDataLogging()
-            );
+            services.AddLibHouseContext(environment, connectionString);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             return services;

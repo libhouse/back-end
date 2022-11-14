@@ -36,7 +36,7 @@ namespace LibHouse.API
             services.ResolveGeneralDependencies();
             services.AddIdentityConfiguration(Configuration);
             services.AddAuthenticationConfiguration(Configuration);
-            services.ResolveRepositories(Configuration);
+            services.ResolveRepositories(Configuration, Environment);
             services.ResolveValidators();
             services.ResolveGateways();
             services.ResolveSenders(Configuration);
