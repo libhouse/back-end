@@ -3,6 +3,7 @@ using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Notifiers
 {
+    [Collection("Business.Notifiers")]
     public class NotifierTests
     {
         [Fact]

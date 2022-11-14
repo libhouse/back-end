@@ -10,6 +10,7 @@ using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Validations.Users
 {
+    [Collection("Business.Validations")]
     public class UserRegistrationValidatorTests
     {
         [Fact]

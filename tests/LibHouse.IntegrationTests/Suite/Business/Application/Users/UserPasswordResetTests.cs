@@ -19,6 +19,7 @@ using Xunit;
 
 namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
 {
+    [Collection("Business.Application")]
     public class UserPasswordResetTests
     {
         [Fact]

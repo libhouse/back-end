@@ -1,8 +1,10 @@
-﻿using LibHouse.Business.Entities.Residents.Preferences.Rooms;
+﻿using LibHouse.Business.Entities.Residents.Preferences;
+using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences
 {
+    [Collection("Business.Entities")]
     public class ResidentPreferencesTests
     {
         [Fact]

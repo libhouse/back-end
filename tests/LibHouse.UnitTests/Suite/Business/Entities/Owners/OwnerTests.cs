@@ -5,6 +5,7 @@ using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Entities.Owners
 {
+    [Collection("Business.Entities")]
     public class OwnerTests
     {
         [Fact]

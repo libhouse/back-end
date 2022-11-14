@@ -44,6 +44,7 @@ using Xunit;
 
 namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.Adapters
 {
+    [Collection("Infrastructure.Controllers")]
     public class UsersWebApiAdapterTests
     {
         [Fact]

@@ -17,6 +17,7 @@ using Xunit;
 
 namespace LibHouse.IntegrationTests.Suite.Business.Application.Residents
 {
+    [Collection("Business.Application")]
     public class ResidentRoomPreferencesRegistrationTests
     {
         private readonly IConfiguration _testsConfiguration;

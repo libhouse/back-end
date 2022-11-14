@@ -26,6 +26,7 @@ using Xunit;
 
 namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
 {
+    [Collection("Api")]
     public class UsersAspNetCoreControllerTests
     {
         private readonly HttpClient _httpClient;

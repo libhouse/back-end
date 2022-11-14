@@ -6,6 +6,7 @@ using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Entities.Residents
 {
+    [Collection("Business.Entities")]
     public class ResidentTests
     {
         [Fact]

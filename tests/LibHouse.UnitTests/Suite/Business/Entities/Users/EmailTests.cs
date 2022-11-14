@@ -4,6 +4,7 @@ using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Entities.Users
 {
+    [Collection("Business.Entities")]
     public class EmailTests
     {
         [Theory]

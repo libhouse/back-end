@@ -14,6 +14,7 @@ using Xunit;
 
 namespace LibHouse.IntegrationTests.Suite.Infrastructure.Authentication.Token.Validations
 {
+    [Collection("Infrastructure.Authentication")]
     public class RefreshTokenValidatorTests
     {
         private readonly IRefreshTokenValidator _refreshTokenValidator;

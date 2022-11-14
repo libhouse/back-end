@@ -3,6 +3,7 @@ using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences.Rooms
 {
+    [Collection("Business.Entities")]
     public class OtherRoomPreferencesTests
     {
         [Theory]
