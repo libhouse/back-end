@@ -1,14 +1,19 @@
 ﻿using LibHouse.API.Authentication;
 using LibHouse.API.Configurations.Contexts;
 using LibHouse.API.Configurations.Swagger;
+using LibHouse.Business.Application.Residents;
+using LibHouse.Business.Application.Residents.Interfaces;
 using LibHouse.Business.Application.Users;
 using LibHouse.Business.Application.Users.Gateways;
 using LibHouse.Business.Application.Users.Interfaces;
 using LibHouse.Business.Application.Users.Senders;
+using LibHouse.Business.Entities.Residents;
+using LibHouse.Business.Entities.Residents.Preferences.Rooms.Builders;
 using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Notifiers;
 using LibHouse.Business.Validations.Users;
+using LibHouse.Data.Repositories.Residents;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Login;
@@ -35,6 +40,12 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ILoggedUser, AspNetLoggedUser>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            return services;
+        }
+
+        public static IServiceCollection ResolveBuilders(this IServiceCollection services)
+        {
+            services.AddScoped<IRoomPreferencesBuilder, RoomPreferencesBuilder>();
             return services;
         }
 
@@ -69,7 +80,7 @@ namespace LibHouse.API.Configurations.Dependencies
             return services;
         }
 
-        public static IServiceCollection ResolveServices(this IServiceCollection services)
+        public static IServiceCollection ResolveUseCases(this IServiceCollection services)
         {
             services.AddScoped<IUserRegistration, UserRegistration>();
             services.AddScoped<IConfirmUserRegistration, ConfirmUserRegistration>();
@@ -78,6 +89,7 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<IUserLoginRenewal, UserLoginRenewal>();
             services.AddScoped<IUserPasswordReset, UserPasswordReset>();
             services.AddScoped<IConfirmUserPasswordReset, ConfirmUserPasswordReset>();
+            services.AddScoped<IResidentRoomPreferencesRegistration, ResidentRoomPreferencesRegistration>();
             return services;
         }
 
@@ -90,6 +102,7 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddLibHouseContext(environment, connectionString);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IResidentRepository, ResidentRepository>();
             return services;
         }
     }

@@ -4,6 +4,16 @@
         <name>LibHouse.API</name>
     </assembly>
     <members>
+        <member name="M:LibHouse.API.V1.Controllers.ResidentsAspNetCoreController.RegisterResidentRoomPreferencesAsync(LibHouse.Infrastructure.Controllers.ViewModels.Residents.ResidentRoomPreferencesRegistrationViewModel)">
+            <summary>
+            Cadastra as preferências de cômodos de um morador.
+            </summary>
+            <param name="preferencesRegistrationViewModel">Objeto que possui os dados necessários para cadastrar as preferências de cômodos do morador.</param>
+            <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="200">As preferências do morador foram registradas com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
         <member name="M:LibHouse.API.V1.Controllers.UsersAspNetCoreController.RegisterUserAsync(LibHouse.Infrastructure.Controllers.ViewModels.Users.UserRegistrationViewModel)">
             <summary>
             Cadastra um novo usuário na plataforma, enviando um e-mail automático de confirmação.

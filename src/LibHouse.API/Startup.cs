@@ -34,13 +34,14 @@ namespace LibHouse.API
             services.AddApiResponseCompressionConfig();
             services.AddEmailConfig(Configuration, Environment);
             services.ResolveGeneralDependencies();
+            services.ResolveBuilders();
             services.AddIdentityConfiguration(Configuration);
             services.AddAuthenticationConfiguration(Configuration);
             services.ResolveRepositories(Configuration, Environment);
             services.ResolveValidators();
             services.ResolveGateways();
             services.ResolveSenders(Configuration);
-            services.ResolveServices();
+            services.ResolveUseCases();
             services.AddApiCachingConfig(Configuration);
             services.AddWebApiConfig();
             services.AddLoggingConfiguration();

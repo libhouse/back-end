@@ -27,26 +27,8 @@ using Xunit;
 namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
 {
     [Collection("Api")]
-    public class UsersAspNetCoreControllerTests
+    public class UsersAspNetCoreControllerTests : BaseIntegrationTestApi
     {
-        private readonly HttpClient _httpClient;
-        private readonly LibHouseContext _libHouseContext;
-        private readonly AuthenticationContext _authenticationContext;
-
-        public UsersAspNetCoreControllerTests()
-        {
-            TestServer server = new(new WebHostBuilder()
-                .UseEnvironment(Environments.Staging)
-                .UseConfiguration(new ConfigurationBuilder()
-                    .AddUserSecrets(typeof(UsersAspNetCoreControllerTests).Assembly)
-                    .AddJsonFile("appsettings.Staging.json")
-                    .Build())
-                .UseStartup<Startup>());
-            _libHouseContext = server.Services.GetRequiredService<LibHouseContext>();
-            _authenticationContext = server.Services.GetRequiredService<AuthenticationContext>();
-            _httpClient = server.CreateClient();
-        }
-
         [Theory]
         [InlineData("POST", "/api/v1/users/new-account")]
         public async Task RegisterUserAsync_NewUser_ShouldReturn200OK(string method, string route)
