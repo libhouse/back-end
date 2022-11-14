@@ -11,7 +11,6 @@ using LibHouse.Infrastructure.Controllers.ViewModels.Users;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -69,45 +68,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             }), Encoding.UTF8, "application/json");
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-        }
-
-        [Theory]
-        [InlineData("PATCH", "/api/v1/users/confirm-registration")]
-        public async Task ConfirmUserRegistrationAsync_UserWithoutConfirmation_ShouldReturn204NoContent(string method, string route)
-        {
-            await _libHouseContext.CleanContextDataAsync();
-            await _authenticationContext.CleanContextDataAsync();
-            string userEmail = "leonardo.jardim@gmail.com";
-            HttpRequestMessage httpRequestUserRegistration = new(new HttpMethod("POST"), "/api/v1/users/new-account");
-            httpRequestUserRegistration.Content = new StringContent(JsonSerializer.Serialize(new UserRegistrationViewModel
-            {
-                BirthDate = new DateTime(1995, 7, 25),
-                ConfirmPassword = "Senh@123456",
-                Cpf = "47802855004",
-                Email = userEmail,
-                Gender = Gender.Male,
-                LastName = "Jardim",
-                Name = "Leonardo",
-                Password = "Senh@123456",
-                Phone = "21998415581",
-                UserType = UserType.Owner
-            }), Encoding.UTF8, "application/json");
-            HttpResponseMessage httpResponseUserRegistration = await _httpClient.SendAsync(httpRequestUserRegistration);
-            UserRegistrationResponse userRegistrationResponse = JsonSerializer.Deserialize<UserRegistrationResponse>(await httpResponseUserRegistration.Content.ReadAsStringAsync(), new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNameCaseInsensitive = true
-            });
-            User registeredUser = await _libHouseContext.Users.FirstOrDefaultAsync(user => user.Email.Value == userEmail);
-            HttpRequestMessage httpRequestConfirmUserRegistration = new(new HttpMethod(method), route);
-            httpRequestConfirmUserRegistration.Content = new StringContent(JsonSerializer.Serialize(new ConfirmUserRegistrationViewModel
-            {
-                ConfirmationToken = userRegistrationResponse.RegistrationToken,
-                UserEmail = userEmail,
-                UserId = registeredUser.Id
-            }), Encoding.UTF8, "application/json");
-            HttpResponseMessage httpResponseConfirmUserRegistration = await _httpClient.SendAsync(httpRequestConfirmUserRegistration);
-            Assert.Equal(HttpStatusCode.NoContent, httpResponseConfirmUserRegistration.StatusCode);
         }
 
         [Theory]
@@ -291,57 +251,6 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             }), Encoding.UTF8, "application/json");
             HttpResponseMessage httpResponsePasswordReset = await _httpClient.SendAsync(httpRequestPasswordReset);
             Assert.Equal(HttpStatusCode.OK, httpResponsePasswordReset.StatusCode);
-        }
-
-        [Theory]
-        [InlineData("PATCH", "/api/v1/users/confirm-password-reset")]
-        public async Task ConfirmPasswordResetAsync_UserThatRequestedPasswordReset_ShouldReturn204NoContent(string method, string route)
-        {
-            await _libHouseContext.CleanContextDataAsync();
-            await _authenticationContext.CleanContextDataAsync();
-            string userCpf = "99092729035";
-            string userEmail = "dercyvasconcelos@gmail.com";
-            string userNewPassword = "Senh@1234567";
-            User user = new Resident("Dercy", "Vasconcelos", new DateTime(1960, 5, 7), Gender.Female, "17992257813", userEmail, userCpf);
-            user.Activate();
-            _libHouseContext.Users.Add(user);
-            await _libHouseContext.SaveChangesAsync();
-            IdentityUser identityUser = new()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Email = userEmail,
-                EmailConfirmed = true,
-                NormalizedEmail = userEmail.ToUpper(),
-                UserName = userEmail,
-                NormalizedUserName = userEmail.ToUpper(),
-                PasswordHash = "AQAAAAEAACcQAAAAEGGXbR8FPdApGw6YRB6r95b1wYvOrJkdFCAhpL5t6a3f6E/NtB2YWLifYx5sBpyltw==",
-                SecurityStamp = "74LC5CVBBAZCQKTVJFW7VTZTF6UJMQZN",
-                ConcurrencyStamp = "97d52be0-5c20-41a4-9ccd-c36f75eb8926",
-                LockoutEnabled = true
-            };
-            _authenticationContext.Users.Add(identityUser);
-            await _authenticationContext.SaveChangesAsync();
-            HttpRequestMessage httpRequestPasswordReset = new(new HttpMethod("POST"), "/api/v1/users/request-password-reset");
-            httpRequestPasswordReset.Content = new StringContent(JsonSerializer.Serialize(new UserPasswordResetViewModel
-            {
-                Cpf = userCpf
-            }), Encoding.UTF8, "application/json");
-            HttpResponseMessage httpResponseRequestPasswordReset = await _httpClient.SendAsync(httpRequestPasswordReset);
-            var userPasswordResetResponse = JsonSerializer.Deserialize<UserPasswordResetResponse>(await httpResponseRequestPasswordReset.Content.ReadAsStringAsync(), new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNameCaseInsensitive = true
-            });
-            HttpRequestMessage httpRequestConfirmUserPasswordReset = new(new HttpMethod(method), route);
-            httpRequestConfirmUserPasswordReset.Content = new StringContent(JsonSerializer.Serialize(new ConfirmUserPasswordResetViewModel
-            {
-                ConfirmPassword = userNewPassword,
-                Password = userNewPassword,
-                UserEmail = userEmail,
-                PasswordResetToken = userPasswordResetResponse.PasswordResetToken
-            }), Encoding.UTF8, "application/json");
-            HttpResponseMessage httpResponseConfirmUserPasswordReset = await _httpClient.SendAsync(httpRequestConfirmUserPasswordReset);
-            Assert.Equal(HttpStatusCode.NoContent, httpResponseConfirmUserPasswordReset.StatusCode);
         }
     }
 }
