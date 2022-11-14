@@ -22,7 +22,6 @@ namespace LibHouse.Business.Entities.Residents
             CPF = Cpf.CreateFromDocument(cpf);
             Phone = Phone.CreateFromNumber(phone);
             Email = Email.CreateFromAddress(email);
-            ResidentPreferences = new();
         }
 
         private Resident(
@@ -35,14 +34,27 @@ namespace LibHouse.Business.Entities.Residents
         {
         }
 
+        public void WithPreferences()
+        {
+            if (ResidentPreferences is null)
+            {
+                ResidentPreferences = new();
+            }
+        }
+
         public void AddRoomPreferences(RoomPreferences roomPreferences)
         {
             ResidentPreferences.AddRoomPreferences(roomPreferences);
         }
 
+        public RoomPreferences GetRoomPreferences()
+        {
+            return ResidentPreferences.GetRoomPreferences();
+        }
+
         public bool HaveRoomPreferences()
         {
-            return ResidentPreferences.HaveRoomPreferences();
+            return ResidentPreferences is not null && ResidentPreferences.HaveRoomPreferences();
         }
 
         public override string ToString() => $"Resident {Id}: {Name} {LastName}";

@@ -7,6 +7,7 @@ namespace LibHouse.Business.Entities.Shared
 {
     public interface IEntityRepository<T> where T : Entity
     {
+        Task<int> ExecuteStatementAsync(FormattableString statement); 
         Task AddAsync(T entity);
         void Remove(T entity);
         void Update(T entity);

@@ -11,11 +11,14 @@ namespace LibHouse.Data.Repositories.Shared
 {
     public class EntityTypeRepository<T> : IEntityRepository<T> where T : Entity
     {
+        private readonly DbContext _dbContext;
+
         protected readonly DbSet<T> _dbSet;
 
         public EntityTypeRepository(LibHouseContext context)
         {
             _dbSet = context.Set<T>();
+            _dbContext = context;
         }
 
         public async Task AddAsync(T entity)
@@ -26,6 +29,12 @@ namespace LibHouse.Data.Repositories.Shared
         public async Task<int> CountAsync(Expression<Func<T, bool>> expression)
         {
             return await _dbSet.CountAsync(expression);
+        }
+
+        public async Task<int> ExecuteStatementAsync(FormattableString statement)
+        {
+            int numberOfRowsAffected = await _dbContext.Database.ExecuteSqlInterpolatedAsync(statement);
+            return numberOfRowsAffected;
         }
 
         public async Task<T> FirstAsync(Expression<Func<T, bool>> expression)

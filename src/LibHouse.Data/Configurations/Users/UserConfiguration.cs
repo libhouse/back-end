@@ -15,7 +15,7 @@ namespace LibHouse.Data.Configurations.Users
             builder.Property(u => u.LastName).HasColumnType("varchar").HasMaxLength(40).IsRequired();
             builder.Property(u => u.BirthDate).HasColumnType("date").IsRequired();
             builder.Property(u => u.Gender).HasConversion(new EnumToStringConverter<Gender>()).HasColumnType("varchar").HasMaxLength(11).IsRequired();
-            builder.OwnsOne(u => u.Phone).Property(p => p.Value).HasColumnType("char").HasMaxLength(11).HasColumnName("Phone").IsRequired();
+            builder.OwnsOne(u => u.Phone).Property(p => p.Value).HasColumnType("varchar").HasMaxLength(15).HasColumnName("Phone").IsRequired();
             builder.Property(u => u.UserType).HasConversion(new EnumToStringConverter<UserType>()).HasColumnType("varchar").HasMaxLength(8).IsRequired();
             builder.Property(u => u.Active).HasColumnType("bit").IsRequired();
             builder.Property(u => u.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("GETDATE()").IsRequired();

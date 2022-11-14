@@ -8,6 +8,7 @@ namespace LibHouse.Data.Extensions.Context
     {
         public static async Task CleanContextDataAsync(this LibHouseContext libHouseContext)
         {
+            await libHouseContext.Database.ExecuteSqlRawAsync("DELETE FROM [Business].[ResidentPreferences]");
             await libHouseContext.Database.ExecuteSqlRawAsync("DELETE FROM [Business].[Residents]");
             await libHouseContext.Database.ExecuteSqlRawAsync("DELETE FROM [Business].[Owners]");
             await libHouseContext.Database.ExecuteSqlRawAsync("DELETE FROM [Business].[Users]");

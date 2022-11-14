@@ -9,6 +9,7 @@ namespace LibHouse.Data.Configurations.Residents
         public void Configure(EntityTypeBuilder<Resident> builder)
         {
             builder.ToTable("Residents", "Business");
+            builder.HasOne("ResidentPreferences").WithOne("Resident").HasForeignKey("ResidentPreferences", "ResidentId").IsRequired(false);
         }
     }
 }

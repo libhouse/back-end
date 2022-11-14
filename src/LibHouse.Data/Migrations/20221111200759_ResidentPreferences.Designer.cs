@@ -4,14 +4,16 @@ using LibHouse.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LibHouse.Data.Migrations
 {
     [DbContext(typeof(LibHouseContext))]
-    partial class LibHouseContextModelSnapshot : ModelSnapshot
+    [Migration("20221111200759_ResidentPreferences")]
+    partial class ResidentPreferences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,6 +121,7 @@ namespace LibHouse.Data.Migrations
 
                                     b2.Property<string>("BathroomType")
                                         .IsRequired()
+                                        .ValueGeneratedOnAdd()
                                         .HasMaxLength(6)
                                         .HasColumnType("varchar(6)")
                                         .HasColumnName("RoomPreferences_Bathroom_BathroomType");
@@ -138,6 +141,7 @@ namespace LibHouse.Data.Migrations
 
                                     b2.Property<string>("DormitoryType")
                                         .IsRequired()
+                                        .ValueGeneratedOnAdd()
                                         .HasMaxLength(6)
                                         .HasColumnType("varchar(6)")
                                         .HasColumnName("RoomPreferences_Dormitory_DormitoryType");
@@ -298,8 +302,8 @@ namespace LibHouse.Data.Migrations
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(15)
-                                .HasColumnType("varchar(15)")
+                                .HasMaxLength(11)
+                                .HasColumnType("char(11)")
                                 .HasColumnName("Phone");
 
                             b1.HasKey("UserId");
