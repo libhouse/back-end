@@ -134,6 +134,7 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents
                 email: "luke.skywalker@gmail.com",
                 cpf: "876.511.550-33"
             );
+            resident.WithPreferences();
             RoomPreferences roomPreferences = new();
             roomPreferences.AddBathroomPreferences(BathroomType.Shared);
             roomPreferences.AddDormitoryPreferences(DormitoryType.Shared, requireFurnishedDormitory: true);
