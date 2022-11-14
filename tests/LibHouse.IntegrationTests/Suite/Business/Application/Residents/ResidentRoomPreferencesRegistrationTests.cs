@@ -10,6 +10,7 @@ using LibHouse.Data.Context;
 using LibHouse.Data.Extensions.Context;
 using LibHouse.Data.Repositories.Residents;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -18,11 +19,18 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Residents
 {
     public class ResidentRoomPreferencesRegistrationTests
     {
+        private readonly IConfiguration _testsConfiguration;
+
+        public ResidentRoomPreferencesRegistrationTests()
+        {
+            _testsConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.Tests.json").Build();
+        }
+
         [Fact]
         public async Task ExecuteAsync_NewRoomPreferences_ShouldRegisterRoomPreferences()
         {
             Notifier notifier = new();
-            string connectionString = "Data source=(localdb)\\mssqllocaldb;Initial Catalog=LibHouse;Integrated Security=true;pooling=true;MultipleActiveResultSets=true";
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
             LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
             await libHouseContext.CleanContextDataAsync();
             IResidentRepository residentRepository = new ResidentRepository(libHouseContext);
@@ -52,7 +60,7 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Residents
         public async Task ExecuteAsync_ResidentWithRoomPreferencesAlreadyRegistered_ShouldNotRegisterRoomPreferences()
         {
             Notifier notifier = new();
-            string connectionString = "Data source=(localdb)\\mssqllocaldb;Initial Catalog=LibHouse;Integrated Security=true;pooling=true;MultipleActiveResultSets=true";
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
             LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
             await libHouseContext.CleanContextDataAsync();
             IResidentRepository residentRepository = new ResidentRepository(libHouseContext);
