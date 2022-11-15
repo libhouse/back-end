@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Lucas\",\r\n    \"lastName\": \"Dirani\",\r\n    \"birthDate\": \"1998-08-12\",\r\n    \"gender\": 0,\r\n    \"phone\": \"11975257584\",\r\n    \"email\": \"{{api_username}}\",\r\n    \"cpf\": \"{{api_user_cpf}}\",\r\n    \"userType\": 1,\r\n    \"password\": \"{{api_user_password}}\",\r\n    \"confirmPassword\": \"{{api_user_password}}\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Lucas\",\r\n    \"lastName\": \"Dirani\",\r\n    \"birthDate\": \"1998-08-12\",\r\n    \"gender\": 0,\r\n    \"phone\": \"11975257584\",\r\n    \"email\": \"{{api_username}}\",\r\n    \"cpf\": \"{{api_user_cpf}}\",\r\n    \"userType\": 0,\r\n    \"password\": \"{{api_user_password}}\",\r\n    \"confirmPassword\": \"{{api_user_password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -52,7 +52,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BPykeuH+DRCpJAYVK0BLBQRLOkNtbNBH3dMYC4ASI75ZIbWUM+4YHfepuoLdJDyNiyBBzn/cuZ0toAsQzZExH0Km8TOUaVeisjjISsG9oe939vyD9twoudkqnXfD16kfQpLBspNTdq4Jh7ce7fwIgQ/3sIZqEagjfW29rCu5jGiULoWhnbsgksM+ypPjNxTysCMbqQ20yrSCReKty3NlJgLehN7+d8CukLWNf23ksHRqcNoG3kPZXRlyG1VYBDCrA==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"4ebc598d-933d-4c83-90fb-71383c5bdddd\"\r\n}",
+							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BfWSeGztkBHvxcCnitIZP5RmY6E/LxAP9hV/oPe/hgY98JfjDD9VeGccZbeA5vN9ULcy+DONPGR//bGbjA/bOOUtZH1AjE+zLJ0D4hIy1p+M4ZlM+OFR2KJ9ififlb0TkX11RzO5qQ8Cae6uOJ47MnrOW6cuhFSSq047qG08UzModlPyf/fZ54SMGAmKBqoE19GUKasSzzjqrDKWOeGySHxVF0rbYHwZNTyjWrvdro5nfEM4q2B9p5u7aEAMhz03w==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"02540A93-F16C-475B-BC0B-B684AB77A2F9\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -258,6 +258,41 @@
 				}
 			],
 			"description": "Todas as requisições para a rota de usuários (/users) estão agrupadas nesta pasta. As principais operações incluem registrar, autenticar e consultar os dados de cadastro dos usuários da aplicação LibHouse."
+		},
+		{
+			"name": "Residents",
+			"item": [
+				{
+					"name": "Register Room Preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"residentId\": \"{{user_id}}\",\r\n    \"dormitoryPreferences\": {\r\n        \"wantSigleDormitory\": true,\r\n        \"wantFurnishedDormitory\": true\r\n    },\r\n    \"kitchenPreferences\": {\r\n        \"wantStove\": false,\r\n        \"wantMicrowave\": true,\r\n        \"wantRefrigerator\": true\r\n    },\r\n    \"garagePreferences\": {\r\n        \"wantGarage\": true\r\n    },\r\n    \"bathroomPreferences\": {\r\n        \"wantPrivateBathroom\": true\r\n    },\r\n    \"otherPreferences\": {\r\n        \"wantServiceArea\": false,\r\n        \"wantRecreationArea\": false\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/residents/register-room-preferences",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"residents",
+								"register-room-preferences"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Todas as requisições para a rota de moradores (/residents) estão agrupadas nesta pasta. As principais operações incluem registrar e alterar os seus dados de preferências e perfil na plataforma."
 		}
 	],
 	"auth": {
@@ -299,9 +334,11 @@
 					"        const jsonResponse = response.json();",
 					"        const newAccessToken = jsonResponse.accessToken;",
 					"        const newRefreshToken = jsonResponse.refreshToken;",
+					"        const userId = jsonResponse.user.id;",
 					"",
 					"        pm.variables.set('access_token', newAccessToken);",
 					"        pm.variables.set('refresh_token', newRefreshToken);",
+					"        pm.variables.set('user_id', userId);",
 					"    });",
 					"}"
 				]
