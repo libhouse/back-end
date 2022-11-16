@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
+using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Business.Entities.Users;
 using System;
 
@@ -55,6 +56,16 @@ namespace LibHouse.Business.Entities.Residents
         public bool HaveRoomPreferences()
         {
             return ResidentPreferences is not null && ResidentPreferences.HaveRoomPreferences();
+        }
+
+        public void AddServicesPreferences(ServicesPreferences servicesPreferences)
+        {
+            ResidentPreferences.AddServicesPreferences(servicesPreferences);
+        }
+
+        public bool HaveServicesPreferences()
+        {
+            return ResidentPreferences is not null && ResidentPreferences.HaveServicesPreferences();
         }
 
         public override string ToString() => $"Resident {Id}: {Name} {LastName}";

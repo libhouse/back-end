@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
+using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Business.Entities.Users;
 using System;
 using Xunit;
@@ -144,6 +145,27 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents
             roomPreferences.AddOtherRoomPreferences(serviceAreaIsRequired: true, recreationAreaIsRequired: true);
             resident.AddRoomPreferences(roomPreferences);
             Assert.True(resident.HaveRoomPreferences());
+        }
+
+        [Fact]
+        public void AddServicesPreferences_ValidServicesPreferences_ShouldAddServicesPreferences()
+        {
+            Resident resident = new(
+                name: "Luke",
+                lastName: "Skywalker",
+                birthDate: new DateTime(1960, 5, 10),
+                gender: Gender.Male,
+                phone: "(11) 44245-9016",
+                email: "luke.skywalker@gmail.com",
+                cpf: "876.511.550-33"
+            );
+            resident.WithPreferences();
+            ServicesPreferences servicesPreferences = new();
+            servicesPreferences.AddCleaningPreferences(houseCleaningIsRequired: true);
+            servicesPreferences.AddInternetPreferences(internetServiceIsRequired: false);
+            servicesPreferences.AddTelevisionPreferences(cableTelevisionIsRequired: false);
+            resident.AddServicesPreferences(servicesPreferences);
+            Assert.True(resident.HaveServicesPreferences());
         }
     }
 }

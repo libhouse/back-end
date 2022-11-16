@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
+using LibHouse.Business.Entities.Residents.Preferences.Services;
 using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences
@@ -19,6 +20,18 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences
             roomPreferences.AddOtherRoomPreferences(serviceAreaIsRequired: true, recreationAreaIsRequired: true);
             residentPreferences.AddRoomPreferences(roomPreferences);
             Assert.True(residentPreferences.HaveRoomPreferences());
+        }
+
+        [Fact]
+        public void AddServicesPreferences_ValidServicesPreferences_ShouldAddServicesPreferences()
+        {
+            ResidentPreferences residentPreferences = new();
+            ServicesPreferences servicesPreferences = new();
+            servicesPreferences.AddCleaningPreferences(houseCleaningIsRequired: true);
+            servicesPreferences.AddInternetPreferences(internetServiceIsRequired: false);
+            servicesPreferences.AddTelevisionPreferences(cableTelevisionIsRequired: false);
+            residentPreferences.AddServicesPreferences(servicesPreferences);
+            Assert.True(residentPreferences.HaveServicesPreferences());
         }
     }
 }
