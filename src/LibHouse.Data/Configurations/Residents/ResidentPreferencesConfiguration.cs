@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
+using LibHouse.Business.Entities.Residents.Preferences.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -37,6 +38,21 @@ namespace LibHouse.Data.Configurations.Residents
                 {
                     otherRoomPreferences.Property(o => o.RecreationAreaIsRequired).HasColumnName("RoomPreferences_Other_RecreationAreaIsRequired").HasColumnType("bit").HasDefaultValueSql("0");
                     otherRoomPreferences.Property(o => o.ServiceAreaIsRequired).HasColumnName("RoomPreferences_Other_ServiceAreaIsRequired").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+            });
+            builder.OwnsOne<ServicesPreferences>(navigationName: "ServicesPreferences", servicesPreferences =>
+            {
+                servicesPreferences.OwnsOne(s => s.CleaningPreferences, cleaningPreferences =>
+                {
+                    cleaningPreferences.Property(c => c.HouseCleaningIsRequired).HasColumnName("ServicesPreferences_Cleaning_HouseCleaningIsRequired").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+                servicesPreferences.OwnsOne(s => s.InternetPreferences, internetPreferences =>
+                {
+                    internetPreferences.Property(i => i.InternetServiceIsRequired).HasColumnName("ServicesPreferences_Internet_InternetServiceIsRequired").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+                servicesPreferences.OwnsOne(s => s.TelevisionPreferences, televisionPreferences =>
+                {
+                    televisionPreferences.Property(t => t.CableTelevisionIsRequired).HasColumnName("ServicesPreferences_Television_CableTelevisionIsRequired").HasColumnType("bit").HasDefaultValueSql("0");
                 });
             });
             builder.HasIndex("ResidentId").HasDatabaseName("idx_residentpreferences_residentid").IsUnique();
