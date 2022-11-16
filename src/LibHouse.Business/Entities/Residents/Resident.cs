@@ -63,6 +63,11 @@ namespace LibHouse.Business.Entities.Residents
             ResidentPreferences.AddServicesPreferences(servicesPreferences);
         }
 
+        public ServicesPreferences GetServicesPreferences()
+        {
+            return ResidentPreferences.GetServicesPreferences();
+        }
+
         public bool HaveServicesPreferences()
         {
             return ResidentPreferences is not null && ResidentPreferences.HaveServicesPreferences();

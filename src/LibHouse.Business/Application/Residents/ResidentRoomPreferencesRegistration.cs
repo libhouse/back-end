@@ -45,7 +45,7 @@ namespace LibHouse.Business.Application.Residents
             _roomPreferencesBuilder.WithKitchenPreferences(input.WantStove, input.WantMicrowave, input.WantRefrigerator);
             _roomPreferencesBuilder.WithOtherPreferences(input.WantServiceArea, input.WantRecreationArea);
             resident.AddRoomPreferences(_roomPreferencesBuilder.GetRoomPreferences());
-            bool preferencesHaveBeendAdded = await _residentRepository.AddResidentRoomPreferencesAsync(resident.Id, resident.GetRoomPreferences());
+            bool preferencesHaveBeendAdded = await _residentRepository.AddOrUpdateResidentRoomPreferencesAsync(resident.Id, resident.GetRoomPreferences());
             if (!preferencesHaveBeendAdded)
             {
                 Notify("Falha inesperada", $"Falha ao salvar as preferências do morador {input.ResidentId}");
