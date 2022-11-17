@@ -33,6 +33,11 @@ namespace LibHouse.Business.Application.Residents
                 Notify("Morador não encontrado", $"O morador {input.ResidentId} não foi encontrado");
                 return new() { IsSuccess = false, RoomPreferencesRegistrationMessage = "O morador não foi encontrado" };
             }
+            if (!resident.IsActive)
+            {
+                Notify("Morador inativo", $"O morador {input.ResidentId} não está com o seu perfil ativo");
+                return new() { IsSuccess = false, RoomPreferencesRegistrationMessage = "O morador não está com o seu perfil ativo" };
+            }
             if (resident.HaveRoomPreferences())
             {
                 Notify("Morador com preferências", $"O morador {input.ResidentId} já possui preferências cadastradas");
