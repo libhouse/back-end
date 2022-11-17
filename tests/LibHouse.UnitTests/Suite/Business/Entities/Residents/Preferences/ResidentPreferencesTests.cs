@@ -1,4 +1,5 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
+using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using Xunit;
@@ -32,6 +33,17 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences
             servicesPreferences.AddTelevisionPreferences(cableTelevisionIsRequired: false);
             residentPreferences.AddServicesPreferences(servicesPreferences);
             Assert.True(residentPreferences.HaveServicesPreferences());
+        }
+
+        [Fact]
+        public void AddChargePreferences_ValidChargePreferences_ShouldAddChargePreferences()
+        {
+            ResidentPreferences residentPreferences = new();
+            ChargePreferences chargePreferences = new();
+            chargePreferences.AddRentPreferences(minimumRentalAmountDesired: 150.0m, maximumRentalAmountDesired: 350.0m);
+            chargePreferences.AddExpensePreferences(minimumExpenseAmountDesired: 150.0m, maximumExpenseAmountDesired: 350.0m);
+            residentPreferences.AddChargePreferences(chargePreferences);
+            Assert.True(residentPreferences.HaveChargePreferences());
         }
     }
 }
