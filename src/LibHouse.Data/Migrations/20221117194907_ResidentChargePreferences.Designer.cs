@@ -4,14 +4,16 @@ using LibHouse.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LibHouse.Data.Migrations
 {
     [DbContext(typeof(LibHouseContext))]
-    partial class LibHouseContextModelSnapshot : ModelSnapshot
+    [Migration("20221117194907_ResidentChargePreferences")]
+    partial class ResidentChargePreferences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

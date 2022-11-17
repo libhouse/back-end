@@ -13,6 +13,8 @@ namespace LibHouse.Business.Entities.Residents.Preferences.Charges
             ExpenseRange = new(minimumExpenseAmountDesired, maximumExpenseAmountDesired);
         }
 
+        private ExpensePreferences() { }
+
         public decimal GetMinimumExpenseAmount()
         {
             return ExpenseRange.MinimumValue;

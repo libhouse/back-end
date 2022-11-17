@@ -11,6 +11,8 @@ namespace LibHouse.Business.Entities.Residents.Preferences.Charges
             RentRange = new(minimumRentalAmountDesired, maximumRentalAmountDesired);
         }
 
+        private RentPreferences() { }
+
         public decimal GetMinimumRentalAmount()
         {
             return RentRange.MinimumValue;

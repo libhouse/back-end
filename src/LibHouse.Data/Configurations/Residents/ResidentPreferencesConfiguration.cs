@@ -1,4 +1,5 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
+using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,25 @@ namespace LibHouse.Data.Configurations.Residents
                 servicesPreferences.OwnsOne(s => s.TelevisionPreferences, televisionPreferences =>
                 {
                     televisionPreferences.Property(t => t.CableTelevisionIsRequired).HasColumnName("ServicesPreferences_Television_CableTelevisionIsRequired").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+            });
+            builder.OwnsOne<ChargePreferences>(navigationName: "ChargePreferences", chargePreferences =>
+            {
+                chargePreferences.OwnsOne(c => c.ExpensePreferences, expensePreferences =>
+                {
+                    expensePreferences.OwnsOne(e => e.ExpenseRange, expenseRange =>
+                    {
+                        expenseRange.Property(r => r.MinimumValue).HasColumnName("ChargePreferences_Expense_MinimumExpenseAmountDesired").HasColumnType("decimal(6,2)");
+                        expenseRange.Property(r => r.MaximumValue).HasColumnName("ChargePreferences_Expense_MaximumExpenseAmountDesired").HasColumnType("decimal(6,2)");
+                    });
+                });
+                chargePreferences.OwnsOne(c => c.RentPreferences, rentPreferences =>
+                {
+                    rentPreferences.OwnsOne(r => r.RentRange, rentRange =>
+                    {
+                        rentRange.Property(r => r.MinimumValue).HasColumnName("ChargePreferences_Rent_MinimumRentAmountDesired").HasColumnType("decimal(6,2)");
+                        rentRange.Property(r => r.MaximumValue).HasColumnName("ChargePreferences_Rent_MaximumRentAmountDesired").HasColumnType("decimal(6,2)");
+                    });
                 });
             });
             builder.HasIndex("ResidentId").HasDatabaseName("idx_residentpreferences_residentid").IsUnique();
