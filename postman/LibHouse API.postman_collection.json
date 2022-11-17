@@ -52,7 +52,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BfWSeGztkBHvxcCnitIZP5RmY6E/LxAP9hV/oPe/hgY98JfjDD9VeGccZbeA5vN9ULcy+DONPGR//bGbjA/bOOUtZH1AjE+zLJ0D4hIy1p+M4ZlM+OFR2KJ9ififlb0TkX11RzO5qQ8Cae6uOJ47MnrOW6cuhFSSq047qG08UzModlPyf/fZ54SMGAmKBqoE19GUKasSzzjqrDKWOeGySHxVF0rbYHwZNTyjWrvdro5nfEM4q2B9p5u7aEAMhz03w==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"02540A93-F16C-475B-BC0B-B684AB77A2F9\"\r\n}",
+							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BfWSeGztkBHvxcCnitIZP6pXYfKhiOA3H0BqBi6WkGezk6gXcfljIeCu5KDTe+Ity6Pa5f68PEVDC9BMCAYutvOgIP/hy1UEV2TNfSTn2X1fVhfB0iNspWaKzZtvhywHpxNf7tyWxrM+J5pRa31JBP1Nvg1Pv9qB503K+RffXOUK7a9a9WKMhhzWE1Wlbl2qnqzxxRsvFO2pgh1JurP+Q/beJoAh3Z17CKlnWQRe7YkQYBOYRmaMffIdyzjegypEw==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"A326468C-586F-41EB-9FD3-082FDDD5A6C4\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -286,6 +286,35 @@
 								"{{api_version}}",
 								"residents",
 								"register-room-preferences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Services Preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"residentId\": \"{{user_id}}\",\r\n    \"wantHouseCleaningService\": true,\r\n    \"wantInternetService\": true,\r\n    \"wantCableTelevisionService\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/residents/register-services-preferences",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"residents",
+								"register-services-preferences"
 							]
 						}
 					},
