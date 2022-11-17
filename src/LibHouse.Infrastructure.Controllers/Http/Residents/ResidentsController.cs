@@ -6,6 +6,25 @@ namespace LibHouse.Infrastructure.Controllers.Http.Residents
     public class ResidentsController
     {
         public ResidentsController(
+            IHttpResident residentsWebApiAdapter,
+            IResidentRoomPreferencesRegistration residentRoomPreferencesRegistration,
+            IResidentServicesPreferencesRegistration residentServicesPreferencesRegistration)
+        {
+            residentsWebApiAdapter.OnResidentRoomPreferencesRegistration(
+                async (input) =>
+                {
+                    return await residentRoomPreferencesRegistration.ExecuteAsync(input);
+                }
+            );
+            residentsWebApiAdapter.OnResidentServicesPreferencesRegistration(
+                async (input) =>
+                {
+                    return await residentServicesPreferencesRegistration.ExecuteAsync(input);
+                }
+            );
+        }
+
+        public ResidentsController(
             IHttpResident residentsWebApiAdapter, 
             IResidentRoomPreferencesRegistration residentRoomPreferencesRegistration)
         {
