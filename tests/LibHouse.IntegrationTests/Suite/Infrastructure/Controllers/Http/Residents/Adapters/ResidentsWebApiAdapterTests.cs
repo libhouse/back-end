@@ -74,5 +74,30 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Reside
             Result residentRoomPreferencesRegistrationResult = await residentsWebApiAdapter.ResidentRoomPreferencesRegistration(viewModel);
             Assert.True(residentRoomPreferencesRegistrationResult.IsSuccess);
         }
+
+        [Fact]
+        public async Task ResidentServicesPreferencesRegistration_NewServicesPreferences_ShouldBeSuccess()
+        {
+            Notifier notifier = new();
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
+            IResidentRepository residentRepository = new ResidentRepository(libHouseContext);
+            Resident resident = new("Gustavo", "Rodriguez", new DateTime(1967, 1, 20), Gender.Male, "11985261522", "gustavorodriguez@gmail.com", "72047778085");
+            await libHouseContext.Residents.AddAsync(resident);
+            await libHouseContext.SaveChangesAsync();
+            ResidentServicesPreferencesRegistration residentServicesPreferencesRegistration = new(notifier, residentRepository);
+            ResidentsWebApiAdapter residentsWebApiAdapter = new();
+            _ = new ResidentsController(residentsWebApiAdapter, residentServicesPreferencesRegistration);
+            ResidentServicesPreferencesRegistrationViewModel viewModel = new()
+            {
+                ResidentId = resident.Id,
+                WantHouseCleaningService = true,
+                WantInternetService = true,
+                WantCableTelevisionService = true
+            };
+            Result residentServicesPreferencesRegistrationResult = await residentsWebApiAdapter.ResidentServicesPreferencesRegistration(viewModel);
+            Assert.True(residentServicesPreferencesRegistrationResult.IsSuccess);
+        }
     }
 }

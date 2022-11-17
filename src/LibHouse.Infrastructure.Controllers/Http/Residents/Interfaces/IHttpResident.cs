@@ -8,5 +8,6 @@ namespace LibHouse.Infrastructure.Controllers.Http.Residents.Interfaces
     public interface IHttpResident
     {
         void OnResidentRoomPreferencesRegistration(Func<InputResidentRoomPreferencesRegistration, Task<OutputResidentRoomPreferencesRegistration>> on);
+        void OnResidentServicesPreferencesRegistration(Func<InputResidentServicesPreferencesRegistration, Task<OutputResidentServicesPreferencesRegistration>> on);
     }
 }
