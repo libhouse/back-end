@@ -48,6 +48,11 @@ namespace LibHouse.Business.Entities.Residents.Preferences
             ChargePreferences = chargePreferences;
         }
 
+        public ChargePreferences GetChargePreferences()
+        {
+            return ChargePreferences;
+        }
+
         public bool HaveChargePreferences()
         {
             return ChargePreferences is not null;

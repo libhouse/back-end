@@ -1,4 +1,5 @@
 ﻿using LibHouse.Business.Entities.Residents;
+using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Data.Context;
@@ -13,6 +14,44 @@ namespace LibHouse.Data.Repositories.Residents
         public ResidentRepository(LibHouseContext context)
             : base(context)
         {
+        }
+
+        public async Task<bool> AddOrUpdateResidentChargePreferencesAsync(Guid residentId, ChargePreferences chargePreferences)
+        {
+            int numberOfRowsAffected = await ExecuteStatementAsync($@"
+                IF NOT EXISTS
+                (
+                	SELECT TOP 1 ResidentId 
+                	FROM [Business].[ResidentPreferences]
+                	WHERE ResidentId = {residentId}
+                )
+                BEGIN
+                    INSERT INTO [Business].[ResidentPreferences]
+                    ([ResidentId]
+                    ,[ChargePreferences_Expense_MinimumExpenseAmountDesired]
+                    ,[ChargePreferences_Expense_MaximumExpenseAmountDesired]
+                    ,[ChargePreferences_Rent_MinimumRentAmountDesired]
+                    ,[ChargePreferences_Rent_MaximumRentAmountDesired])
+                    VALUES
+                    (
+                        {residentId},
+                        {chargePreferences.ExpensePreferences.GetMinimumExpenseAmount()},
+                        {chargePreferences.ExpensePreferences.GetMaximumExpenseAmount()},
+                        {chargePreferences.RentPreferences.GetMinimumRentalAmount()},
+                        {chargePreferences.RentPreferences.GetMaximumRentalAmount()}
+                    )
+                END
+                ELSE
+                BEGIN
+                    UPDATE [Business].[ResidentPreferences]
+                    SET [ChargePreferences_Expense_MinimumExpenseAmountDesired] = {chargePreferences.ExpensePreferences.GetMinimumExpenseAmount()}
+                        ,[ChargePreferences_Expense_MaximumExpenseAmountDesired] = {chargePreferences.ExpensePreferences.GetMaximumExpenseAmount()}
+                        ,[ChargePreferences_Rent_MinimumRentAmountDesired] = {chargePreferences.RentPreferences.GetMinimumRentalAmount()}
+                        ,[ChargePreferences_Rent_MaximumRentAmountDesired] = {chargePreferences.RentPreferences.GetMaximumRentalAmount()}
+                    WHERE [ResidentId] = {residentId}
+                END
+            ");
+            return numberOfRowsAffected > 0;
         }
 
         public async Task<bool> AddOrUpdateResidentRoomPreferencesAsync(Guid residentId, RoomPreferences roomPreferences)

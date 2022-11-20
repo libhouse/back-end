@@ -79,6 +79,11 @@ namespace LibHouse.Business.Entities.Residents
             ResidentPreferences.AddChargePreferences(chargePreferences);
         }
 
+        public ChargePreferences GetChargePreferences()
+        {
+            return ResidentPreferences.GetChargePreferences();
+        }
+
         public bool HaveChargePreferences()
         {
             return ResidentPreferences is not null && ResidentPreferences.HaveChargePreferences();
