@@ -52,7 +52,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BfWSeGztkBHvxcCnitIZP6pXYfKhiOA3H0BqBi6WkGezk6gXcfljIeCu5KDTe+Ity6Pa5f68PEVDC9BMCAYutvOgIP/hy1UEV2TNfSTn2X1fVhfB0iNspWaKzZtvhywHpxNf7tyWxrM+J5pRa31JBP1Nvg1Pv9qB503K+RffXOUK7a9a9WKMhhzWE1Wlbl2qnqzxxRsvFO2pgh1JurP+Q/beJoAh3Z17CKlnWQRe7YkQYBOYRmaMffIdyzjegypEw==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"A326468C-586F-41EB-9FD3-082FDDD5A6C4\"\r\n}",
+							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BfWSeGztkBHvxcCnitIZP5kDl1swdqCO0G95UP+A8w4Te5ZODtdhRSC/EsEkv54FC2FeZa5r1b/XkT6JFdMxre45J1DKxWfEh0+hdmBr3JNQeQQszEduzNiheip8Ufz7jCtPECZBTZ04XoxLrrFOBuTCnB/RJN55Nr1YUkYIrQaZD4Eh7BSEtpm1fMl6sq2n0UkfxOgwceR9dMWRFaFSZfDMq9f/+oppV0tOcr9FSdYOsIJ2dk7BRnpFUriUWAVlw==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"200E6451-568F-492E-8CCB-AF6E6B7ED1F5\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -315,6 +315,35 @@
 								"{{api_version}}",
 								"residents",
 								"register-services-preferences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Charge Preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"residentId\": \"{{user_id}}\",\r\n    \"minimumRentalAmountDesired\": 100,\r\n    \"maximumRentalAmountDesired\": 500,\r\n    \"minimumExpenseAmountDesired\": 60,\r\n    \"maximumExpenseAmountDesired\": 220\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/residents/register-charge-preferences",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"residents",
+								"register-charge-preferences"
 							]
 						}
 					},
