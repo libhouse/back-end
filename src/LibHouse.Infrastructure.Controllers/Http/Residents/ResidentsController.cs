@@ -47,5 +47,17 @@ namespace LibHouse.Infrastructure.Controllers.Http.Residents
                 }
             );
         }
+
+        public ResidentsController(
+            IHttpResident residentsWebApiAdapter, 
+            IResidentChargePreferencesRegistration residentChargePreferencesRegistration)
+        {
+            residentsWebApiAdapter.OnResidentChargePreferencesRegistration(
+                async (input) =>
+                {
+                    return await residentChargePreferencesRegistration.ExecuteAsync(input);
+                }
+            );
+        }
     }
 }

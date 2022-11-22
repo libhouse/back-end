@@ -99,5 +99,31 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Reside
             Result residentServicesPreferencesRegistrationResult = await residentsWebApiAdapter.ResidentServicesPreferencesRegistration(viewModel);
             Assert.True(residentServicesPreferencesRegistrationResult.IsSuccess);
         }
+
+        [Fact]
+        public async Task ResidentChargePreferencesRegistration_NewChargePreferences_ShouldBeSuccess()
+        {
+            Notifier notifier = new();
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
+            IResidentRepository residentRepository = new ResidentRepository(libHouseContext);
+            Resident resident = new("Juan", "Batista", new DateTime(1971, 10, 10), Gender.Male, "11985261522", "juanbatista@gmail.com", "76912370063");
+            await libHouseContext.Residents.AddAsync(resident);
+            await libHouseContext.SaveChangesAsync();
+            ResidentChargePreferencesRegistration residentChargePreferencesRegistration = new(notifier, residentRepository);
+            ResidentsWebApiAdapter residentsWebApiAdapter = new();
+            _ = new ResidentsController(residentsWebApiAdapter, residentChargePreferencesRegistration);
+            ResidentChargePreferencesRegistrationViewModel viewModel = new()
+            {
+                ResidentId = resident.Id,
+                MinimumRentalAmountDesired = 100.0m,
+                MaximumRentalAmountDesired = 400.0m,
+                MinimumExpenseAmountDesired = 50.0m,
+                MaximumExpenseAmountDesired = 150.0m
+            };
+            Result residentChargePreferencesRegistrationResult = await residentsWebApiAdapter.ResidentChargePreferencesRegistration(viewModel);
+            Assert.True(residentChargePreferencesRegistrationResult.IsSuccess);
+        }
     }
 }
