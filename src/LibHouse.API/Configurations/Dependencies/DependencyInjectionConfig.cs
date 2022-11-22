@@ -91,6 +91,7 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<IConfirmUserPasswordReset, ConfirmUserPasswordReset>();
             services.AddScoped<IResidentRoomPreferencesRegistration, ResidentRoomPreferencesRegistration>();
             services.AddScoped<IResidentServicesPreferencesRegistration, ResidentServicesPreferencesRegistration>();
+            services.AddScoped<IResidentChargePreferencesRegistration, ResidentChargePreferencesRegistration>();
             return services;
         }
 

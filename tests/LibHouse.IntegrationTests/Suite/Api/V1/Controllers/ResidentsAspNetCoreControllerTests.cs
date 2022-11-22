@@ -75,5 +75,26 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
+
+        [Theory]
+        [InlineData("POST", "/api/v1/residents/register-charge-preferences")]
+        public async Task RegisterResidentChargePreferencesAsync_NewChargePreferences_ShouldReturn200OK(string method, string route)
+        {
+            await _libHouseContext.CleanContextDataAsync();
+            await _authenticationContext.CleanContextDataAsync();
+            User userResident = await CreateActiveResidentAsync();
+            HttpRequestMessage httpRequest = new(new HttpMethod(method), route);
+            httpRequest.Content = new StringContent(JsonSerializer.Serialize(new ResidentChargePreferencesRegistrationViewModel
+            {
+                ResidentId = userResident.Id,
+                MinimumRentalAmountDesired = 100.0m,
+                MaximumRentalAmountDesired = 400.0m,
+                MinimumExpenseAmountDesired = 50.0m,
+                MaximumExpenseAmountDesired = 150.0m
+            }), Encoding.UTF8, "application/json");
+            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessTokenAsync(userResident.GetEmailAddress()));
+            HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
     }
 }

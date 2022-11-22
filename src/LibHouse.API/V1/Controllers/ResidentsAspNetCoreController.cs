@@ -26,14 +26,16 @@ namespace LibHouse.API.V1.Controllers
             ILoggedUser loggedUser,
             IKLogger logger,
             IResidentRoomPreferencesRegistration residentRoomPreferencesRegistration,
-            IResidentServicesPreferencesRegistration residentServicesPreferencesRegistration) 
+            IResidentServicesPreferencesRegistration residentServicesPreferencesRegistration,
+            IResidentChargePreferencesRegistration residentChargePreferencesRegistration) 
             : base(notifier, loggedUser, logger)
         {
             _residentsWebApiAdapter = new ResidentsWebApiAdapter();
             _ = new ResidentsController(
                 _residentsWebApiAdapter, 
                 residentRoomPreferencesRegistration,
-                residentServicesPreferencesRegistration
+                residentServicesPreferencesRegistration,
+                residentChargePreferencesRegistration
             );
         }
 
@@ -88,6 +90,33 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
             Logger.Log(LogLevel.Information, $"Preferências de serviços do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
+            return Ok(preferencesRegistrationResult);
+        }
+
+        /// <summary>
+        /// Cadastra as preferências de cobrança de um morador.
+        /// </summary>
+        /// <param name="preferencesRegistrationViewModel">Objeto que possui os dados necessários para cadastrar as preferências de cobranças do morador.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [Authorize("Resident")]
+        [HttpPost("register-charge-preferences", Name = "Register Charge Preferences")]
+        public async Task<ActionResult> RegisterResidentChargePreferencesAsync(ResidentChargePreferencesRegistrationViewModel preferencesRegistrationViewModel)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+            Result preferencesRegistrationResult = await _residentsWebApiAdapter.ResidentChargePreferencesRegistration(preferencesRegistrationViewModel);
+            if (preferencesRegistrationResult.Failure)
+            {
+                NotifyError("Registro de preferências", preferencesRegistrationResult.Error);
+                Logger.Log(LogLevel.Error, $"Falha ao realizar as preferências do morador: {preferencesRegistrationResult.Error}");
+                return CustomResponseForPostEndpoint();
+            }
+            Logger.Log(LogLevel.Information, $"Preferências de cobrança do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
             return Ok(preferencesRegistrationResult);
         }
     }
