@@ -34,6 +34,8 @@ namespace LibHouse.Business.Entities.Residents.Preferences.General
             AcceptsRoommatesOfAllGenders = !AcceptsOnlyMaleRoommates && !AcceptsOnlyFemaleRoommates;
         }
 
+        private RoommatePreferences() { }
+
         public int GetMaximumNumberOfRoommatesDesired()
         {
             return AcceptedRangeOfRoommates.LastValue;

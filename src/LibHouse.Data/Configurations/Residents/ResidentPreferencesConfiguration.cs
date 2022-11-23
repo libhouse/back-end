@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
+using LibHouse.Business.Entities.Residents.Preferences.General;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +74,36 @@ namespace LibHouse.Data.Configurations.Residents
                         rentRange.Property(r => r.MinimumValue).HasColumnName("ChargePreferences_Rent_MinimumRentAmountDesired").HasColumnType("decimal(6,2)");
                         rentRange.Property(r => r.MaximumValue).HasColumnName("ChargePreferences_Rent_MaximumRentAmountDesired").HasColumnType("decimal(6,2)");
                     });
+                });
+            });
+            builder.OwnsOne<GeneralPreferences>(navigationName: "GeneralPreferences", generalPreferences =>
+            {
+                generalPreferences.OwnsOne(g => g.AnimalPreferences, animalPreferences =>
+                {
+                    animalPreferences.Property(a => a.WantSpaceForAnimals).HasColumnName("GeneralPreferences_Animal_WantSpaceForAnimals").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+                generalPreferences.OwnsOne(g => g.ChildrenPreferences, childrenPreferences =>
+                {
+                    childrenPreferences.Property(c => c.AcceptChildren).HasColumnName("GeneralPreferences_Children_AcceptChildren").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+                generalPreferences.OwnsOne(g => g.PartyPreferences, partyPreferences =>
+                {
+                    partyPreferences.Property(p => p.WantsToParty).HasColumnName("GeneralPreferences_Party_WantsToParty").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+                generalPreferences.OwnsOne(g => g.RoommatePreferences, roommatePreferences =>
+                {
+                    roommatePreferences.Ignore(r => r.AcceptsRoommatesOfAllGenders);
+                    roommatePreferences.Property(r => r.AcceptsOnlyFemaleRoommates).HasColumnName("GeneralPreferences_Roommate_AcceptsOnlyFemaleRoommates").HasColumnType("bit").HasDefaultValueSql("0");
+                    roommatePreferences.Property(r => r.AcceptsOnlyMaleRoommates).HasColumnName("GeneralPreferences_Roommate_AcceptsOnlyMaleRoommates").HasColumnType("bit").HasDefaultValueSql("0");
+                    roommatePreferences.OwnsOne(r => r.AcceptedRangeOfRoommates, rangeOfRoommates =>
+                    {
+                        rangeOfRoommates.Property(r => r.InitialValue).HasColumnName("GeneralPreferences_Roommate_MinimumNumberOfRoommatesDesired").HasColumnType("tinyint");
+                        rangeOfRoommates.Property(r => r.LastValue).HasColumnName("GeneralPreferences_Roommate_MaximumNumberOfRoommatesDesired").HasColumnType("tinyint");
+                    });
+                });
+                generalPreferences.OwnsOne(g => g.SmokersPreferences, smokersPreferences =>
+                {
+                    smokersPreferences.Property(s => s.AcceptSmokers).HasColumnName("GeneralPreferences_Smokers_AcceptSmokers").HasColumnType("bit").HasDefaultValueSql("0");
                 });
             });
             builder.HasIndex("ResidentId").HasDatabaseName("idx_residentpreferences_residentid").IsUnique();
