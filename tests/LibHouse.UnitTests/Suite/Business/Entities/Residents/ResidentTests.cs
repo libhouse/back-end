@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
+using LibHouse.Business.Entities.Residents.Preferences.General;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Business.Entities.Users;
@@ -187,6 +188,29 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents
             chargePreferences.AddExpensePreferences(minimumExpenseAmountDesired: 150.0m, maximumExpenseAmountDesired: 350.0m);
             resident.AddChargePreferences(chargePreferences);
             Assert.True(resident.HaveChargePreferences());
+        }
+
+        [Fact]
+        public void AddGeneralPreferences_ValidGeneralPreferences_ShouldAddGeneralPreferences()
+        {
+            Resident resident = new(
+                name: "Luke",
+                lastName: "Skywalker",
+                birthDate: new DateTime(1960, 5, 10),
+                gender: Gender.Male,
+                phone: "(11) 44245-9016",
+                email: "luke.skywalker@gmail.com",
+                cpf: "876.511.550-33"
+            );
+            resident.WithPreferences();
+            GeneralPreferences generalPreferences = new();
+            generalPreferences.AddAnimalPreferences(wantSpaceForAnimals: true);
+            generalPreferences.AddChildrenPreferences(acceptChildren: true);
+            generalPreferences.AddPartyPreferences(wantsToParty: true);
+            generalPreferences.AddRoommatePreferences(1, 4, new[] { Gender.Male });
+            generalPreferences.AddSmokersPreferences(acceptSmokers: true);
+            resident.AddGeneralPreferences(generalPreferences);
+            Assert.True(resident.HaveGeneralPreferences());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
+using LibHouse.Business.Entities.Residents.Preferences.General;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Business.Entities.Users;
@@ -87,6 +88,16 @@ namespace LibHouse.Business.Entities.Residents
         public bool HaveChargePreferences()
         {
             return ResidentPreferences is not null && ResidentPreferences.HaveChargePreferences();
+        }
+
+        public void AddGeneralPreferences(GeneralPreferences generalPreferences)
+        {
+            ResidentPreferences.AddGeneralPreferences(generalPreferences);
+        }
+
+        public bool HaveGeneralPreferences()
+        {
+            return ResidentPreferences is not null && ResidentPreferences.HaveGeneralPreferences();
         }
 
         public override string ToString() => $"Resident {Id}: {Name} {LastName}";
