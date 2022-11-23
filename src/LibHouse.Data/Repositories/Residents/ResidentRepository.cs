@@ -32,50 +32,16 @@ namespace LibHouse.Data.Repositories.Residents
         public async Task<bool> AddOrUpdateResidentGeneralPreferencesAsync(Guid residentId, GeneralPreferences generalPreferences)
         {
             int numberOfRowsAffected = await ExecuteStatementAsync($@"
-                IF NOT EXISTS
-                (
-                	SELECT TOP 1 ResidentId 
-                	FROM [Business].[ResidentPreferences]
-                	WHERE ResidentId = {residentId}
-                )
-                BEGIN
-                    INSERT INTO [Business].[ResidentPreferences]
-                    ([ResidentId]
-                    ,[GeneralPreferences_Animal_WantSpaceForAnimals]
-                    ,[GeneralPreferences_Children_AcceptChildren]
-                    ,[GeneralPreferences_Party_WantsToParty]
-                    ,[GeneralPreferences_Roommate_AcceptsOnlyFemaleRoommates]
-                    ,[GeneralPreferences_Roommate_AcceptsOnlyMaleRoommates]
-                    ,[GeneralPreferences_Roommate_MaximumNumberOfRoommatesDesired]
-                    ,[GeneralPreferences_Roommate_MinimumNumberOfRoommatesDesired]
-                    ,[GeneralPreferences_Smokers_AcceptSmokers])
-                    VALUES
-                    (
-                        {residentId},
-                        {generalPreferences.AnimalPreferences.WantSpaceForAnimals},
-                        {generalPreferences.ChildrenPreferences.AcceptChildren},
-                        {generalPreferences.PartyPreferences.WantsToParty},
-                        {generalPreferences.RoommatePreferences.AcceptsOnlyFemaleRoommates},
-                        {generalPreferences.RoommatePreferences.AcceptsOnlyMaleRoommates},
-                        {generalPreferences.RoommatePreferences.GetMaximumNumberOfRoommatesDesired()},
-                        {generalPreferences.RoommatePreferences.GetMinimumNumberOfRoommatesDesired()},
-                        {generalPreferences.SmokersPreferences.AcceptSmokers}
-                    )
-                END
-                ELSE
-                BEGIN
-                    UPDATE [Business].[ResidentPreferences]
-                    SET [GeneralPreferences_Animal_WantSpaceForAnimals] = {generalPreferences.AnimalPreferences.WantSpaceForAnimals}
-                        ,[GeneralPreferences_Children_AcceptChildren] = {generalPreferences.ChildrenPreferences.AcceptChildren}
-                        ,[GeneralPreferences_Party_WantsToParty] = {generalPreferences.PartyPreferences.WantsToParty}
-                        ,[GeneralPreferences_Roommate_AcceptsOnlyFemaleRoommates] = {generalPreferences.RoommatePreferences.AcceptsOnlyFemaleRoommates}
-                        ,[GeneralPreferences_Roommate_AcceptsOnlyMaleRoommates] = {generalPreferences.RoommatePreferences.AcceptsOnlyMaleRoommates}
-                        ,[GeneralPreferences_Roommate_MaximumNumberOfRoommatesDesired] = {generalPreferences.RoommatePreferences.GetMaximumNumberOfRoommatesDesired()}
-                        ,[GeneralPreferences_Roommate_MinimumNumberOfRoommatesDesired] = {generalPreferences.RoommatePreferences.GetMinimumNumberOfRoommatesDesired()}
-                        ,[GeneralPreferences_Smokers_AcceptSmokers] = {generalPreferences.SmokersPreferences.AcceptSmokers}
-                    WHERE [ResidentId] = {residentId}
-                END
-            ");
+                EXEC [Business].[sp_residentpreferences_addOrUpdateResidentGeneralPreferences]
+                    {residentId},
+                    {generalPreferences.AnimalPreferences.WantSpaceForAnimals},
+                    {generalPreferences.ChildrenPreferences.AcceptChildren},
+                    {generalPreferences.PartyPreferences.WantsToParty},
+                    {generalPreferences.RoommatePreferences.AcceptsOnlyFemaleRoommates},
+                    {generalPreferences.RoommatePreferences.AcceptsOnlyMaleRoommates},
+                    {generalPreferences.RoommatePreferences.GetMaximumNumberOfRoommatesDesired()},
+                    {generalPreferences.RoommatePreferences.GetMinimumNumberOfRoommatesDesired()},
+                    {generalPreferences.SmokersPreferences.AcceptSmokers}");
             return numberOfRowsAffected > 0;
         }
 
