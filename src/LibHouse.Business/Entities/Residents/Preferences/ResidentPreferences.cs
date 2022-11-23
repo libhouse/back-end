@@ -65,6 +65,11 @@ namespace LibHouse.Business.Entities.Residents.Preferences
             GeneralPreferences = generalPreferences;
         }
 
+        public GeneralPreferences GetGeneralPreferences()
+        {
+            return GeneralPreferences;
+        }
+
         public bool HaveGeneralPreferences()
         {
             return GeneralPreferences is not null;
