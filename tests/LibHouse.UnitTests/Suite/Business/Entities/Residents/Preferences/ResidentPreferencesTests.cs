@@ -1,7 +1,9 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
+using LibHouse.Business.Entities.Residents.Preferences.General;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
+using LibHouse.Business.Entities.Users;
 using Xunit;
 
 namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences
@@ -44,6 +46,20 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences
             chargePreferences.AddExpensePreferences(minimumExpenseAmountDesired: 150.0m, maximumExpenseAmountDesired: 350.0m);
             residentPreferences.AddChargePreferences(chargePreferences);
             Assert.True(residentPreferences.HaveChargePreferences());
+        }
+
+        [Fact]
+        public void AddGeneralPreferences_ValidGeneralPreferences_ShouldAddGeneralPreferences()
+        {
+            ResidentPreferences residentPreferences = new();
+            GeneralPreferences generalPreferences = new();
+            generalPreferences.AddAnimalPreferences(wantSpaceForAnimals: true);
+            generalPreferences.AddChildrenPreferences(acceptChildren: true);
+            generalPreferences.AddPartyPreferences(wantsToParty: true);
+            generalPreferences.AddRoommatePreferences(1, 4, new[] { Gender.Male });
+            generalPreferences.AddSmokersPreferences(acceptSmokers: true);
+            residentPreferences.AddGeneralPreferences(generalPreferences);
+            Assert.True(residentPreferences.HaveGeneralPreferences());
         }
     }
 }
