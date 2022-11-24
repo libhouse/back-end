@@ -48,53 +48,17 @@ namespace LibHouse.Data.Repositories.Residents
         public async Task<bool> AddOrUpdateResidentRoomPreferencesAsync(Guid residentId, RoomPreferences roomPreferences)
         {
             int numberOfRowsAffected = await ExecuteStatementAsync($@"
-                IF NOT EXISTS
-                (
-                	SELECT TOP 1 ResidentId 
-                	FROM [Business].[ResidentPreferences]
-                	WHERE ResidentId = {residentId}
-                )
-                BEGIN
-                    INSERT INTO [Business].[ResidentPreferences]
-                    ([ResidentId]
-                    ,[RoomPreferences_Dormitory_DormitoryType]
-                    ,[RoomPreferences_Dormitory_RequireFurnishedDormitory]
-                    ,[RoomPreferences_Bathroom_BathroomType]
-                    ,[RoomPreferences_Garage_GarageIsRequired]
-                    ,[RoomPreferences_Kitchen_StoveIsRequired]
-                    ,[RoomPreferences_Kitchen_MicrowaveIsRequired]
-                    ,[RoomPreferences_Kitchen_RefrigeratorIsRequired]
-                    ,[RoomPreferences_Other_ServiceAreaIsRequired]
-                    ,[RoomPreferences_Other_RecreationAreaIsRequired])
-                    VALUES
-                    (
-                        {residentId},
-                        '{roomPreferences.DormitoryPreferences.DormitoryType}',
-                        {roomPreferences.DormitoryPreferences.RequireFurnishedDormitory},
-                        '{roomPreferences.BathroomPreferences.BathroomType}',
-                        {roomPreferences.GaragePreferences.GarageIsRequired},
-                        {roomPreferences.KitchenPreferences.StoveIsRequired},
-                        {roomPreferences.KitchenPreferences.MicrowaveIsRequired},
-                        {roomPreferences.KitchenPreferences.RefrigeratorIsRequired},
-                        {roomPreferences.OtherRoomPreferences.ServiceAreaIsRequired},
-                        {roomPreferences.OtherRoomPreferences.RecreationAreaIsRequired}
-                    )
-                END
-                ELSE
-                BEGIN
-                    UPDATE [Business].[ResidentPreferences]
-                    SET [RoomPreferences_Dormitory_DormitoryType] = '{roomPreferences.DormitoryPreferences.DormitoryType}'
-                       ,[RoomPreferences_Dormitory_RequireFurnishedDormitory] = {roomPreferences.DormitoryPreferences.RequireFurnishedDormitory}
-                       ,[RoomPreferences_Bathroom_BathroomType] = '{roomPreferences.BathroomPreferences.BathroomType}'
-                       ,[RoomPreferences_Garage_GarageIsRequired] = {roomPreferences.GaragePreferences.GarageIsRequired}
-                       ,[RoomPreferences_Kitchen_StoveIsRequired] = {roomPreferences.KitchenPreferences.StoveIsRequired}
-                       ,[RoomPreferences_Kitchen_MicrowaveIsRequired] = {roomPreferences.KitchenPreferences.MicrowaveIsRequired}
-                       ,[RoomPreferences_Kitchen_RefrigeratorIsRequired] = {roomPreferences.KitchenPreferences.RefrigeratorIsRequired}
-                       ,[RoomPreferences_Other_ServiceAreaIsRequired] = {roomPreferences.OtherRoomPreferences.ServiceAreaIsRequired}
-                       ,[RoomPreferences_Other_RecreationAreaIsRequired] = {roomPreferences.OtherRoomPreferences.RecreationAreaIsRequired}
-                    WHERE [ResidentId] = {residentId}
-                END
-            ");
+                EXEC [Business].[sp_residentpreferences_addOrUpdateResidentRoomPreferences]
+                    {residentId},
+                    '{roomPreferences.DormitoryPreferences.GetDormitoryType()}',
+                    {roomPreferences.DormitoryPreferences.RequiresFurnishedDormitory()},
+                    '{roomPreferences.BathroomPreferences.GetBathroomType()}',
+                    {roomPreferences.GaragePreferences.RequiresGarage()},
+                    {roomPreferences.KitchenPreferences.RequiresStove()},
+                    {roomPreferences.KitchenPreferences.RequiresMicrowave()},
+                    {roomPreferences.KitchenPreferences.RequiresRefrigerator()},
+                    {roomPreferences.OtherRoomPreferences.RequiresServiceArea()},
+                    {roomPreferences.OtherRoomPreferences.RequiresRecreationArea()}");
             return numberOfRowsAffected > 0;
         }
 
