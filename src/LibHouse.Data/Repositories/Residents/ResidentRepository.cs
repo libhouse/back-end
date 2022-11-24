@@ -65,35 +65,11 @@ namespace LibHouse.Data.Repositories.Residents
         public async Task<bool> AddOrUpdateResidentServicesPreferencesAsync(Guid residentId, ServicesPreferences servicesPreferences)
         {
             int numberOfRowsAffected = await ExecuteStatementAsync($@"
-                IF NOT EXISTS
-                (
-                	SELECT TOP 1 ResidentId 
-                	FROM [Business].[ResidentPreferences]
-                	WHERE ResidentId = {residentId}
-                )
-                BEGIN
-                    INSERT INTO [Business].[ResidentPreferences]
-                    ([ResidentId]
-                    ,[ServicesPreferences_Cleaning_HouseCleaningIsRequired]
-                    ,[ServicesPreferences_Internet_InternetServiceIsRequired]
-                    ,[ServicesPreferences_Television_CableTelevisionIsRequired])
-                    VALUES
-                    (
-                        {residentId},
-                        {servicesPreferences.CleaningPreferences.HouseCleaningIsRequired},
-                        {servicesPreferences.InternetPreferences.InternetServiceIsRequired},
-                        {servicesPreferences.TelevisionPreferences.CableTelevisionIsRequired}
-                    )
-                END
-                ELSE
-                BEGIN
-                    UPDATE [Business].[ResidentPreferences]
-                    SET [ServicesPreferences_Cleaning_HouseCleaningIsRequired] = {servicesPreferences.CleaningPreferences.HouseCleaningIsRequired}
-                        ,[ServicesPreferences_Internet_InternetServiceIsRequired] = {servicesPreferences.InternetPreferences.InternetServiceIsRequired}
-                        ,[ServicesPreferences_Television_CableTelevisionIsRequired] = {servicesPreferences.TelevisionPreferences.CableTelevisionIsRequired}
-                    WHERE [ResidentId] = {residentId}
-                END
-            ");
+                EXEC [Business].[sp_residentpreferences_addOrUpdateResidentServicesPreferences]
+                    {residentId},
+                    {servicesPreferences.CleaningPreferences.RequiresHouseCleaningService()},
+                    {servicesPreferences.InternetPreferences.RequiresInternetService()},
+                    {servicesPreferences.TelevisionPreferences.RequiresCableTelevisionService()}");
             return numberOfRowsAffected > 0;
         }
     }
