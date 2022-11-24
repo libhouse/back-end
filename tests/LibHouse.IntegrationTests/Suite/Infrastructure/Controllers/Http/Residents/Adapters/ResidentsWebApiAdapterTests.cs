@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Application.Residents;
 using LibHouse.Business.Entities.Residents;
+using LibHouse.Business.Entities.Residents.Preferences.General.Builders;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms.Builders;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Monads;
@@ -124,6 +125,37 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Reside
             };
             Result residentChargePreferencesRegistrationResult = await residentsWebApiAdapter.ResidentChargePreferencesRegistration(viewModel);
             Assert.True(residentChargePreferencesRegistrationResult.IsSuccess);
+        }
+
+        [Fact]
+        public async Task ResidentGeneralPreferencesRegistration_NewGeneralPreferences_ShouldBeSuccess()
+        {
+            Notifier notifier = new();
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
+            IGeneralPreferencesBuilder generalPreferencesBuilder = new GeneralPreferencesBuilder();
+            IResidentRepository residentRepository = new ResidentRepository(libHouseContext);
+            Resident resident = new("Cléber", "Dias", new DateTime(1975, 11, 11), Gender.Male, "11985261522", "cleberdias@gmail.com", "21571050000");
+            await libHouseContext.Residents.AddAsync(resident);
+            await libHouseContext.SaveChangesAsync();
+            ResidentGeneralPreferencesRegistration residentGeneralPreferencesRegistration = new(notifier, residentRepository, generalPreferencesBuilder);
+            ResidentsWebApiAdapter residentsWebApiAdapter = new();
+            _ = new ResidentsController(residentsWebApiAdapter, residentGeneralPreferencesRegistration);
+            ResidentGeneralPreferencesRegistrationViewModel viewModel = new()
+            {
+                ResidentId = resident.Id,
+                WantSpaceForAnimals = true,
+                AcceptChildren = true,
+                WantsToParty = false,
+                AcceptSmokers = false,
+                AcceptsOnlyMenAsRoommates = false,
+                AcceptsOnlyWomenAsRoommates = false,
+                MinimumNumberOfRoommatesDesired = 1,
+                MaximumNumberOfRoommatesDesired = 3
+            };
+            Result residentGeneralPreferencesRegistrationResult = await residentsWebApiAdapter.ResidentGeneralPreferencesRegistration(viewModel);
+            Assert.True(residentGeneralPreferencesRegistrationResult.IsSuccess);
         }
     }
 }
