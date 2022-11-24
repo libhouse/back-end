@@ -8,6 +8,7 @@ using LibHouse.Business.Application.Users.Gateways;
 using LibHouse.Business.Application.Users.Interfaces;
 using LibHouse.Business.Application.Users.Senders;
 using LibHouse.Business.Entities.Residents;
+using LibHouse.Business.Entities.Residents.Preferences.General.Builders;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms.Builders;
 using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
@@ -46,6 +47,7 @@ namespace LibHouse.API.Configurations.Dependencies
         public static IServiceCollection ResolveBuilders(this IServiceCollection services)
         {
             services.AddScoped<IRoomPreferencesBuilder, RoomPreferencesBuilder>();
+            services.AddScoped<IGeneralPreferencesBuilder, GeneralPreferencesBuilder>();
             return services;
         }
 
@@ -92,6 +94,7 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<IResidentRoomPreferencesRegistration, ResidentRoomPreferencesRegistration>();
             services.AddScoped<IResidentServicesPreferencesRegistration, ResidentServicesPreferencesRegistration>();
             services.AddScoped<IResidentChargePreferencesRegistration, ResidentChargePreferencesRegistration>();
+            services.AddScoped<IResidentGeneralPreferencesRegistration, ResidentGeneralPreferencesRegistration>();
             return services;
         }
 

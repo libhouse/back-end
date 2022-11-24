@@ -9,7 +9,8 @@ namespace LibHouse.Infrastructure.Controllers.Http.Residents
             IHttpResident residentsWebApiAdapter,
             IResidentRoomPreferencesRegistration residentRoomPreferencesRegistration,
             IResidentServicesPreferencesRegistration residentServicesPreferencesRegistration,
-            IResidentChargePreferencesRegistration residentChargePreferencesRegistration)
+            IResidentChargePreferencesRegistration residentChargePreferencesRegistration,
+            IResidentGeneralPreferencesRegistration residentGeneralPreferencesRegistration)
         {
             residentsWebApiAdapter.OnResidentRoomPreferencesRegistration(
                 async (input) =>
@@ -27,6 +28,12 @@ namespace LibHouse.Infrastructure.Controllers.Http.Residents
                 async (input) =>
                 {
                     return await residentChargePreferencesRegistration.ExecuteAsync(input);
+                }
+            );
+            residentsWebApiAdapter.OnResidentGeneralPreferencesRegistration(
+                async (input) =>
+                {
+                    return await residentGeneralPreferencesRegistration.ExecuteAsync(input);
                 }
             );
         }

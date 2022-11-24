@@ -96,5 +96,30 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
+
+        [Theory]
+        [InlineData("POST", "/api/v1/residents/register-general-preferences")]
+        public async Task RegisterResidentGeneralPreferencesAsync_NewGeneralPreferences_ShouldReturn200OK(string method, string route)
+        {
+            await _libHouseContext.CleanContextDataAsync();
+            await _authenticationContext.CleanContextDataAsync();
+            User userResident = await CreateActiveResidentAsync();
+            HttpRequestMessage httpRequest = new(new HttpMethod(method), route);
+            httpRequest.Content = new StringContent(JsonSerializer.Serialize(new ResidentGeneralPreferencesRegistrationViewModel
+            {
+                ResidentId = userResident.Id,
+                WantSpaceForAnimals = true,
+                AcceptChildren = true,
+                WantsToParty = false,
+                AcceptSmokers = false,
+                AcceptsOnlyMenAsRoommates = false,
+                AcceptsOnlyWomenAsRoommates = false,
+                MinimumNumberOfRoommatesDesired = 1,
+                MaximumNumberOfRoommatesDesired = 3
+            }), Encoding.UTF8, "application/json");
+            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessTokenAsync(userResident.GetEmailAddress()));
+            HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
     }
 }

@@ -27,7 +27,8 @@ namespace LibHouse.API.V1.Controllers
             IKLogger logger,
             IResidentRoomPreferencesRegistration residentRoomPreferencesRegistration,
             IResidentServicesPreferencesRegistration residentServicesPreferencesRegistration,
-            IResidentChargePreferencesRegistration residentChargePreferencesRegistration) 
+            IResidentChargePreferencesRegistration residentChargePreferencesRegistration,
+            IResidentGeneralPreferencesRegistration residentGeneralPreferencesRegistration) 
             : base(notifier, loggedUser, logger)
         {
             _residentsWebApiAdapter = new ResidentsWebApiAdapter();
@@ -35,7 +36,8 @@ namespace LibHouse.API.V1.Controllers
                 _residentsWebApiAdapter, 
                 residentRoomPreferencesRegistration,
                 residentServicesPreferencesRegistration,
-                residentChargePreferencesRegistration
+                residentChargePreferencesRegistration,
+                residentGeneralPreferencesRegistration
             );
         }
 
@@ -63,7 +65,7 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
             Logger.Log(LogLevel.Information, $"Preferências de cômodo do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
-            return Ok(preferencesRegistrationResult);
+            return Ok();
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
             Logger.Log(LogLevel.Information, $"Preferências de serviços do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
-            return Ok(preferencesRegistrationResult);
+            return Ok();
         }
 
         /// <summary>
@@ -117,7 +119,34 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
             Logger.Log(LogLevel.Information, $"Preferências de cobrança do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
-            return Ok(preferencesRegistrationResult);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Cadastra as preferências gerais de um morador.
+        /// </summary>
+        /// <param name="preferencesRegistrationViewModel">Objeto que possui os dados necessários para cadastrar as preferências gerais do morador.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [Authorize("Resident")]
+        [HttpPost("register-general-preferences", Name = "Register General Preferences")]
+        public async Task<ActionResult> RegisterResidentGeneralPreferencesAsync(ResidentGeneralPreferencesRegistrationViewModel preferencesRegistrationViewModel)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+            Result preferencesRegistrationResult = await _residentsWebApiAdapter.ResidentGeneralPreferencesRegistration(preferencesRegistrationViewModel);
+            if (preferencesRegistrationResult.Failure)
+            {
+                NotifyError("Registro de preferências", preferencesRegistrationResult.Error);
+                Logger.Log(LogLevel.Error, $"Falha ao realizar as preferências do morador: {preferencesRegistrationResult.Error}");
+                return CustomResponseForPostEndpoint();
+            }
+            Logger.Log(LogLevel.Information, $"Preferências gerais do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
+            return Ok();
         }
     }
 }
