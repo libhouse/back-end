@@ -45,6 +45,7 @@
 		<ProjectReference Include="..\..\src\LibHouse.Data\LibHouse.Data.csproj" />
 		<ProjectReference Include="..\..\src\LibHouse.Infrastructure.Authentication\LibHouse.Infrastructure.Authentication.csproj" />
 		<ProjectReference Include="..\..\src\LibHouse.Infrastructure.Controllers\LibHouse.Infrastructure.Controllers.csproj" />
+		<ProjectReference Include="..\..\src\LibHouse.Infrastructure.WebClients\LibHouse.Infrastructure.WebClients.csproj" />
 	</ItemGroup>
 
 </Project>
