@@ -10,23 +10,23 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Localizations
         [Theory]
         [InlineData("Rua Hidrolândia", 101, "Tucuruvi", "São Paulo", "SP", "02307210")]
         [InlineData("Praça da Sé", 200, "Sé", "São Paulo", "SP", "01001-000", "lado ímpar")]
-        public void Street_ValidStreet_ShouldCreateStreet(
+        public void Address_ValidAddress_ShouldCreateAddress(
             string name, 
             ushort number, 
-            string streetNeighborhood, 
-            string streetCity, 
+            string addressNeighborhood, 
+            string addressCity, 
             string abbreviationOfCityFederativeUnit, 
             string postalCode, 
             string complement = null)
         {
-            Address street = new(name, number, streetNeighborhood, streetCity, abbreviationOfCityFederativeUnit, postalCode, complement);
-            Assert.Equal(name, street.GetName());
-            Assert.Equal(streetNeighborhood, street.GetNeighborhoodName());
-            Assert.Equal(streetCity, street.GetCityName());
-            Assert.Equal(abbreviationOfCityFederativeUnit, street.GetAbbreviationOfTheFederativeUnit());
-            Assert.Equal(number, street.GetNumber());
-            Assert.Equal(postalCode.Replace("-", ""), street.GetPostalCodeNumber());
-            Assert.Equal(complement, street.GetComplement());
+            Address address = new(name, number, addressNeighborhood, addressCity, abbreviationOfCityFederativeUnit, postalCode, complement);
+            Assert.Equal(name, address.GetName());
+            Assert.Equal(addressNeighborhood, address.GetNeighborhoodName());
+            Assert.Equal(addressCity, address.GetCityName());
+            Assert.Equal(abbreviationOfCityFederativeUnit, address.GetAbbreviationOfTheFederativeUnit());
+            Assert.Equal(number, address.GetNumber());
+            Assert.Equal(postalCode.Replace("-", ""), address.GetPostalCodeNumber());
+            Assert.Equal(complement, address.GetComplement());
         }
 
         [Theory]
@@ -37,16 +37,16 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Localizations
         [InlineData("Rua Hidrolândia", 100, "Tucuruvi", "", "SP", "02307210")]
         [InlineData("Rua Hidrolândia", 100, "Tucuruvi", "São Paulo", "", "02307210")]
         [InlineData("Rua Hidrolândia", 101, "Tucuruvi", "São Paulo", "SP", "")]
-        public void Street_InvalidStreet_ShouldNotCreateStreet(
+        public void Address_InvalidAddress_ShouldNotCreateAddress(
             string name,
             ushort number,
-            string streetNeighborhood,
-            string streetCity,
+            string addressNeighborhood,
+            string addressCity,
             string abbreviationOfCityFederativeUnit,
             string postalCode,
             string complement = null)
         {
-            Assert.ThrowsAny<Exception>(() => new Address(name, number, streetNeighborhood, streetCity, abbreviationOfCityFederativeUnit, postalCode, complement));
+            Assert.ThrowsAny<Exception>(() => new Address(name, number, addressNeighborhood, addressCity, abbreviationOfCityFederativeUnit, postalCode, complement));
         }
     }
 }
