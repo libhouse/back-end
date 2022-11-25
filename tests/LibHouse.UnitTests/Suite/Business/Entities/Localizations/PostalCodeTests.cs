@@ -13,7 +13,7 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Localizations
         public void PostalCode_ValidPostalCode_ShouldCreatePostalCode(string postalCodeNumber)
         {
             PostalCode postalCode = new(postalCodeNumber);
-            Assert.Equal(postalCodeNumber.Replace('-', ' '), postalCode.GetNumber());
+            Assert.Equal(postalCodeNumber.Replace("-", ""), postalCode.GetNumber());
         }
 
         [Theory]

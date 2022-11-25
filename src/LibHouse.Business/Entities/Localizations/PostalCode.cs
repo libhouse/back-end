@@ -15,7 +15,7 @@ namespace LibHouse.Business.Entities.Localizations
             {
                 throw new FormatException("O número deve possuir oito dígitos, com os três últimos separados opcionalmente por traço");
             }
-            PostalCodeNumber = postalCodeNumber.Replace('-', ' ');
+            PostalCodeNumber = postalCodeNumber.Replace("-", "");
         }
 
         private string PostalCodeNumber { get; init; }
