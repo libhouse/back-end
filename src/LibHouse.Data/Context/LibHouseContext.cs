@@ -1,4 +1,5 @@
-﻿using LibHouse.Business.Entities.Owners;
+﻿using LibHouse.Business.Entities.Localizations;
+using LibHouse.Business.Entities.Owners;
 using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Users;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace LibHouse.Data.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Resident> Residents { get; set; }
         public DbSet<Owner> Owners { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         public LibHouseContext(DbContextOptions<LibHouseContext> options)
             : base(options)

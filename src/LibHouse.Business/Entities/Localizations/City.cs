@@ -25,6 +25,8 @@ namespace LibHouse.Business.Entities.Localizations
             FederativeUnit = new(abbreviationOfCityFederativeUnit);
         }
 
+        private City() { }
+
         private string Name { get; init; }
         private FederativeUnit FederativeUnit { get; init; }
 

@@ -25,6 +25,8 @@ namespace LibHouse.Business.Entities.Localizations
             City = new(neighborhoodCity, abbreviationOfCityFederativeUnit);
         }
 
+        private Neighborhood() { }
+
         private string Name { get; init; }
         private City City { get; init; }
 

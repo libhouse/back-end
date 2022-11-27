@@ -36,6 +36,8 @@ namespace LibHouse.Business.Entities.Localizations
             PostalCode = new(postalCode);
         }
 
+        private Address() { }
+
         private string Name { get; init; }
         private AddressNumber AddressNumber { get; init; }
         private AddressComplement AddressComplement { get; init; }
