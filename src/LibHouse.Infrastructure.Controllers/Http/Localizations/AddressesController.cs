@@ -3,9 +3,9 @@ using LibHouse.Infrastructure.Controllers.Http.Localizations.Interfaces;
 
 namespace LibHouse.Infrastructure.Controllers.Http.Localizations
 {
-    public class AddressController
+    public class AddressesController
     {
-        public AddressController(
+        public AddressesController(
             IHttpAddress addressWebApiAdapter, 
             IPostalCodeSearch postalCodeSearch)
         {

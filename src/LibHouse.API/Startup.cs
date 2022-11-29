@@ -35,6 +35,7 @@ namespace LibHouse.API
             services.AddEmailConfig(Configuration, Environment);
             services.ResolveGeneralDependencies();
             services.ResolveBuilders();
+            services.ResolveWebClients(Configuration);
             services.AddIdentityConfiguration(Configuration);
             services.AddAuthenticationConfiguration(Configuration);
             services.ResolveRepositories(Configuration, Environment);

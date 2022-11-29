@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LibHouse.Infrastructure.Controllers.Http.Localizations.Adapters
 {
-    public class AddressWebApiAdapter : IHttpAddress
+    public class AddressesWebApiAdapter : IHttpAddress
     {
         private Func<string, Task<OutputPostalCodeSearch>> OnPostalCodeSearchFunction { get; set; }
 

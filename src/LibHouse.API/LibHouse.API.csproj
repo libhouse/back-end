@@ -45,6 +45,7 @@
     <ProjectReference Include="..\LibHouse.Infrastructure.Cache\LibHouse.Infrastructure.Cache.csproj" />
     <ProjectReference Include="..\LibHouse.Infrastructure.Controllers\LibHouse.Infrastructure.Controllers.csproj" />
     <ProjectReference Include="..\LibHouse.Infrastructure.Email\LibHouse.Infrastructure.Email.csproj" />
+    <ProjectReference Include="..\LibHouse.Infrastructure.WebClients\LibHouse.Infrastructure.WebClients.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://json.schemastore.org/appsettings.json" appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

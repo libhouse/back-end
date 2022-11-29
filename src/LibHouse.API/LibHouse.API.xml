@@ -4,6 +4,16 @@
         <name>LibHouse.API</name>
     </assembly>
     <members>
+        <member name="M:LibHouse.API.V1.Controllers.AddressesAspNetCoreController.GetAddressByPostalCodeAsync(System.String)">
+            <summary>
+            Busca os dados de um endereço a partir do seu número de código postal.
+            </summary>
+            <param name="postalCodeNumber">O número do código postal a ser pesquisado.</param>
+            <returns>Em caso de sucesso, retorna um objeto com os dados do endereço. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="200">Os dados do endereço foram obtidos com sucesso.</response>
+            <response code="404">O endereço não foi encontrado.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
         <member name="M:LibHouse.API.V1.Controllers.ResidentsAspNetCoreController.RegisterResidentRoomPreferencesAsync(LibHouse.Infrastructure.Controllers.ViewModels.Residents.ResidentRoomPreferencesRegistrationViewModel)">
             <summary>
             Cadastra as preferências de cômodos de um morador.

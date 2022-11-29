@@ -25,11 +25,11 @@ using Xunit;
 namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Localizations.Adapters
 {
     [Collection("Infrastructure.Controllers")]
-    public class AddressWebApiAdapterTests
+    public class AddressesWebApiAdapterTests
     {
         private readonly IConfiguration _testsConfiguration;
 
-        public AddressWebApiAdapterTests()
+        public AddressesWebApiAdapterTests()
         {
             _testsConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.Tests.json").Build();
         }
@@ -55,10 +55,10 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Locali
             });
             IAddressPostalCodeGateway addressPostalCodeGateway = new ViaCepAddressGateway(viaCepWebClient);
             PostalCodeSearch postalCodeSearch = new(notifier, addressDecorator, addressPostalCodeGateway);
-            AddressWebApiAdapter addressWebApiAdapter = new();
-            _ = new AddressController(addressWebApiAdapter, postalCodeSearch);
+            AddressesWebApiAdapter addressesWebApiAdapter = new();
+            _ = new AddressesController(addressesWebApiAdapter, postalCodeSearch);
             PostalCodeSearchViewModel viewModel = new() { PostalCodeNumber = "01001000" };
-            Result<PostalCodeSearchResponse> postalCodeSearchResult = await addressWebApiAdapter.PostalCodeSearch(viewModel);
+            Result<PostalCodeSearchResponse> postalCodeSearchResult = await addressesWebApiAdapter.PostalCodeSearch(viewModel);
             Assert.True(postalCodeSearchResult.IsSuccess);
         }
     }

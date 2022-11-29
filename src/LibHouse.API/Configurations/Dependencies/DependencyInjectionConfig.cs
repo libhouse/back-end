@@ -1,12 +1,16 @@
 ﻿using LibHouse.API.Authentication;
 using LibHouse.API.Configurations.Contexts;
 using LibHouse.API.Configurations.Swagger;
+using LibHouse.Business.Application.Localizations;
+using LibHouse.Business.Application.Localizations.Gateways;
+using LibHouse.Business.Application.Localizations.Interfaces;
 using LibHouse.Business.Application.Residents;
 using LibHouse.Business.Application.Residents.Interfaces;
 using LibHouse.Business.Application.Users;
 using LibHouse.Business.Application.Users.Gateways;
 using LibHouse.Business.Application.Users.Interfaces;
 using LibHouse.Business.Application.Users.Senders;
+using LibHouse.Business.Entities.Localizations;
 using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Residents.Preferences.General.Builders;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms.Builders;
@@ -14,6 +18,7 @@ using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Notifiers;
 using LibHouse.Business.Validations.Users;
+using LibHouse.Data.Repositories.Localizations;
 using LibHouse.Data.Repositories.Residents;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
@@ -22,8 +27,12 @@ using LibHouse.Infrastructure.Authentication.Login.Interfaces;
 using LibHouse.Infrastructure.Authentication.Logout;
 using LibHouse.Infrastructure.Authentication.Password;
 using LibHouse.Infrastructure.Authentication.Register;
+using LibHouse.Infrastructure.Cache.Decorators.Memory;
 using LibHouse.Infrastructure.Email.Senders.Users;
 using LibHouse.Infrastructure.Email.Settings.Users;
+using LibHouse.Infrastructure.WebClients.ViaCep;
+using LibHouse.Infrastructure.WebClients.ViaCep.Configurations;
+using LibHouse.Infrastructure.WebClients.ViaCep.Gateways;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -70,6 +79,20 @@ namespace LibHouse.API.Configurations.Dependencies
             return services;
         }
 
+        public static IServiceCollection ResolveWebClients(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddSingleton(settings => new ViaCepWebClientConfiguration()
+            {
+                BaseUrl = configuration.GetValue<string>("ViaCepWebClientConfiguration:BaseUrl"),
+                EndpointResponseType = configuration.GetValue<string>("ViaCepWebClientConfiguration:EndpointResponseType")
+            });
+            services.AddHttpClient<ViaCepWebClient>();
+            services.AddScoped<ViaCepWebClient>();
+            return services;
+        }
+
         public static IServiceCollection ResolveGateways(this IServiceCollection services)
         {
             services.AddScoped<IUserRegistrationGateway, IdentityUserRegistrationGateway>();
@@ -79,6 +102,7 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<IUserLoginRenewalGateway, IdentityUserLoginRenewalGateway>();
             services.AddScoped<IUserPasswordResetGateway, IdentityUserPasswordResetGateway>();
             services.AddScoped<IConfirmUserPasswordResetGateway, IdentityConfirmUserPasswordResetGateway>();
+            services.AddScoped<IAddressPostalCodeGateway, ViaCepAddressGateway>();
             return services;
         }
 
@@ -95,6 +119,7 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<IResidentServicesPreferencesRegistration, ResidentServicesPreferencesRegistration>();
             services.AddScoped<IResidentChargePreferencesRegistration, ResidentChargePreferencesRegistration>();
             services.AddScoped<IResidentGeneralPreferencesRegistration, ResidentGeneralPreferencesRegistration>();
+            services.AddScoped<IPostalCodeSearch, PostalCodeSearch>();
             return services;
         }
 
@@ -108,6 +133,8 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IResidentRepository, ResidentRepository>();
+            services.AddScoped<AddressRepository>();
+            services.AddScoped<IAddressRepository, AddressMemoryCachingDecorator<AddressRepository>>();
             return services;
         }
     }

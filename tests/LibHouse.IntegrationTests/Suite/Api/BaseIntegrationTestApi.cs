@@ -49,6 +49,7 @@ namespace LibHouse.IntegrationTests.Suite.Api
             await _libHouseContext.SaveChangesAsync();
             string residentAuthenticationId = Guid.NewGuid().ToString();
             string residentRoleId = _authenticationContext.Roles.FirstOrDefault(role => role.Name == LibHouseUserRole.Resident).Id;
+            string userRoleId = _authenticationContext.Roles.FirstOrDefault(role => role.Name == LibHouseUserRole.User).Id;
             await _authenticationContext.Users.AddAsync(new IdentityUser()
             {
                 Id = residentAuthenticationId,
@@ -65,6 +66,11 @@ namespace LibHouse.IntegrationTests.Suite.Api
             await _authenticationContext.UserRoles.AddAsync(new IdentityUserRole<string>()
             {
                 RoleId = residentRoleId,
+                UserId = residentAuthenticationId
+            });
+            await _authenticationContext.UserRoles.AddAsync(new IdentityUserRole<string>()
+            {
+                RoleId = userRoleId,
                 UserId = residentAuthenticationId
             });
             await _authenticationContext.SaveChangesAsync();

@@ -32,12 +32,13 @@ namespace LibHouse.Business.Application.Localizations
             {
                 throw new ArgumentNullException(paramName: nameof(postalCodeNumber), "O código postal é obrigatório");
             }
-            Address address = await _addressRepository.GetFirstAddressFromPostalCodeAsync(postalCodeNumber);
+            PostalCode postalCode = new(postalCodeNumber);
+            Address address = await _addressRepository.GetFirstAddressFromPostalCodeAsync(postalCode.GetNumber());
             if(address is not null)
             {
                 return address.Convert();
             }
-            OutputAddressPostalCodeGateway outputGateway = await _addressPostalCodeGateway.GetAddressByPostalCodeAsync(postalCodeNumber);
+            OutputAddressPostalCodeGateway outputGateway = await _addressPostalCodeGateway.GetAddressByPostalCodeAsync(postalCode.GetNumber());
             if(!outputGateway.IsSuccess)
             {
                 return new() { IsSuccess = false, PostalCodeSearchMessage = "Não foi possível localizar o código postal informado" };
