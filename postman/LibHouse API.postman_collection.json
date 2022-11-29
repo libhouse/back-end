@@ -287,7 +287,8 @@
 								"residents",
 								"register-room-preferences"
 							]
-						}
+						},
+						"description": "Este endpoint registra as preferências de dormitórios de um morador."
 					},
 					"response": []
 				},
@@ -316,7 +317,8 @@
 								"residents",
 								"register-services-preferences"
 							]
-						}
+						},
+						"description": "Este endpoint registra as preferências de serviços de um morador."
 					},
 					"response": []
 				},
@@ -345,7 +347,8 @@
 								"residents",
 								"register-charge-preferences"
 							]
-						}
+						},
+						"description": "Este endpoint registra as preferências de cobrança de um morador."
 					},
 					"response": []
 				},
@@ -374,12 +377,41 @@
 								"residents",
 								"register-general-preferences"
 							]
-						}
+						},
+						"description": "Este endpoint registra as preferências gerais de um morador."
 					},
 					"response": []
 				}
 			],
 			"description": "Todas as requisições para a rota de moradores (/residents) estão agrupadas nesta pasta. As principais operações incluem registrar e alterar os seus dados de preferências e perfil na plataforma."
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "Get Address By Postal Code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/addresses/postal-code/01001000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"addresses",
+								"postal-code",
+								"01001000"
+							]
+						},
+						"description": "Este endpoint busca os dados de endereço associados a um código postal."
+					},
+					"response": []
+				}
+			],
+			"description": "Todas as requisições para a rota de endereço (/addresses) estão agrupadas nesta pasta. Uma das principais operações busca um endereço pelo seu código postal."
 		}
 	],
 	"auth": {
