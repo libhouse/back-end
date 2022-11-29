@@ -22,5 +22,13 @@ namespace LibHouse.Infrastructure.WebClients.ViaCep.Outputs
         public string DDD { get; init; }
         [JsonPropertyName("siafi")]
         public string SIAFICode { get; init; }
+
+        public bool AddressWasObtained()
+        {
+            return !string.IsNullOrEmpty(Street)
+                && !string.IsNullOrEmpty(Neighborhood)
+                && !string.IsNullOrEmpty(Localization)
+                && !string.IsNullOrEmpty(FederativeUnit);
+        }
     }
 }

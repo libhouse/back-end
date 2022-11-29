@@ -18,7 +18,7 @@ namespace LibHouse.Business.Entities.Localizations
             PostalCodeNumber = postalCodeNumber.Replace("-", "");
         }
 
-        private string PostalCodeNumber { get; init; }
+        public string PostalCodeNumber { get; init; }
 
         public string GetNumber()
         {

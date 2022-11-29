@@ -42,7 +42,7 @@ namespace LibHouse.Business.Entities.Localizations
         private AddressNumber AddressNumber { get; init; }
         private AddressComplement AddressComplement { get; init; }
         private Neighborhood Neighborhood { get; init; }
-        private PostalCode PostalCode { get; init; }
+        public PostalCode PostalCode { get; init; }
 
         public string GetName()
         {

@@ -21,6 +21,16 @@ namespace LibHouse.Infrastructure.Cache.Providers
             });
         }
 
+        public bool CheckIfResourceExists(string key)
+        {
+            return _cache.TryGetValue(key, out _);
+        }
+
+        public Resource GetResource<Resource>(string key)
+        {
+            return _cache.Get<Resource>(key);
+        }
+
         public async Task<Resource> GetOrCreateResourceAsync<Resource>(
             string key,
             TimeSpan slidingExpiration,
