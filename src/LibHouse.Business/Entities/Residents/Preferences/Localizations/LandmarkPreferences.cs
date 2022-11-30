@@ -15,6 +15,8 @@ namespace LibHouse.Business.Entities.Residents.Preferences.Localizations
             LandmarkAddressId = address.Id;
         }
 
+        private LandmarkPreferences() { }
+
         public Guid LandmarkAddressId { get; init; }
         private Address LandmarkAddress { get; init; }
 

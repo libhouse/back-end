@@ -1,6 +1,7 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.General;
+using LibHouse.Business.Entities.Residents.Preferences.Localizations;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +105,15 @@ namespace LibHouse.Data.Configurations.Residents
                 generalPreferences.OwnsOne(g => g.SmokersPreferences, smokersPreferences =>
                 {
                     smokersPreferences.Property(s => s.AcceptSmokers).HasColumnName("GeneralPreferences_Smokers_AcceptSmokers").HasColumnType("bit").HasDefaultValueSql("0");
+                });
+            });
+            builder.OwnsOne<LocalizationPreferences>(navigationName: "LocalizationPreferences", localizationPreferences =>
+            {
+                localizationPreferences.OwnsOne(l => l.LandmarkPreferences, landmarkPreferences =>
+                {
+                    landmarkPreferences.Property(l => l.LandmarkAddressId).HasColumnName("LocalizationPreferences_Landmark_LandmarkAddressId").HasColumnType("uniqueidentifier");
+                    landmarkPreferences.HasOne("LandmarkAddress").WithMany().HasForeignKey("LandmarkAddressId");
+                    landmarkPreferences.HasIndex(l => l.LandmarkAddressId).HasDatabaseName("idx_residentpreferences_landmarkaddressid");
                 });
             });
             builder.HasIndex("ResidentId").HasDatabaseName("idx_residentpreferences_residentid").IsUnique();
