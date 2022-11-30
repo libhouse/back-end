@@ -1,6 +1,8 @@
-﻿using LibHouse.Business.Entities.Residents;
+﻿using LibHouse.Business.Entities.Localizations;
+using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.General;
+using LibHouse.Business.Entities.Residents.Preferences.Localizations;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Business.Entities.Users;
@@ -211,6 +213,33 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents
             generalPreferences.AddSmokersPreferences(acceptSmokers: true);
             resident.AddGeneralPreferences(generalPreferences);
             Assert.True(resident.HaveGeneralPreferences());
+        }
+
+        [Fact]
+        public void AddLocalizationPreferences_ValidLocalizationPreferences_ShouldAddLocalizationPreferences()
+        {
+            Resident resident = new(
+                name: "Luke",
+                lastName: "Skywalker",
+                birthDate: new DateTime(1960, 5, 10),
+                gender: Gender.Male,
+                phone: "(11) 44245-9016",
+                email: "luke.skywalker@gmail.com",
+                cpf: "876.511.550-33"
+            );
+            resident.WithPreferences();
+            LocalizationPreferences localizationPreferences = new();
+            string landmarkStreet = "Rua São Bento";
+            string landmarkComplement = "de 321 ao fim - lado ímpar";
+            ushort landmarkNumber = 321;
+            string landmarkNeighborhood = "Centro";
+            string landmarkCity = "São Paulo";
+            string landmarkFederativeUnit = "SP";
+            string landmarkPostalCodeNumber = "01011100";
+            Address landmarkAddress = new(landmarkStreet, landmarkNumber, landmarkNeighborhood, landmarkCity, landmarkFederativeUnit, landmarkPostalCodeNumber, landmarkComplement);
+            localizationPreferences.AddLandmarkPreferences(landmarkAddress);
+            resident.AddLocalizationPreferences(localizationPreferences);
+            Assert.True(resident.HaveLocalizationPreferences());
         }
     }
 }
