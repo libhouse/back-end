@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.General;
+using LibHouse.Business.Entities.Residents.Preferences.Localizations;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using System;
@@ -14,6 +15,7 @@ namespace LibHouse.Business.Entities.Residents.Preferences
         private ServicesPreferences ServicesPreferences { get; set; }
         private ChargePreferences ChargePreferences { get; set; }
         private GeneralPreferences GeneralPreferences { get; set; }
+        private LocalizationPreferences LocalizationPreferences { get; set; }
 
         public void AddRoomPreferences(RoomPreferences roomPreferences)
         {
@@ -73,6 +75,16 @@ namespace LibHouse.Business.Entities.Residents.Preferences
         public bool HaveGeneralPreferences()
         {
             return GeneralPreferences is not null;
+        }
+
+        public void AddLocalizationPreferences(LocalizationPreferences localizationPreferences)
+        {
+            LocalizationPreferences = localizationPreferences;
+        }
+
+        public bool HaveLocalizationPreferences()
+        {
+            return LocalizationPreferences is not null;
         }
 
         public override string ToString() => $"Resident {ResidentId} preferences";

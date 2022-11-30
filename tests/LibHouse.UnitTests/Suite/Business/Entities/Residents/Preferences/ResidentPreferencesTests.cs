@@ -1,6 +1,8 @@
-﻿using LibHouse.Business.Entities.Residents.Preferences;
+﻿using LibHouse.Business.Entities.Localizations;
+using LibHouse.Business.Entities.Residents.Preferences;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.General;
+using LibHouse.Business.Entities.Residents.Preferences.Localizations;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Business.Entities.Users;
@@ -60,6 +62,24 @@ namespace LibHouse.UnitTests.Suite.Business.Entities.Residents.Preferences
             generalPreferences.AddSmokersPreferences(acceptSmokers: true);
             residentPreferences.AddGeneralPreferences(generalPreferences);
             Assert.True(residentPreferences.HaveGeneralPreferences());
+        }
+
+        [Fact]
+        public void AddLocalizationPreferences_ValidLocalizationPreferences_ShouldAddLocalizationPreferences()
+        {
+            ResidentPreferences residentPreferences = new();
+            LocalizationPreferences localizationPreferences = new();
+            string landmarkStreet = "Rua São Bento";
+            string landmarkComplement = "de 321 ao fim - lado ímpar";
+            ushort landmarkNumber = 321;
+            string landmarkNeighborhood = "Centro";
+            string landmarkCity = "São Paulo";
+            string landmarkFederativeUnit = "SP";
+            string landmarkPostalCodeNumber = "01011100";
+            Address landmarkAddress = new(landmarkStreet, landmarkNumber, landmarkNeighborhood, landmarkCity, landmarkFederativeUnit, landmarkPostalCodeNumber, landmarkComplement);
+            localizationPreferences.AddLandmarkPreferences(landmarkAddress);
+            residentPreferences.AddLocalizationPreferences(localizationPreferences);
+            Assert.True(residentPreferences.HaveLocalizationPreferences());
         }
     }
 }
