@@ -7,6 +7,7 @@ using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Notifiers;
 using LibHouse.Data.Context;
+using LibHouse.Data.Extensions.Context;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Context;
@@ -14,6 +15,7 @@ using LibHouse.Infrastructure.Authentication.Register;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -24,12 +26,21 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
     [Collection("Business.Application")]
     public class ConfirmUserRegistrationTests
     {
+        private readonly IConfiguration _testsConfiguration;
+
+        public ConfirmUserRegistrationTests()
+        {
+            _testsConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.Tests.json").Build();
+        }
+
         [Fact]
         public async Task ExecuteAsync_UserWithoutConfirmation_ShouldConfirmUserRegistration()
         {
             string userEmail = "antonio-pereira@gmail.com";
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -54,8 +65,8 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             await authenticationContext.SaveChangesAsync();
             User user = new Resident("Antonio", "Pereira", new DateTime(2000, 8, 12), Gender.Male, "11975678421", userEmail, "16677665038");
             user.Inactivate();
-            await unitOfWork.UserRepository.AddAsync(user);
-            await unitOfWork.CommitAsync();
+            await libHouseContext.Users.AddAsync(user);
+            await libHouseContext.SaveChangesAsync();
             InputConfirmUserRegistration input = new(RegistrationToken: Guid.NewGuid().ToString(), UserEmail: userEmail, UserId: user.Id);
             OutputConfirmUserRegistration output = await confirmUserRegistration.ExecuteAsync(input);
             Assert.True(output.IsSuccess);
@@ -65,7 +76,9 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
         public async Task ExecuteAsync_UserAlreadyConfirmed_ShouldConfirmUserRegistration()
         {
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -90,8 +103,8 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             await authenticationContext.SaveChangesAsync();
             User user = new Resident("Leila", "Araujo", new DateTime(2005, 9, 20), Gender.Female, "21975678421", userEmail, "26419782023");
             user.Activate();
-            await unitOfWork.UserRepository.AddAsync(user);
-            await unitOfWork.CommitAsync();
+            await libHouseContext.Users.AddAsync(user);
+            await libHouseContext.SaveChangesAsync();
             InputConfirmUserRegistration input = new(RegistrationToken: Guid.NewGuid().ToString(), UserEmail: userEmail, UserId: user.Id);
             OutputConfirmUserRegistration output = await confirmUserRegistration.ExecuteAsync(input);
             Assert.True(output.IsSuccess);
@@ -101,7 +114,9 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
         public async Task ExecuteAsync_UserNotRegistered_ShouldNotConfirmUserRegistration()
         {
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -120,7 +135,9 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
         {
             string userEmail = "jaqueline.silva@gmail.com";
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -146,8 +163,8 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             await authenticationContext.SaveChangesAsync();
             User user = new Resident("Jaqueline", "Silva", new DateTime(1980, 5, 17), Gender.Female, "18973175431", userEmail, "42152552016");
             user.Inactivate();
-            await unitOfWork.UserRepository.AddAsync(user);
-            await unitOfWork.CommitAsync();
+            await libHouseContext.Users.AddAsync(user);
+            await libHouseContext.SaveChangesAsync();
             InputConfirmUserRegistration input = new(RegistrationToken: Guid.NewGuid().ToString(), UserEmail: userEmail, UserId: user.Id);
             OutputConfirmUserRegistration output = await confirmUserRegistration.ExecuteAsync(input);
             Assert.False(output.IsSuccess);
