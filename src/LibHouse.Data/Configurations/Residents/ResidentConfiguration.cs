@@ -10,6 +10,7 @@ namespace LibHouse.Data.Configurations.Residents
         {
             builder.ToTable("Residents", "Business");
             builder.HasOne("ResidentPreferences").WithOne("Resident").HasForeignKey("ResidentPreferences", "ResidentId").IsRequired(false);
+            builder.Navigation("ResidentPreferences").AutoInclude(true);
         }
     }
 }

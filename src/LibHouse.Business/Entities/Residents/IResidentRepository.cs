@@ -1,5 +1,6 @@
 ﻿using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.General;
+using LibHouse.Business.Entities.Residents.Preferences.Localizations;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Business.Entities.Shared;
@@ -14,5 +15,6 @@ namespace LibHouse.Business.Entities.Residents
         Task<bool> AddOrUpdateResidentServicesPreferencesAsync(Guid residentId, ServicesPreferences servicesPreferences);
         Task<bool> AddOrUpdateResidentChargePreferencesAsync(Guid residentId, ChargePreferences chargePreferences);
         Task<bool> AddOrUpdateResidentGeneralPreferencesAsync(Guid residentId, GeneralPreferences generalPreferences);
+        Task<bool> AddOrUpdateResidentLocalizationPreferencesAsync(Guid residentId, LocalizationPreferences localizationPreferences);
     }
 }

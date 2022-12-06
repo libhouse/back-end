@@ -21,7 +21,7 @@ namespace LibHouse.Data.Repositories.Shared
             _dbContext = context;
         }
 
-        public async Task AddAsync(T entity)
+        public virtual async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
         }
@@ -33,8 +33,7 @@ namespace LibHouse.Data.Repositories.Shared
 
         public async Task<int> ExecuteStatementAsync(FormattableString statement)
         {
-            int numberOfRowsAffected = await _dbContext.Database.ExecuteSqlInterpolatedAsync(statement);
-            return numberOfRowsAffected;
+            return await _dbContext.Database.ExecuteSqlInterpolatedAsync(statement);
         }
 
         public async Task<T> FirstAsync(Expression<Func<T, bool>> expression)
@@ -83,6 +82,11 @@ namespace LibHouse.Data.Repositories.Shared
         public void Update(T entity)
         {
             _dbSet.Update(entity);
+        }
+
+        public async Task<T> GetByIdAsNoTrackingAsync(Guid id)
+        {
+            return await _dbSet.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(entity => entity.Id == id);
         }
     }
 }

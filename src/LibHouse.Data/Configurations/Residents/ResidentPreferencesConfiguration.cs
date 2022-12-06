@@ -117,6 +117,7 @@ namespace LibHouse.Data.Configurations.Residents
                 });
             });
             builder.HasIndex("ResidentId").HasDatabaseName("idx_residentpreferences_residentid").IsUnique();
+            builder.Navigation("Resident").AutoInclude(false);
         }
     }
 }

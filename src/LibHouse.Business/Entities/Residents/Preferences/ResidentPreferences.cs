@@ -82,6 +82,11 @@ namespace LibHouse.Business.Entities.Residents.Preferences
             LocalizationPreferences = localizationPreferences;
         }
 
+        public LocalizationPreferences GetLocalizationPreferences()
+        {
+            return LocalizationPreferences;
+        }
+
         public bool HaveLocalizationPreferences()
         {
             return LocalizationPreferences is not null;

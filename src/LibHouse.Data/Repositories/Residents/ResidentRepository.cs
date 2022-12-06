@@ -1,6 +1,7 @@
 ﻿using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Residents.Preferences.Charges;
 using LibHouse.Business.Entities.Residents.Preferences.General;
+using LibHouse.Business.Entities.Residents.Preferences.Localizations;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms;
 using LibHouse.Business.Entities.Residents.Preferences.Services;
 using LibHouse.Data.Context;
@@ -45,14 +46,23 @@ namespace LibHouse.Data.Repositories.Residents
             return numberOfRowsAffected > 0;
         }
 
+        public async Task<bool> AddOrUpdateResidentLocalizationPreferencesAsync(Guid residentId, LocalizationPreferences localizationPreferences)
+        {
+            int numberOfRowsAffected = await ExecuteStatementAsync($@"
+                EXEC [Business].[sp_residentpreferences_addOrUpdateResidentLocalizationPreferences]
+                    {residentId},
+                    {localizationPreferences.LandmarkPreferences.LandmarkAddressId}");
+            return numberOfRowsAffected > 0;
+        }
+
         public async Task<bool> AddOrUpdateResidentRoomPreferencesAsync(Guid residentId, RoomPreferences roomPreferences)
         {
             int numberOfRowsAffected = await ExecuteStatementAsync($@"
                 EXEC [Business].[sp_residentpreferences_addOrUpdateResidentRoomPreferences]
                     {residentId},
-                    '{roomPreferences.DormitoryPreferences.GetDormitoryType()}',
+                    {roomPreferences.DormitoryPreferences.GetDormitoryType()},
                     {roomPreferences.DormitoryPreferences.RequiresFurnishedDormitory()},
-                    '{roomPreferences.BathroomPreferences.GetBathroomType()}',
+                    {roomPreferences.BathroomPreferences.GetBathroomType()},
                     {roomPreferences.GaragePreferences.RequiresGarage()},
                     {roomPreferences.KitchenPreferences.RequiresStove()},
                     {roomPreferences.KitchenPreferences.RequiresMicrowave()},

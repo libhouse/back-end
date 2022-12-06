@@ -13,7 +13,7 @@ namespace LibHouse.Business.Entities.Localizations
             Number = number;
         }
 
-        private ushort Number { get; init; }
+        public ushort Number { get; init; }
 
         public ushort GetNumber()
         {

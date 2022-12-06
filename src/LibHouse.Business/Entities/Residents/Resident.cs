@@ -111,6 +111,11 @@ namespace LibHouse.Business.Entities.Residents
             ResidentPreferences.AddLocalizationPreferences(localizationPreferences);
         }
 
+        public LocalizationPreferences GetLocalizationPreferences()
+        {
+            return ResidentPreferences.GetLocalizationPreferences();
+        }
+
         public bool HaveLocalizationPreferences()
         {
             return ResidentPreferences is not null && ResidentPreferences.HaveLocalizationPreferences();

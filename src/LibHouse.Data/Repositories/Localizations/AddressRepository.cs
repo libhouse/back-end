@@ -15,6 +15,25 @@ namespace LibHouse.Data.Repositories.Localizations
         {
         }
 
+        public override async Task AddAsync(Address address)
+        {
+            _ = await ExecuteStatementAsync($@"
+                EXEC [Business].[sp_address_addAddress]
+                    @AddressId={address.Id},
+                    @Description={address.GetName()},
+                    @Number={address.GetNumber()},
+                    @Complement={address.GetComplement()},
+                    @Neighborhood={address.GetNeighborhoodName()},
+                    @PostalCode={address.GetPostalCodeNumber()},
+                    @City={address.GetCityName()},
+                    @FederativeUnit={address.GetAbbreviationOfTheFederativeUnit()}");
+        }
+
+        public async Task<Address> GetAddressByPostalCodeAndNumberAsync(string postalCodeNumber, ushort addressNumber)
+        {
+            return await _dbSet.FirstOrDefaultAsync(address => address.PostalCode.PostalCodeNumber == postalCodeNumber && address.AddressNumber.Number == addressNumber);
+        }
+
         public async Task<Address> GetFirstAddressFromPostalCodeAsync(string postalCodeNumber)
         {
             List<Address> postalCodeAddresses = await _dbSet.Where(address => address.PostalCode.PostalCodeNumber == postalCodeNumber).ToListAsync();

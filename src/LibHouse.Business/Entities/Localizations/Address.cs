@@ -11,8 +11,8 @@ namespace LibHouse.Business.Entities.Localizations
         public Address(
             string name, 
             ushort number,
-            string streetNeighborhood, 
-            string streetCity,
+            string addressNeighborhood, 
+            string addressCity,
             string abbreviationOfCityFederativeUnit,
             string postalCode,
             string complement = null)
@@ -32,14 +32,14 @@ namespace LibHouse.Business.Entities.Localizations
             Name = name;
             AddressNumber = new(number);
             AddressComplement = !string.IsNullOrEmpty(complement) ? new(complement) : null;
-            Neighborhood = new(streetNeighborhood, streetCity, abbreviationOfCityFederativeUnit);
+            Neighborhood = new(addressNeighborhood, addressCity, abbreviationOfCityFederativeUnit);
             PostalCode = new(postalCode);
         }
 
         private Address() { }
 
         private string Name { get; init; }
-        private AddressNumber AddressNumber { get; init; }
+        public AddressNumber AddressNumber { get; init; }
         private AddressComplement AddressComplement { get; init; }
         private Neighborhood Neighborhood { get; init; }
         public PostalCode PostalCode { get; init; }

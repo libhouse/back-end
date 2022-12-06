@@ -41,17 +41,27 @@ namespace LibHouse.Infrastructure.Cache.Decorators.Memory
             return await _addressRepository.FirstAsync(expression);
         }
 
+        public async Task<Address> GetAddressByPostalCodeAndNumberAsync(string postalCodeNumber, ushort addressNumber)
+        {
+            return await _addressRepository.GetAddressByPostalCodeAndNumberAsync(postalCodeNumber, addressNumber);
+        }
+
         public async Task<List<Address>> GetAsync(
             Expression<Func<Address, bool>> expression = null, 
             int? skip = null,
             int? take = null)
         {
-            return await GetAsync(expression, skip, take);
+            return await _addressRepository.GetAsync(expression, skip, take);
+        }
+
+        public async Task<Address> GetByIdAsNoTrackingAsync(Guid id)
+        {
+            return await _addressRepository.GetByIdAsNoTrackingAsync(id);
         }
 
         public async Task<Address> GetByIdAsync(Guid id)
         {
-            return await GetByIdAsync(id);
+            return await _addressRepository.GetByIdAsync(id);
         }
 
         public async Task<Address> GetFirstAddressFromPostalCodeAsync(string postalCodeNumber)
@@ -78,7 +88,7 @@ namespace LibHouse.Infrastructure.Cache.Decorators.Memory
             Expression<Func<Address, bool>> expression, 
             Expression<Func<Address, Projection>> projection)
         {
-            return await GetProjectionAsync(expression, projection);
+            return await _addressRepository.GetProjectionAsync(expression, projection);
         }
 
         public void Remove(Address entity)
