@@ -26,7 +26,7 @@ namespace LibHouse.Business.Application.Residents
 
         public async Task<OutputResidentGeneralPreferencesRegistration> ExecuteAsync(InputResidentGeneralPreferencesRegistration input)
         {
-            Resident resident = await _residentRepository.GetByIdAsync(input.ResidentId);
+            Resident resident = await _residentRepository.GetByIdAsNoTrackingAsync(input.ResidentId);
             if (resident is null)
             {
                 Notify("Morador não encontrado", $"O morador {input.ResidentId} não foi encontrado");
