@@ -50,6 +50,7 @@ namespace LibHouse.Business.Application.Users
                 Notify("Registrar usuário", $"Falha ao registrar o usuário {user.GetEmailAddress()}: {outputGateway.RegistrationMessage}.");
                 return new(registrationMessage: $"Falha ao registrar o usuário {user.GetEmailAddress()}.");
             }
+            await _unitOfWork.StartWorkAsync();
             await _unitOfWork.UserRepository.AddAsync(user);
             bool userDataHasBeenPersisted = await _unitOfWork.CommitAsync();
             if (!userDataHasBeenPersisted)

@@ -9,6 +9,7 @@ using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Notifiers;
 using LibHouse.Business.Validations.Users;
 using LibHouse.Data.Context;
+using LibHouse.Data.Extensions.Context;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Context;
@@ -16,6 +17,7 @@ using LibHouse.Infrastructure.Authentication.Register;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -26,11 +28,20 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
     [Collection("Business.Application")]
     public class UserRegistrationTests
     {
+        private readonly IConfiguration _testsConfiguration;
+
+        public UserRegistrationTests()
+        {
+            _testsConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.Tests.json").Build();
+        }
+
         [Fact]
         public async Task ExecuteAsync_NewUser_ShouldRegisterUser()
         {
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -44,7 +55,7 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             Mock<IUserRegistrationSender> userRegistrationSender = new();
             userRegistrationSender.Setup(u => u.SendUserRegistrationDataAsync(It.IsAny<InputUserRegistrationSender>())).ReturnsAsync(new OutputUserRegistrationSender(IsSuccess: true));
             UserRegistration userRegistration = new(notifier, unitOfWork, userRegistrationGateway, userRegistrationSender.Object, userValidator);
-            InputUserRegistration input = new("Lucas", "Dirani", new DateTime(1998, 8, 12), "Male", "(11) 98526-7981", "lucas.dirani@gmail.com", "450.104.530-29", "Resident", "Senh@123456");
+            InputUserRegistration input = new("Lucas", "Dirani", new DateTime(1998, 8, 12), "Male", "11985267981", "lucas.dirani@gmail.com", "45010453029", "Resident", "Senh@123456");
             OutputUserRegistration output = await userRegistration.ExecuteAsync(input);
             Assert.True(output.IsSuccess);
         }
@@ -53,7 +64,9 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
         public async Task ExecuteAsync_RepeatedUser_ShouldNotRegisterUser()
         {
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -67,11 +80,12 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             Mock<IUserRegistrationSender> userRegistrationSender = new();
             userRegistrationSender.Setup(u => u.SendUserRegistrationDataAsync(It.IsAny<InputUserRegistrationSender>())).ReturnsAsync(new OutputUserRegistrationSender(IsSuccess: true));
             UserRegistration userRegistration = new(notifier, unitOfWork, userRegistrationGateway, userRegistrationSender.Object, userValidator);
-            Resident existingUser = new("Matheus", "Jesus", new DateTime(1999, 5, 15), Gender.Male, "(11) 98641-8080", "matheus.jesus@gmail.com", "533.545.030-41");
+            Resident existingUser = new("Matheus", "Jesus", new DateTime(1999, 5, 15), Gender.Male, "11986418080", "matheus.jesus@gmail.com", "53354503041");
             existingUser.Activate();
+            await unitOfWork.StartWorkAsync();
             await unitOfWork.UserRepository.AddAsync(existingUser);
             await unitOfWork.CommitAsync();
-            InputUserRegistration input = new("Matheus", "Jesus", new DateTime(1999, 5, 15), "Male", "(11) 98641-8080", "matheus.jesus@gmail.com", "533.545.030-41", "Resident", "Senh@123456");
+            InputUserRegistration input = new("Matheus", "Jesus", new DateTime(1999, 5, 15), "Male", "11986418080", "matheus.jesus@gmail.com", "53354503041", "Resident", "Senh@123456");
             OutputUserRegistration output = await userRegistration.ExecuteAsync(input);
             Assert.False(output.IsSuccess);
         }

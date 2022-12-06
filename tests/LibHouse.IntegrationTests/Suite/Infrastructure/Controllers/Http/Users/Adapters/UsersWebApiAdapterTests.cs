@@ -11,6 +11,7 @@ using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
 using LibHouse.Business.Validations.Users;
 using LibHouse.Data.Context;
+using LibHouse.Data.Extensions.Context;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Context;
@@ -32,6 +33,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using System;
@@ -47,12 +49,21 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
     [Collection("Infrastructure.Controllers")]
     public class UsersWebApiAdapterTests
     {
+        private readonly IConfiguration _testsConfiguration;
+
+        public UsersWebApiAdapterTests()
+        {
+            _testsConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.Tests.json").Build();
+        }
+
         [Fact]
         public async Task UserRegistration_ValidUserRegistration_ShouldBeSuccess()
         {
             UsersWebApiAdapter userWebApiAdapter = new();
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -81,13 +92,13 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             {
                 BirthDate = new DateTime(1977, 7, 12),
                 ConfirmPassword = "Senh@123456",
-                Cpf = "581.634.450-17",
-                Email = "juliana-pereira@hotmail.com",
+                Cpf = "58163445017",
+                Email = "julianapereira@hotmail.com",
                 Gender = Gender.Female,
                 LastName = "Pereira",
                 Name = "Juliana",
                 Password = "Senh@123456",
-                Phone = "(11) 97652-9062",
+                Phone = "18973175431",
                 UserType = UserType.Owner
             };
             Result userRegistrationResult = await userWebApiAdapter.UserRegistration(viewModel);
@@ -100,7 +111,9 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             string userEmail = "alexandre.nunes@gmail.com";
             UsersWebApiAdapter userWebApiAdapter = new();
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -136,6 +149,7 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             await authenticationContext.SaveChangesAsync();
             User user = new Resident("Alexandre", "Nunes", new DateTime(1989, 2, 15), Gender.Male, "11975678421", userEmail, "80077797019");
             user.Inactivate();
+            await unitOfWork.StartWorkAsync();
             await unitOfWork.UserRepository.AddAsync(user);
             await unitOfWork.CommitAsync();
             ConfirmUserRegistrationViewModel viewModel = new()
@@ -155,7 +169,9 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             string userPassword = "Senh@123456";
             UsersWebApiAdapter userWebApiAdapter = new();
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
@@ -192,6 +208,7 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             );
             Owner registeredUser = new("Alberto", "Ayamashita", new DateTime(1970, 3, 25), Gender.Male, "(22) 99655-1134", userEmail, "23219514006");
             registeredUser.Activate();
+            await unitOfWork.StartWorkAsync();
             await unitOfWork.UserRepository.AddAsync(registeredUser);
             await unitOfWork.CommitAsync();
             Result userLoginResult = await userWebApiAdapter.UserLogin(new UserLoginViewModel()
@@ -248,7 +265,9 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
                 LockoutEnabled = true
             };
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             TokenValidationParameters tokenParameters = new()
             {
@@ -311,7 +330,9 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             string userCpf = "48206098070";
             string userEmail = "marta-uchoa@gmail.com";
             Notifier notifier = new();
-            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
             IUserRepository userRepository = new UserRepository(libHouseContext);
             AuthenticationContext authenticationContext = new(new DbContextOptionsBuilder<AuthenticationContext>().UseInMemoryDatabase("InMemoryAuthentication").Options);
             IUserStore<IdentityUser> userStore = new UserStore<IdentityUser>(authenticationContext);
