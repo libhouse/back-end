@@ -14,6 +14,7 @@ namespace LibHouse.Data.Configurations.Localizations
             builder.Property("Name").HasColumnType("varchar").HasMaxLength(30).HasColumnName("Description").IsRequired();
             builder.HasOne("FederativeUnit").WithMany().HasForeignKey("FederativeUnitId").IsRequired();
             builder.HasIndex("FederativeUnitId").HasDatabaseName("idx_city_federativeunitid");
+            builder.HasIndex("FederativeUnitId", "Name").IsUnique().HasDatabaseName("idx_city_federativeunitid_description");
         }
     }
 }

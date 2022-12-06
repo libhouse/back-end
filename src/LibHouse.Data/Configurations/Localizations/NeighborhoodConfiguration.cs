@@ -14,6 +14,7 @@ namespace LibHouse.Data.Configurations.Localizations
             builder.Property("Name").HasColumnType("varchar").HasMaxLength(60).HasColumnName("Description").IsRequired();
             builder.HasOne("City").WithMany().HasForeignKey("CityId").IsRequired();
             builder.HasIndex("CityId").HasDatabaseName("idx_neighborhood_cityid");
+            builder.HasIndex("CityId", "Name").IsUnique().HasDatabaseName("idx_neighborhood_cityid_description");
         }
     }
 }

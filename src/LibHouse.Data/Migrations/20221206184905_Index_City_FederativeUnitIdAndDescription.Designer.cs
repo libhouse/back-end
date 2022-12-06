@@ -4,14 +4,16 @@ using LibHouse.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LibHouse.Data.Migrations
 {
     [DbContext(typeof(LibHouseContext))]
-    partial class LibHouseContextModelSnapshot : ModelSnapshot
+    [Migration("20221206184905_Index_City_FederativeUnitIdAndDescription")]
+    partial class Index_City_FederativeUnitIdAndDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,10 +260,6 @@ namespace LibHouse.Data.Migrations
 
                     b.HasIndex("CityId")
                         .HasDatabaseName("idx_neighborhood_cityid");
-
-                    b.HasIndex("CityId", "Name")
-                        .IsUnique()
-                        .HasDatabaseName("idx_neighborhood_cityid_description");
 
                     b.ToTable("Neighborhood", "Business");
                 });
