@@ -22,7 +22,7 @@ namespace LibHouse.API.Configurations.Database
             var builder = new DbContextOptionsBuilder<LibHouseContext>();
             string connectionString = configuration.GetValue<string>("LibHouseConnectionString");
             builder
-             .UseSqlServer(connectionString, s => s.CommandTimeout(180).EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null))
+             .UseSqlServer(connectionString, s => s.CommandTimeout(180))
              .LogTo(Console.WriteLine, LogLevel.Information, DbContextLoggerOptions.LocalTime | DbContextLoggerOptions.SingleLine)
              .EnableDetailedErrors()
              .EnableSensitiveDataLogging();
