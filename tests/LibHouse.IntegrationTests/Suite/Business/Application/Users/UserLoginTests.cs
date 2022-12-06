@@ -2,13 +2,11 @@
 using LibHouse.Business.Application.Users.Gateways;
 using LibHouse.Business.Application.Users.Outputs;
 using LibHouse.Business.Entities.Residents;
-using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Extensions;
 using LibHouse.Business.Notifiers;
 using LibHouse.Data.Context;
 using LibHouse.Data.Repositories.Users;
-using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Context;
 using LibHouse.Infrastructure.Authentication.Login;
 using LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens;
@@ -57,12 +55,11 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             IUserLoginGateway userLoginGateway = new IdentityUserLoginGateway(signInManager.Object, accessTokenGenerator.Object);
             LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseInMemoryDatabase("InMemoryLibHouse").Options);
             IUserRepository userRepository = new UserRepository(libHouseContext);
-            IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
             UserLogin userLogin = new(notifier, userLoginGateway, userRepository);
             Resident registeredUser = new("Roberto", "Motta", new DateTime(1960, 8, 20), Gender.Male, "(11) 91633-9187", userEmail, "98598456039");
             registeredUser.Activate();
-            await unitOfWork.UserRepository.AddAsync(registeredUser);
-            await unitOfWork.CommitAsync();
+            await libHouseContext.Users.AddAsync(registeredUser);
+            await libHouseContext.SaveChangesAsync();
             OutputUserLogin outputUserLogin = await userLogin.ExecuteAsync(new(userEmail, userPassword));
             Assert.True(outputUserLogin.IsSuccess);
             Assert.Equal(userEmail, outputUserLogin.UserEmail);
