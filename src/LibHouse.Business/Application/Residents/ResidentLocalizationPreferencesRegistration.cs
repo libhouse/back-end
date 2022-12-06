@@ -8,6 +8,8 @@ using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Residents.Preferences.Localizations;
 using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Notifiers;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LibHouse.Business.Application.Residents
@@ -42,14 +44,17 @@ namespace LibHouse.Business.Application.Residents
                 Notify("Morador com preferências", $"O morador {input.ResidentId} já possui preferências cadastradas");
                 return new() { IsSuccess = false, LocalizationPreferencesRegistrationMessage = "O morador já possui preferências cadastradas" };
             }
-            Address landmarkAddress = await _unitOfWork.AddressRepository.GetAddressByPostalCodeAndNumberAsync(input.AddressPostalCodeNumber, input.AddressNumber);
+            IEnumerable<Address> addresses = await _unitOfWork.AddressRepository.GetAddressesByPostalCodeAndNumberAsync(input.AddressPostalCodeNumber, input.AddressNumber);
+            bool landmarkAddressIsRegistered = addresses.Any(address => string.Equals(address.GetComplement(), input.AddressComplement));
             await _unitOfWork.StartWorkAsync();
-            if (landmarkAddress is null)
+            Address landmarkAddress = null;
+            if (!landmarkAddressIsRegistered)
             {
                 landmarkAddress = input.Convert();
                 await _unitOfWork.AddressRepository.AddAsync(landmarkAddress);
             }
             LocalizationPreferences localizationPreferences = new();
+            landmarkAddress ??= addresses.Single(address => string.Equals(address.GetComplement(), input.AddressComplement));
             localizationPreferences.AddLandmarkPreferences(landmarkAddress);
             resident.WithPreferences();
             resident.AddLocalizationPreferences(localizationPreferences);

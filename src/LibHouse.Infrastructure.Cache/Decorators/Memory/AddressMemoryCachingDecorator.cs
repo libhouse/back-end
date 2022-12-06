@@ -41,9 +41,9 @@ namespace LibHouse.Infrastructure.Cache.Decorators.Memory
             return await _addressRepository.FirstAsync(expression);
         }
 
-        public async Task<Address> GetAddressByPostalCodeAndNumberAsync(string postalCodeNumber, ushort addressNumber)
+        public async Task<IEnumerable<Address>> GetAddressesByPostalCodeAndNumberAsync(string postalCodeNumber, ushort addressNumber)
         {
-            return await _addressRepository.GetAddressByPostalCodeAndNumberAsync(postalCodeNumber, addressNumber);
+            return await _addressRepository.GetAddressesByPostalCodeAndNumberAsync(postalCodeNumber, addressNumber);
         }
 
         public async Task<List<Address>> GetAsync(

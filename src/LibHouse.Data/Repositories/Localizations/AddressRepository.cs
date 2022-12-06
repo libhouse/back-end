@@ -29,9 +29,9 @@ namespace LibHouse.Data.Repositories.Localizations
                     @FederativeUnit={address.GetAbbreviationOfTheFederativeUnit()}");
         }
 
-        public async Task<Address> GetAddressByPostalCodeAndNumberAsync(string postalCodeNumber, ushort addressNumber)
+        public async Task<IEnumerable<Address>> GetAddressesByPostalCodeAndNumberAsync(string postalCodeNumber, ushort addressNumber)
         {
-            return await _dbSet.FirstOrDefaultAsync(address => address.PostalCode.PostalCodeNumber == postalCodeNumber && address.AddressNumber.Number == addressNumber);
+            return await _dbSet.Where(address => address.PostalCode.PostalCodeNumber == postalCodeNumber && address.AddressNumber.Number == addressNumber).ToListAsync();
         }
 
         public async Task<Address> GetFirstAddressFromPostalCodeAsync(string postalCodeNumber)
