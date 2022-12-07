@@ -46,20 +46,21 @@ namespace LibHouse.Business.Application.Residents
             }
             IEnumerable<Address> addresses = await _unitOfWork.AddressRepository.GetAddressesByPostalCodeAndNumberAsync(input.AddressPostalCodeNumber, input.AddressNumber);
             bool landmarkAddressIsRegistered = addresses.Any(address => string.Equals(address.GetComplement(), input.AddressComplement));
-            await _unitOfWork.StartWorkAsync();
             Address landmarkAddress = null;
-            if (!landmarkAddressIsRegistered)
+            bool preferencesHaveBeendAdded = await _unitOfWork.CommitAsync(async () =>
             {
-                landmarkAddress = input.Convert();
-                await _unitOfWork.AddressRepository.AddAsync(landmarkAddress);
-            }
-            LocalizationPreferences localizationPreferences = new();
-            landmarkAddress ??= addresses.Single(address => string.Equals(address.GetComplement(), input.AddressComplement));
-            localizationPreferences.AddLandmarkPreferences(landmarkAddress);
-            resident.WithPreferences();
-            resident.AddLocalizationPreferences(localizationPreferences);
-            _ = await _unitOfWork.ResidentRepository.AddOrUpdateResidentLocalizationPreferencesAsync(resident.Id, resident.GetLocalizationPreferences());
-            bool preferencesHaveBeendAdded = await _unitOfWork.CommitAsync();
+                if (!landmarkAddressIsRegistered)
+                {
+                    landmarkAddress = input.Convert();
+                    await _unitOfWork.AddressRepository.AddAsync(landmarkAddress);
+                }
+                LocalizationPreferences localizationPreferences = new();
+                landmarkAddress ??= addresses.Single(address => string.Equals(address.GetComplement(), input.AddressComplement));
+                localizationPreferences.AddLandmarkPreferences(landmarkAddress);
+                resident.WithPreferences();
+                resident.AddLocalizationPreferences(localizationPreferences);
+                _ = await _unitOfWork.ResidentRepository.AddOrUpdateResidentLocalizationPreferencesAsync(resident.Id, resident.GetLocalizationPreferences());
+            });
             if (!preferencesHaveBeendAdded)
             {
                 Notify("Falha inesperada", $"Falha ao salvar as preferências do morador {input.ResidentId}");

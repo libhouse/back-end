@@ -8,10 +8,9 @@ namespace LibHouse.Business.Entities.Shared
 {
     public interface IUnitOfWork : IDisposable
     {
-        void StartWork();
-        Task StartWorkAsync();
         bool Commit();
         Task<bool> CommitAsync();
+        Task<bool> CommitAsync(Func<Task> action);
         IUserRepository UserRepository { get; }
         IResidentRepository ResidentRepository { get; }
         IAddressRepository AddressRepository { get; }

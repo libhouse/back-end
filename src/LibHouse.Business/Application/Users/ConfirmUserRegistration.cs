@@ -44,7 +44,6 @@ namespace LibHouse.Business.Application.Users
                 Notify("Aceitar confirmação do usuário", outputGateway.ConfirmationMessage);
                 return new(ConfirmationMessage: outputGateway.ConfirmationMessage);
             }
-            await _unitOfWork.StartWorkAsync();
             user.Activate();
             bool isUserActivated = await _unitOfWork.CommitAsync();
             if (!isUserActivated)

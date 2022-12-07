@@ -31,7 +31,7 @@ namespace LibHouse.API.Configurations.Contexts
             services.AddDbContext<LibHouseContext>(options =>
                 options.UseSqlServer(
                     connectionString,
-                    s => s.CommandTimeout(180)
+                    s => s.CommandTimeout(180).EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null)
                 ).LogTo(
                     Console.WriteLine,
                     LogLevel.Debug,
@@ -49,7 +49,7 @@ namespace LibHouse.API.Configurations.Contexts
             services.AddDbContext<LibHouseContext>(options =>
                 options.UseSqlServer(
                     connectionString,
-                    s => s.CommandTimeout(180)
+                     s => s.CommandTimeout(180).EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null)
                 )
             );
             return services;

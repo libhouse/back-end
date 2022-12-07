@@ -82,7 +82,6 @@ namespace LibHouse.IntegrationTests.Suite.Business.Application.Users
             UserRegistration userRegistration = new(notifier, unitOfWork, userRegistrationGateway, userRegistrationSender.Object, userValidator);
             Resident existingUser = new("Matheus", "Jesus", new DateTime(1999, 5, 15), Gender.Male, "11986418080", "matheus.jesus@gmail.com", "53354503041");
             existingUser.Activate();
-            await unitOfWork.StartWorkAsync();
             await unitOfWork.UserRepository.AddAsync(existingUser);
             await unitOfWork.CommitAsync();
             InputUserRegistration input = new("Matheus", "Jesus", new DateTime(1999, 5, 15), "Male", "11986418080", "matheus.jesus@gmail.com", "53354503041", "Resident", "Senh@123456");

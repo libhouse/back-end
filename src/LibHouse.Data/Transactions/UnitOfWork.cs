@@ -6,7 +6,9 @@ using LibHouse.Data.Context;
 using LibHouse.Data.Repositories.Localizations;
 using LibHouse.Data.Repositories.Residents;
 using LibHouse.Data.Repositories.Users;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Threading.Tasks;
 
 namespace LibHouse.Data.Transactions
@@ -23,8 +25,6 @@ namespace LibHouse.Data.Transactions
         {
             _context = context;
         }
-
-        private IDbContextTransaction DbContextTransaction { get; set; }
 
         public IUserRepository UserRepository
         {
@@ -43,32 +43,29 @@ namespace LibHouse.Data.Transactions
 
         public bool Commit()
         {
-            _ = _context.SaveChanges();
-            DbContextTransaction.Commit();
-            return true;
+            return _context.SaveChanges() > 0;
         }
 
         public async Task<bool> CommitAsync()
         {
-            _ = await _context.SaveChangesAsync();
-            await DbContextTransaction.CommitAsync();
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> CommitAsync(Func<Task> action)
+        {
+            IExecutionStrategy strategy = _context.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async() =>
+            {
+                await using IDbContextTransaction transaction = await _context.Database.BeginTransactionAsync();
+                await action();
+                await transaction.CommitAsync();
+            });
             return true;
         }
 
         public void Dispose()
         {
-            DbContextTransaction?.Dispose();
             _context?.Dispose();
-        }
-
-        public void StartWork()
-        {
-            DbContextTransaction = _context.Database.BeginTransaction();
-        }
-
-        public async Task StartWorkAsync()
-        {
-            DbContextTransaction = await _context.Database.BeginTransactionAsync();
         }
     }
 }

@@ -149,7 +149,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             await authenticationContext.SaveChangesAsync();
             User user = new Resident("Alexandre", "Nunes", new DateTime(1989, 2, 15), Gender.Male, "11975678421", userEmail, "80077797019");
             user.Inactivate();
-            await unitOfWork.StartWorkAsync();
             await unitOfWork.UserRepository.AddAsync(user);
             await unitOfWork.CommitAsync();
             ConfirmUserRegistrationViewModel viewModel = new()
@@ -208,7 +207,6 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Users.
             );
             Owner registeredUser = new("Alberto", "Ayamashita", new DateTime(1970, 3, 25), Gender.Male, "(22) 99655-1134", userEmail, "23219514006");
             registeredUser.Activate();
-            await unitOfWork.StartWorkAsync();
             await unitOfWork.UserRepository.AddAsync(registeredUser);
             await unitOfWork.CommitAsync();
             Result userLoginResult = await userWebApiAdapter.UserLogin(new UserLoginViewModel()
