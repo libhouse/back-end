@@ -85,5 +85,17 @@ namespace LibHouse.Infrastructure.Controllers.Http.Residents
                 }
             );
         }
+
+        public ResidentsController(
+            IHttpResident residentsWebApiAdapter, 
+            IResidentLocalizationPreferencesRegistration residentLocalizationPreferencesRegistration)
+        {
+            residentsWebApiAdapter.OnResidentLocalizationPreferencesRegistration(
+                async (input) =>
+                {
+                    return await residentLocalizationPreferencesRegistration.ExecuteAsync(input);
+                }
+            );
+        }
     }
 }

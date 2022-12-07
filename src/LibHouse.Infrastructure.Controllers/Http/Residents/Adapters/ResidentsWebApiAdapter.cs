@@ -54,5 +54,16 @@ namespace LibHouse.Infrastructure.Controllers.Http.Residents.Adapters
             OutputResidentGeneralPreferencesRegistration output = await OnResidentGeneralPreferencesRegistrationFunction(input);
             return output.IsSuccess ? Result.Success() : Result.Fail(output.GeneralPreferencesRegistrationMessage);
         }
+
+        private Func<InputResidentLocalizationPreferencesRegistration, Task<OutputResidentLocalizationPreferencesRegistration>> OnResidentLocalizationPreferencesRegistrationFunction { get; set; }
+
+        public void OnResidentLocalizationPreferencesRegistration(Func<InputResidentLocalizationPreferencesRegistration, Task<OutputResidentLocalizationPreferencesRegistration>> on) => OnResidentLocalizationPreferencesRegistrationFunction = on;
+
+        public async Task<Result> ResidentLocalizationPreferencesRegistration(ResidentLocalizationPreferencesRegistrationViewModel preferencesRegistrationViewModel)
+        {
+            InputResidentLocalizationPreferencesRegistration input = preferencesRegistrationViewModel.Convert();
+            OutputResidentLocalizationPreferencesRegistration output = await OnResidentLocalizationPreferencesRegistrationFunction(input);
+            return output.IsSuccess ? Result.Success() : Result.Fail(output.LocalizationPreferencesRegistrationMessage);
+        }
     }
 }

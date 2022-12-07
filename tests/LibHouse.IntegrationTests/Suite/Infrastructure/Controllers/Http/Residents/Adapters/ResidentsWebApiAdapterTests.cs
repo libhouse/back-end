@@ -2,12 +2,14 @@
 using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Residents.Preferences.General.Builders;
 using LibHouse.Business.Entities.Residents.Preferences.Rooms.Builders;
+using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
 using LibHouse.Data.Context;
 using LibHouse.Data.Extensions.Context;
 using LibHouse.Data.Repositories.Residents;
+using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Controllers.Http.Residents;
 using LibHouse.Infrastructure.Controllers.Http.Residents.Adapters;
 using LibHouse.Infrastructure.Controllers.ViewModels.Residents;
@@ -156,6 +158,35 @@ namespace LibHouse.IntegrationTests.Suite.Infrastructure.Controllers.Http.Reside
             };
             Result residentGeneralPreferencesRegistrationResult = await residentsWebApiAdapter.ResidentGeneralPreferencesRegistration(viewModel);
             Assert.True(residentGeneralPreferencesRegistrationResult.IsSuccess);
+        }
+
+        [Fact]
+        public async Task ResidentLocalizationPreferencesRegistration_NewLocalizationPreferences_ShouldBeSuccess()
+        {
+            Notifier notifier = new();
+            string connectionString = _testsConfiguration.GetSection("ConnectionStrings:LibHouseBusiness").Value;
+            LibHouseContext libHouseContext = new(new DbContextOptionsBuilder<LibHouseContext>().UseSqlServer(connectionString).Options);
+            await libHouseContext.CleanContextDataAsync();
+            IUnitOfWork unitOfWork = new UnitOfWork(libHouseContext);
+            Resident resident = new("Barbara", "Coelho", new DateTime(1987, 10, 15), Gender.Female, "11985261522", "barbaracoelho@gmail.com", "82925973019");
+            await libHouseContext.Residents.AddAsync(resident);
+            await libHouseContext.SaveChangesAsync();
+            ResidentLocalizationPreferencesRegistration residentLocalizationPreferencesRegistration = new(notifier, unitOfWork);
+            ResidentsWebApiAdapter residentsWebApiAdapter = new();
+            _ = new ResidentsController(residentsWebApiAdapter, residentLocalizationPreferencesRegistration);
+            ResidentLocalizationPreferencesRegistrationViewModel viewModel = new()
+            {
+                ResidentId = resident.Id,
+                LandmarkAddressDescription = "Rua São Bento",
+                LandmarkAddressComplement = "de 321 ao fim - lado ímpar",
+                LandmarkAddressNumber = 321,
+                LandmarkAddressNeighborhood = "Centro",
+                LandmarkAddressCity = "São Paulo",
+                LandmarkAddressFederativeUnit = "SP",
+                LandmarkAddressPostalCodeNumber = "01011100"
+            };
+            Result residentLocalizationPreferencesRegistrationResult = await residentsWebApiAdapter.ResidentLocalizationPreferencesRegistration(viewModel);
+            Assert.True(residentLocalizationPreferencesRegistrationResult.IsSuccess);
         }
     }
 }
