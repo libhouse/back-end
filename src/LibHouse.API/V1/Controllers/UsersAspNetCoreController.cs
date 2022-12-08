@@ -100,6 +100,12 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="204">O cadastro do usuário foi confirmado com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou o token de confirmação expirou.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(ConfirmUserRegistrationViewModel), typeof(ConfirmUserRegistrationViewModelExample))]
+        [ProducesResponseType(204)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [AllowAnonymous]
         [HttpPatch("confirm-registration", Name = "Confirm User Registration")]
         public async Task<ActionResult> ConfirmUserRegistrationAsync([FromBody] ConfirmUserRegistrationViewModel confirmUserRegistrationViewModel)
