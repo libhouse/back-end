@@ -268,6 +268,12 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="204">A senha do usuário foi redefinida com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou houve um erro na redefinição da senha.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(ConfirmUserPasswordResetViewModel), typeof(ConfirmUserPasswordResetViewModelExample))]
+        [ProducesResponseType(204)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [AllowAnonymous]
         [HttpPatch("confirm-password-reset", Name = "Confirm Password Reset")]
         public async Task<ActionResult> ConfirmPasswordResetAsync([FromBody] ConfirmUserPasswordResetViewModel confirmUserPasswordResetViewModel)
