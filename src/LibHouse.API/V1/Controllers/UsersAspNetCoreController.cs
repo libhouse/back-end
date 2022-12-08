@@ -167,6 +167,12 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="204">O logout do usuário foi confirmado com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou houve uma falha na revogação do refresh token do usuário.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(UserLogoutViewModel), typeof(UserLogoutViewModelExample))]
+        [ProducesResponseType(204)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("User")]
         [HttpPatch("logout", Name = "Logout")]
         public async Task<ActionResult> LogoutUserAsync(UserLogoutViewModel userLogoutViewModel)
