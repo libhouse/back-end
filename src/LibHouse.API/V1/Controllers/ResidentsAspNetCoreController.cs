@@ -2,6 +2,7 @@
 using LibHouse.API.Attributes.Authorization;
 using LibHouse.API.BaseControllers;
 using LibHouse.API.Extensions.ModelState;
+using LibHouse.API.Filters.Swagger.Requests.Residents;
 using LibHouse.Business.Application.Residents.Interfaces;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
@@ -10,6 +11,7 @@ using LibHouse.Infrastructure.Controllers.Http.Residents;
 using LibHouse.Infrastructure.Controllers.Http.Residents.Adapters;
 using LibHouse.Infrastructure.Controllers.ViewModels.Residents;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using System.Threading.Tasks;
 
 namespace LibHouse.API.V1.Controllers
@@ -159,6 +161,7 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(ResidentLocalizationPreferencesRegistrationViewModel), typeof(ResidentLocalizationPreferencesRegistrationViewModelExample))]
         [Authorize("Resident")]
         [HttpPost("register-localization-preferences", Name = "Register Localization Preferences")]
         public async Task<ActionResult> RegisterResidentLocalizationPreferencesAsync(ResidentLocalizationPreferencesRegistrationViewModel preferencesRegistrationViewModel)

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
 using System.Reflection;
@@ -15,8 +16,10 @@ namespace LibHouse.API.Configurations.Swagger
             services.AddSwaggerGen(c =>
             {
                 c.OperationFilter<SwaggerDefaultValues>();
+                c.ExampleFilters();
                 c.IncludeXmlComments(GetSwaggerXmlCommentsPath());
             });
+            services.AddSwaggerExamplesFromAssemblyOf<Startup>();
             return services;
         }
 
