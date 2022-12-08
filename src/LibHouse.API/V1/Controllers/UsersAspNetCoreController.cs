@@ -200,6 +200,13 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="200">O token do usuário foi renovado com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou houve uma falha na validação do refresh token.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(UserLoginRenewalViewModel), typeof(UserLoginRenewalViewModelExample))]
+        [SwaggerResponseExample(200, typeof(UserLoginRenewalResponseExample))]
+        [ProducesResponseType(typeof(UserLoginRenewalResponse), 200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("User")]
         [HttpPost("refresh-token", Name = "Refresh Token")]
         public async Task<ActionResult<UserLoginRenewalResponse>> RefreshTokenAsync(UserLoginRenewalViewModel userLoginRenewalViewModel)
@@ -227,6 +234,13 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="200">A solicitação de redefinição de senha foi confirmada com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou houve uma falha na geração do token de redefinição de senha.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(UserPasswordResetViewModel), typeof(UserPasswordResetViewModelExample))]
+        [SwaggerResponseExample(200, typeof(UserPasswordResetResponseExample))]
+        [ProducesResponseType(typeof(UserPasswordResetResponse), 200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [AllowAnonymous]
         [HttpPost("request-password-reset", Name = "Request Password Reset")]
         public async Task<ActionResult<UserPasswordResetResponse>> RequestPasswordResetAsync([FromBody] UserPasswordResetViewModel userPasswordResetViewModel)
