@@ -2,6 +2,9 @@
 using LibHouse.API.Attributes.Authorization;
 using LibHouse.API.BaseControllers;
 using LibHouse.API.Extensions.ModelState;
+using LibHouse.API.Filters.Swagger.Requests.Users;
+using LibHouse.API.Filters.Swagger.Responses;
+using LibHouse.API.Filters.Swagger.Responses.Users;
 using LibHouse.Business.Application.Users.Interfaces;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
@@ -11,7 +14,9 @@ using LibHouse.Infrastructure.Controllers.Http.Users.Adapters;
 using LibHouse.Infrastructure.Controllers.Responses.Users;
 using LibHouse.Infrastructure.Controllers.ViewModels.Users;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LibHouse.API.V1.Controllers
@@ -61,6 +66,13 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="200">O usuário foi registrado com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos, o usuário já está cadastrado ou houve uma falha para registrá-lo.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(UserRegistrationViewModel), typeof(UserRegistrationViewModelExample))]
+        [SwaggerResponseExample(200, typeof(UserRegistrationResponseExample))]
+        [ProducesResponseType(typeof(UserRegistrationResponse), 200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [AllowAnonymous]
         [HttpPost("new-account", Name = "New Account")]
         public async Task<ActionResult<UserRegistrationResponse>> RegisterUserAsync(UserRegistrationViewModel userRegistrationViewModel)
