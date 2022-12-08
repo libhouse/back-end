@@ -24,6 +24,8 @@
             <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
             <response code="200">As preferências do morador foram registradas com sucesso.</response>
             <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+            <response code="401">O usuário que fez a requisição não está autenticado.</response>
+            <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
         <member name="M:LibHouse.API.V1.Controllers.ResidentsAspNetCoreController.RegisterResidentServicesPreferencesAsync(LibHouse.Infrastructure.Controllers.ViewModels.Residents.ResidentServicesPreferencesRegistrationViewModel)">
@@ -34,6 +36,8 @@
             <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
             <response code="200">As preferências do morador foram registradas com sucesso.</response>
             <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+            <response code="401">O usuário que fez a requisição não está autenticado.</response>
+            <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
         <member name="M:LibHouse.API.V1.Controllers.ResidentsAspNetCoreController.RegisterResidentChargePreferencesAsync(LibHouse.Infrastructure.Controllers.ViewModels.Residents.ResidentChargePreferencesRegistrationViewModel)">
@@ -44,6 +48,8 @@
             <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
             <response code="200">As preferências do morador foram registradas com sucesso.</response>
             <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+            <response code="401">O usuário que fez a requisição não está autenticado.</response>
+            <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
         <member name="M:LibHouse.API.V1.Controllers.ResidentsAspNetCoreController.RegisterResidentGeneralPreferencesAsync(LibHouse.Infrastructure.Controllers.ViewModels.Residents.ResidentGeneralPreferencesRegistrationViewModel)">
@@ -54,6 +60,8 @@
             <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
             <response code="200">As preferências do morador foram registradas com sucesso.</response>
             <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+            <response code="401">O usuário que fez a requisição não está autenticado.</response>
+            <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
         <member name="M:LibHouse.API.V1.Controllers.ResidentsAspNetCoreController.RegisterResidentLocalizationPreferencesAsync(LibHouse.Infrastructure.Controllers.ViewModels.Residents.ResidentLocalizationPreferencesRegistrationViewModel)">
@@ -64,6 +72,8 @@
             <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
             <response code="200">As preferências do morador foram registradas com sucesso.</response>
             <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+            <response code="401">O usuário que fez a requisição não está autenticado.</response>
+            <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
         <member name="M:LibHouse.API.V1.Controllers.UsersAspNetCoreController.RegisterUserAsync(LibHouse.Infrastructure.Controllers.ViewModels.Users.UserRegistrationViewModel)">
@@ -104,6 +114,8 @@
             <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
             <response code="204">O logout do usuário foi confirmado com sucesso.</response>
             <response code="400">Os dados enviados são inválidos ou houve uma falha na revogação do refresh token do usuário.</response>
+            <response code="401">O usuário que fez a requisição não está autenticado.</response>
+            <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
         <member name="M:LibHouse.API.V1.Controllers.UsersAspNetCoreController.RefreshTokenAsync(LibHouse.Infrastructure.Controllers.ViewModels.Users.UserLoginRenewalViewModel)">
@@ -114,6 +126,8 @@
             <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações.</returns>
             <response code="200">O token do usuário foi renovado com sucesso.</response>
             <response code="400">Os dados enviados são inválidos ou houve uma falha na validação do refresh token.</response>
+            <response code="401">O usuário que fez a requisição não está autenticado.</response>
+            <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
         <member name="M:LibHouse.API.V1.Controllers.UsersAspNetCoreController.RequestPasswordResetAsync(LibHouse.Infrastructure.Controllers.ViewModels.Users.UserPasswordResetViewModel)">
