@@ -133,6 +133,13 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="200">O login do usuário foi confirmado com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou houve uma falha na autenticação do usuário.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(UserLoginViewModel), typeof(UserLoginViewModelExample))]
+        [SwaggerResponseExample(200, typeof(UserLoginResponseExample))]
+        [ProducesResponseType(typeof(UserLoginResponse), 200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [AllowAnonymous]
         [HttpPost("login", Name = "User Login")]
         public async Task<ActionResult<UserLoginResponse>> LoginUserAsync(UserLoginViewModel userLoginViewModel)
