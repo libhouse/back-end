@@ -3,6 +3,7 @@ using LibHouse.API.Attributes.Authorization;
 using LibHouse.API.BaseControllers;
 using LibHouse.API.Extensions.ModelState;
 using LibHouse.API.Filters.Swagger.Requests.Residents;
+using LibHouse.API.Filters.Swagger.Responses;
 using LibHouse.Business.Application.Residents.Interfaces;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
@@ -12,6 +13,7 @@ using LibHouse.Infrastructure.Controllers.Http.Residents.Adapters;
 using LibHouse.Infrastructure.Controllers.ViewModels.Residents;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LibHouse.API.V1.Controllers
@@ -54,6 +56,11 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentRoomPreferencesRegistrationViewModel), typeof(ResidentRoomPreferencesRegistrationViewModelExample))]
+        [ProducesResponseType(200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
         [HttpPost("register-room-preferences", Name = "Register Room Preferences")]
         public async Task<ActionResult> RegisterResidentRoomPreferencesAsync(ResidentRoomPreferencesRegistrationViewModel preferencesRegistrationViewModel)
@@ -82,6 +89,11 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentServicesPreferencesRegistrationViewModel), typeof(ResidentServicesPreferencesRegistrationViewModelExample))]
+        [ProducesResponseType(200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
         [HttpPost("register-services-preferences", Name = "Register Services Preferences")]
         public async Task<ActionResult> RegisterResidentServicesPreferencesAsync(ResidentServicesPreferencesRegistrationViewModel preferencesRegistrationViewModel)
@@ -110,6 +122,11 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentChargePreferencesRegistrationViewModel), typeof(ResidentChargePreferencesRegistrationViewModelExample))]
+        [ProducesResponseType(200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
         [HttpPost("register-charge-preferences", Name = "Register Charge Preferences")]
         public async Task<ActionResult> RegisterResidentChargePreferencesAsync(ResidentChargePreferencesRegistrationViewModel preferencesRegistrationViewModel)
@@ -138,6 +155,11 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentGeneralPreferencesRegistrationViewModel), typeof(ResidentGeneralPreferencesRegistrationViewModelExample))]
+        [ProducesResponseType(200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
         [HttpPost("register-general-preferences", Name = "Register General Preferences")]
         public async Task<ActionResult> RegisterResidentGeneralPreferencesAsync(ResidentGeneralPreferencesRegistrationViewModel preferencesRegistrationViewModel)
@@ -166,6 +188,11 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentLocalizationPreferencesRegistrationViewModel), typeof(ResidentLocalizationPreferencesRegistrationViewModelExample))]
+        [ProducesResponseType(200)]
+        [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
         [HttpPost("register-localization-preferences", Name = "Register Localization Preferences")]
         public async Task<ActionResult> RegisterResidentLocalizationPreferencesAsync(ResidentLocalizationPreferencesRegistrationViewModel preferencesRegistrationViewModel)
