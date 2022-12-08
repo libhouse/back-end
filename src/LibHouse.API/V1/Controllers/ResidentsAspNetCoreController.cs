@@ -54,11 +54,15 @@ namespace LibHouse.API.V1.Controllers
         /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentRoomPreferencesRegistrationViewModel), typeof(ResidentRoomPreferencesRegistrationViewModelExample))]
         [ProducesResponseType(200)]
         [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
@@ -87,11 +91,15 @@ namespace LibHouse.API.V1.Controllers
         /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentServicesPreferencesRegistrationViewModel), typeof(ResidentServicesPreferencesRegistrationViewModelExample))]
         [ProducesResponseType(200)]
         [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
@@ -120,11 +128,15 @@ namespace LibHouse.API.V1.Controllers
         /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentChargePreferencesRegistrationViewModel), typeof(ResidentChargePreferencesRegistrationViewModelExample))]
         [ProducesResponseType(200)]
         [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
@@ -153,11 +165,15 @@ namespace LibHouse.API.V1.Controllers
         /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentGeneralPreferencesRegistrationViewModel), typeof(ResidentGeneralPreferencesRegistrationViewModelExample))]
         [ProducesResponseType(200)]
         [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]
@@ -186,11 +202,15 @@ namespace LibHouse.API.V1.Controllers
         /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(ResidentLocalizationPreferencesRegistrationViewModel), typeof(ResidentLocalizationPreferencesRegistrationViewModelExample))]
         [ProducesResponseType(200)]
         [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("Resident")]

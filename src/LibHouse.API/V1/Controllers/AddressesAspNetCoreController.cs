@@ -41,10 +41,14 @@ namespace LibHouse.API.V1.Controllers
         /// <param name="postalCodeNumber" example="01001000">O número do código postal a ser pesquisado.</param>
         /// <returns>Em caso de sucesso, retorna um objeto com os dados do endereço. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="200">Os dados do endereço foram obtidos com sucesso.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="404">O endereço não foi encontrado.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerResponseExample(200, typeof(PostalCodeSearchResponseExample))]
         [ProducesResponseType(typeof(PostalCodeSearchResponse), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(404, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 404)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]

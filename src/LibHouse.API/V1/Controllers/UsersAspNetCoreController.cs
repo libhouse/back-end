@@ -166,11 +166,15 @@ namespace LibHouse.API.V1.Controllers
         /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="204">O logout do usuário foi confirmado com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou houve uma falha na revogação do refresh token do usuário.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(UserLogoutViewModel), typeof(UserLogoutViewModelExample))]
         [ProducesResponseType(204)]
         [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("User")]
@@ -199,12 +203,16 @@ namespace LibHouse.API.V1.Controllers
         /// <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações.</returns>
         /// <response code="200">O token do usuário foi renovado com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou houve uma falha na validação do refresh token.</response>
+        /// <response code="401">O usuário que fez a requisição não está autenticado.</response>
+        /// <response code="403">O usuário que fez a requisição não possui as permissões necessárias para acessar o recurso.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [SwaggerRequestExample(typeof(UserLoginRenewalViewModel), typeof(UserLoginRenewalViewModelExample))]
         [SwaggerResponseExample(200, typeof(UserLoginRenewalResponseExample))]
         [ProducesResponseType(typeof(UserLoginRenewalResponse), 200)]
         [SwaggerResponseExample(400, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [SwaggerResponseExample(500, typeof(NotificationResponseExample))]
         [ProducesResponseType(typeof(IEnumerable<Notification>), 500)]
         [Authorize("User")]
