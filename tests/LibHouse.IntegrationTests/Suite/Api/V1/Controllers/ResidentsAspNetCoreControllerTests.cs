@@ -1,6 +1,4 @@
 ﻿using LibHouse.Business.Entities.Users;
-using LibHouse.Data.Extensions.Context;
-using LibHouse.Infrastructure.Authentication.Context.Extensions;
 using LibHouse.Infrastructure.Controllers.ViewModels.Residents;
 using System.Net;
 using System.Net.Http;
@@ -19,8 +17,7 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
         [InlineData("POST", "/api/v1/residents/register-room-preferences")]
         public async Task RegisterResidentRoomPreferencesAsync_NewRoomPreferences_ShouldReturn200OK(string method, string route)
         {
-            await _libHouseContext.CleanContextDataAsync();
-            await _authenticationContext.CleanContextDataAsync();
+            await ResetApiDatabaseAsync();
             User userResident = await CreateActiveResidentAsync();
             HttpRequestMessage httpRequest = new(new HttpMethod(method), route);
             httpRequest.Content = new StringContent(JsonSerializer.Serialize(new ResidentRoomPreferencesRegistrationViewModel
@@ -60,8 +57,7 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
         [InlineData("POST", "/api/v1/residents/register-services-preferences")]
         public async Task RegisterResidentServicesPreferencesAsync_NewServicesPreferences_ShouldReturn200OK(string method, string route)
         {
-            await _libHouseContext.CleanContextDataAsync();
-            await _authenticationContext.CleanContextDataAsync();
+            await ResetApiDatabaseAsync();
             User userResident = await CreateActiveResidentAsync();
             HttpRequestMessage httpRequest = new(new HttpMethod(method), route);
             httpRequest.Content = new StringContent(JsonSerializer.Serialize(new ResidentServicesPreferencesRegistrationViewModel
@@ -80,8 +76,7 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
         [InlineData("POST", "/api/v1/residents/register-charge-preferences")]
         public async Task RegisterResidentChargePreferencesAsync_NewChargePreferences_ShouldReturn200OK(string method, string route)
         {
-            await _libHouseContext.CleanContextDataAsync();
-            await _authenticationContext.CleanContextDataAsync();
+            await ResetApiDatabaseAsync();
             User userResident = await CreateActiveResidentAsync();
             HttpRequestMessage httpRequest = new(new HttpMethod(method), route);
             httpRequest.Content = new StringContent(JsonSerializer.Serialize(new ResidentChargePreferencesRegistrationViewModel
@@ -101,8 +96,7 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
         [InlineData("POST", "/api/v1/residents/register-general-preferences")]
         public async Task RegisterResidentGeneralPreferencesAsync_NewGeneralPreferences_ShouldReturn200OK(string method, string route)
         {
-            await _libHouseContext.CleanContextDataAsync();
-            await _authenticationContext.CleanContextDataAsync();
+            await ResetApiDatabaseAsync();
             User userResident = await CreateActiveResidentAsync();
             HttpRequestMessage httpRequest = new(new HttpMethod(method), route);
             httpRequest.Content = new StringContent(JsonSerializer.Serialize(new ResidentGeneralPreferencesRegistrationViewModel
@@ -116,6 +110,29 @@ namespace LibHouse.IntegrationTests.Suite.Api.V1.Controllers
                 AcceptsOnlyWomenAsRoommates = false,
                 MinimumNumberOfRoommatesDesired = 1,
                 MaximumNumberOfRoommatesDesired = 3
+            }), Encoding.UTF8, "application/json");
+            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessTokenAsync(userResident.GetEmailAddress()));
+            HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("POST", "/api/v1/residents/register-localization-preferences")]
+        public async Task RegisterResidentLocalizationPreferencesAsync_NewLocalizationPreferences_ShouldReturn200OK(string method, string route)
+        {
+            await ResetApiDatabaseAsync();
+            User userResident = await CreateActiveResidentAsync();
+            HttpRequestMessage httpRequest = new(new HttpMethod(method), route);
+            httpRequest.Content = new StringContent(JsonSerializer.Serialize(new ResidentLocalizationPreferencesRegistrationViewModel
+            {
+                ResidentId = userResident.Id,
+                LandmarkAddressDescription = "Rua São Bento",
+                LandmarkAddressComplement = "de 321 ao fim - lado ímpar",
+                LandmarkAddressNumber = 321,
+                LandmarkAddressNeighborhood = "Centro",
+                LandmarkAddressCity = "São Paulo",
+                LandmarkAddressFederativeUnit = "SP",
+                LandmarkAddressPostalCodeNumber = "01011100"
             }), Encoding.UTF8, "application/json");
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessTokenAsync(userResident.GetEmailAddress()));
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);

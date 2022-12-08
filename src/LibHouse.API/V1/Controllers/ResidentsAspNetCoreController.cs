@@ -28,7 +28,8 @@ namespace LibHouse.API.V1.Controllers
             IResidentRoomPreferencesRegistration residentRoomPreferencesRegistration,
             IResidentServicesPreferencesRegistration residentServicesPreferencesRegistration,
             IResidentChargePreferencesRegistration residentChargePreferencesRegistration,
-            IResidentGeneralPreferencesRegistration residentGeneralPreferencesRegistration) 
+            IResidentGeneralPreferencesRegistration residentGeneralPreferencesRegistration,
+            IResidentLocalizationPreferencesRegistration residentLocalizationPreferencesRegistration) 
             : base(notifier, loggedUser, logger)
         {
             _residentsWebApiAdapter = new ResidentsWebApiAdapter();
@@ -37,7 +38,8 @@ namespace LibHouse.API.V1.Controllers
                 residentRoomPreferencesRegistration,
                 residentServicesPreferencesRegistration,
                 residentChargePreferencesRegistration,
-                residentGeneralPreferencesRegistration
+                residentGeneralPreferencesRegistration,
+                residentLocalizationPreferencesRegistration
             );
         }
 
@@ -146,6 +148,33 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
             Logger.Log(LogLevel.Information, $"Preferências gerais do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
+            return Ok();
+        }
+
+        /// <summary>
+        /// Cadastra as preferências de localização de um morador.
+        /// </summary>
+        /// <param name="preferencesRegistrationViewModel">Objeto que possui os dados necessários para cadastrar as preferências de localização do morador.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [Authorize("Resident")]
+        [HttpPost("register-localization-preferences", Name = "Register Localization Preferences")]
+        public async Task<ActionResult> RegisterResidentLocalizationPreferencesAsync(ResidentLocalizationPreferencesRegistrationViewModel preferencesRegistrationViewModel)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+            Result preferencesRegistrationResult = await _residentsWebApiAdapter.ResidentLocalizationPreferencesRegistration(preferencesRegistrationViewModel);
+            if (preferencesRegistrationResult.Failure)
+            {
+                NotifyError("Registro de preferências", preferencesRegistrationResult.Error);
+                Logger.Log(LogLevel.Error, $"Falha ao realizar as preferências do morador: {preferencesRegistrationResult.Error}");
+                return CustomResponseForPostEndpoint();
+            }
+            Logger.Log(LogLevel.Information, $"Preferências de localização do morador {LoggedUser.GetUserEmail()} registradas com sucesso");
             return Ok();
         }
     }

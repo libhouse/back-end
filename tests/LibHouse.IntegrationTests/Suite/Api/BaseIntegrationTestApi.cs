@@ -2,7 +2,9 @@
 using LibHouse.Business.Entities.Residents;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Data.Context;
+using LibHouse.Data.Extensions.Context;
 using LibHouse.Infrastructure.Authentication.Context;
+using LibHouse.Infrastructure.Authentication.Context.Extensions;
 using LibHouse.Infrastructure.Authentication.Roles;
 using LibHouse.Infrastructure.Controllers.Responses.Users;
 using LibHouse.Infrastructure.Controllers.ViewModels.Users;
@@ -39,6 +41,12 @@ namespace LibHouse.IntegrationTests.Suite.Api
             _libHouseContext = server.Services.GetRequiredService<LibHouseContext>();
             _authenticationContext = server.Services.GetRequiredService<AuthenticationContext>();
             _httpClient = server.CreateClient();
+        }
+
+        protected async Task ResetApiDatabaseAsync()
+        {
+            await _libHouseContext.CleanContextDataAsync();
+            await _authenticationContext.CleanContextDataAsync();
         }
 
         protected async Task<Resident> CreateActiveResidentAsync()

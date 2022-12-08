@@ -119,6 +119,7 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<IResidentServicesPreferencesRegistration, ResidentServicesPreferencesRegistration>();
             services.AddScoped<IResidentChargePreferencesRegistration, ResidentChargePreferencesRegistration>();
             services.AddScoped<IResidentGeneralPreferencesRegistration, ResidentGeneralPreferencesRegistration>();
+            services.AddScoped<IResidentLocalizationPreferencesRegistration, ResidentLocalizationPreferencesRegistration>();
             services.AddScoped<IPostalCodeSearch, PostalCodeSearch>();
             return services;
         }
