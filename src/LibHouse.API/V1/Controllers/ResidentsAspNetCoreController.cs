@@ -80,6 +80,7 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="200">As preferências do morador foram registradas com sucesso.</response>
         /// <response code="400">Os dados enviados são inválidos ou as preferências já estão cadastradas.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [SwaggerRequestExample(typeof(ResidentServicesPreferencesRegistrationViewModel), typeof(ResidentServicesPreferencesRegistrationViewModelExample))]
         [Authorize("Resident")]
         [HttpPost("register-services-preferences", Name = "Register Services Preferences")]
         public async Task<ActionResult> RegisterResidentServicesPreferencesAsync(ResidentServicesPreferencesRegistrationViewModel preferencesRegistrationViewModel)
