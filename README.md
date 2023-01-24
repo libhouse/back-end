@@ -152,7 +152,17 @@ dotnet ef database update -c LibHouseContext -p .\LibHouse.Data\LibHouse.Data.cs
 
 # Estrutura da solução
 
+A solução *back-end* do LibHouse foi construída seguindo boa parte dos conceitos propostos pela *Clean Archictecure* e por *Ports and Adapters*, de modo que as regras de negócio estejam totalmente isoladas das outras camadas. Com isso, o código-fonte está segmentado conforme as responsabilidades existentes. Por exemplo, todo o controle de acesso a dados acabou sendo distribuído na camada *Data*, enquanto as preocupações relacionadas a autenticação de usuários ficaram dedicadas na camada *Authentication*. A principal ideia dessa divisão é facilitar a manutenção da solução, contribuíndo também para uma base de código mais testável, intercambiável e extensível.
+
 ## LibHouse API
+
+O projeto *API* foi criado com o *sdk* *web* do *.NET Core*, com o intuito de expor através do protocolo *http* os *endpoints* para consumo do *front-end* da plataforma LibHouse. Mediante o uso do pacote *Microsoft.AspNetCore.Mvc.Versioning*, as *controllers* estão devidamente versionadas, permitindo que atualizações dos principais recursos publicados na *API* sejam feitas sem provocar um grande impacto nos clientes. 
+
+Esta camada possui ainda outras funções pertinentes, a começar pela implementação de *AspNetLoggedUser*, que segue o contrato da interface *ILoggedUser* definida em *Authentication* com o objetivo de fornecer todos os dados de maior relevância do usuário autenticado. Dessa maneira, a cada requisição realizada para qualquer *endpoint* da *API*, o sistema é capaz de identificar o usuário responsável, sem a necessidade de consultar fontes externas, como o banco de dados.
+
+Não menos importante, a injeção das dependências utilizadas nas demais camadas da solução estão organizadas no *namespace* *Configurations*. Desse jeito, quando a *API* é inicializada, as interfaces e classes são mapeadas adequadamente, e o *framework* garante que os objetos serão construídos sempre que forem solicitados nas funções construtoras.
+
+O *Swagger* está instalado e configurado nesta camada, habilitando a documentação dos *endpoints* da *API* a partir das notações *XML* do C#. Além disso, o recurso em questão permite a testabilidade do serviço de uma forma muito mais ágil com a *Swagger UI*, que foi personalizada para suportar o envio de requisições autenticadas com o *token* *JWT*, bem como exibir as diferentes respostas esperadas em cada rota das *controllers*.
 
 ## LibHouse Business
 
