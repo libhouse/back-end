@@ -16,7 +16,10 @@ Este documento busca explicar e detalhar, sobretudo, as informações técnicas 
   - [LibHouse.Infrastructure.Cache](#libhouse-cache)
   - [LibHouse.Infrastructure.Controllers](#libhouse-controllers)
   - [LibHouse.Infrastructure.Email](#libhouse-email)
+  - [LibHouse.Infrastructure.WebClients](#libhouse-webclients)
 - [Endpoints](#endpoints)
+  - [Addresses](#addresses)
+    - [GetAddressByPostalCode](#get-address-by-postal-code)
   - [Users](#users)
     - [RegisterUser](#register-user)
     - [ConfirmUserRegistration](#confirm-user-registration)
@@ -25,6 +28,12 @@ Este documento busca explicar e detalhar, sobretudo, as informações técnicas 
     - [RefreshToken](#refresh-token)
     - [RequestPasswordReset](#request-password-reset)
     - [ConfirmPasswordReset](#confirm-password-reset)
+  - [Residents](#residents)
+    - [RegisterResidentRoomPreferences](#register-resident-room-preferences)
+    - [RegisterResidentServicesPreferences](#register-resident-services-preferences)
+    - [RegisterResidentChargePreferences](#register-resident-charge-preferences)
+    - [RegisterResidentGeneralPreferences](#register-resident-general-preferences)
+    - [RegisterResidentLocalizationPreferences](#register-resident-localization-preferences)
 - [Testes](#testes)
   - [Testes unitários](#testes-unitários)
   - [Testes de integração](#testes-de-integração)
@@ -157,9 +166,15 @@ dotnet ef database update -c LibHouseContext -p .\LibHouse.Data\LibHouse.Data.cs
 
 ## LibHouse Email
 
+## LibHouse WebClients
+
 [(Voltar para o topo)](#índice)
 
 # Endpoints
+
+## Addresses
+
+### Get Address By Postal Code
 
 ## Users
 
@@ -176,6 +191,18 @@ dotnet ef database update -c LibHouseContext -p .\LibHouse.Data\LibHouse.Data.cs
 ### Request Password Reset
 
 ### Confirm Password Reset
+
+## Residents
+
+### Register Resident Room Preferences
+
+### Register Resident Services Preferences
+
+### Register Resident Charge Preferences
+
+### Register Resident General Preferences
+
+### Register Resident Localization Preferences
 
 [(Voltar para o topo)](#índice)
 
