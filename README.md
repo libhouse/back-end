@@ -158,13 +158,21 @@ A solução *back-end* do LibHouse foi construída seguindo boa parte dos concei
 
 O projeto *API* foi criado com o *sdk* *web* do *.NET Core*, com o intuito de expor através do protocolo *http* os *endpoints* para consumo do *front-end* da plataforma LibHouse. Mediante o uso do pacote *Microsoft.AspNetCore.Mvc.Versioning*, as *controllers* estão devidamente versionadas, permitindo que atualizações dos principais recursos publicados na *API* sejam feitas sem provocar um grande impacto nos clientes. 
 
-Esta camada possui ainda outras funções pertinentes, a começar pela implementação de *AspNetLoggedUser*, que segue o contrato da interface *ILoggedUser* definida em *Authentication* com o objetivo de fornecer todos os dados de maior relevância do usuário autenticado. Dessa maneira, a cada requisição realizada para qualquer *endpoint* da *API*, o sistema é capaz de identificar o usuário responsável, sem a necessidade de consultar fontes externas, como o banco de dados.
+Esta camada possui ainda outras funções pertinentes, a começar pela implementação de *AspNetLoggedUser*, que segue o contrato da interface *ILoggedUser* definida em *Authentication* com o objetivo de fornecer todos os dados de maior relevância do usuário autenticado. Dessa maneira, a cada requisição realizada para qualquer *endpoint* da *API*, o sistema é capaz de identificar o usuário, sem a necessidade de consultar fontes externas, como o banco de dados.
 
 Não menos importante, a injeção das dependências utilizadas nas demais camadas da solução estão organizadas no *namespace* *Configurations*. Desse jeito, quando a *API* é inicializada, as interfaces e classes são mapeadas adequadamente, e o *framework* garante que os objetos serão construídos sempre que forem solicitados nas funções construtoras.
 
 O *Swagger* está instalado e configurado nesta camada, habilitando a documentação dos *endpoints* da *API* a partir das notações *XML* do C#. Além disso, o recurso em questão permite a testabilidade do serviço de uma forma muito mais ágil com a *Swagger UI*, que foi personalizada para suportar o envio de requisições autenticadas com o *token* *JWT*, bem como exibir as diferentes respostas esperadas em cada rota das *controllers*.
 
 ## LibHouse Business
+
+O projeto *Business* reúne as classes com maior valor de negócio da solução. Portanto, esta camada não possui qualquer tipo de dependência, destacando-se por ser a mais isolada de todas. 
+
+As **entidades** estão agrupadas logicamente em um *namespace* próprio. Cada classe desse tipo foi desenvolvida para representar um conceito único de negócio, de modo a separar as responsabilidades. Vale ressaltar que a ideia de *entidades* utilizada neste projeto está alinhada, sobretudo, com as definições da obra *Clean Architecture*. Sendo assim, existem classes semelhantes aos **objetos de valor** retratados no livro *Domain-Driven Design*, que também foram incluídas nesta parte de *Business*.
+
+De maneira complementar, dentro do *namespace* *Application*, os **casos de uso** estão implementados para orquestrar a interação entre as *entidades*. Isso garante que as regras de negócio possam ser reaproveitadas e até mesmo substituíveis, caso necessário. Novamente, a literatura da *Clean Architecture* influenciou esta camada. Logo, cada caso de uso expõe somente um método na sua interface, separando as regras em componentes que facilitam a testabilidade e que deixam claro sobre qual problema será resolvido na sua execução. Todo caso de uso recebe um objeto *input* e retorna um objeto *output* exclusivo. Isso é feito para desacoplar a sua estrutura das *entidades*, que podem mudar por razões diferentes.
+
+Validações com um grau de complexidade maior e que não fazem sentido estar nos construtores e métodos das *entidades*, foram migradas para o *namespace* *Validations*. As classes de validação costumam se associar diretamente a apenas uma entidade, e elaboram as suas respectivas regras com o uso da biblioteca *FluentValidation*. 
 
 ## LibHouse Data
 
