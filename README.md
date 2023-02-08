@@ -176,6 +176,16 @@ Validações com um grau de complexidade maior e que não fazem sentido estar no
 
 ## LibHouse Data
 
+O projeto *Data* disponibiliza todas as operações voltadas ao acesso a dados da aplicação. Para se conectar com o banco de dados relacional *Sql Server*, e fazer o mapeamento entre as tabelas e as classes do mundo orientado a objetos, esta camada se beneficia do *Entity Framework Core*. O *framework* da Microsoft elimina a obrigatoriedade de escrever consultas *Sql*, bem como de ter que construir mecanismos de tradução entre os diferentes paradigmas de programação. Logo, o *ORM* viabiliza que os principais esforços de desenvolvimento sejam direcionados às regras de negócio do sistema.
+
+Todas as configurações que envolvem a criação de tabelas, colunas, índices e outras estruturas do banco de dados, estão definidas no *namespace* *Configurations*. Aproveitando-se da interface *IEntityTypeConfiguration*, as entidades e objetos de valor existentes na camada *Business* são mapeadas em classes de configuração exclusivas, auxiliando assim a organização do código.
+
+Por sua vez, o *namespace* *Context* possui somente uma única classe, a **LibHouseContext**, que herda do tipo abstrato *DbContext* fornecido pelo *Entity Framework Core*. Essa classe de contexto é a responsável por configurar o modelo de dados do projeto, gerenciar a conexão com o banco de dados, consultar e persistir os dados, fazer a rastreabilidade dos objetos, materializar o resultado e fazer o cache das consultas.
+
+No diretório identificado como *Migrations*, o histórico completo dos arquivos de migração do banco de dados está disponível. Isso significa que com o uso das ferramentas de linha de comando do *Entity Framework Core*, versões antigas do modelo de dados podem ser restauradas a qualquer momento. Ademais, qualquer mudança nos objetos do banco de dados também pode ser gerada a partir de novas migrações, que consideram as alterações feitas nas classes do *namespace* *Configurations* para criar os *scripts* *Sql*.
+
+Enfim, o *namespace* *Repositories* reúne a implementação das interfaces de repositório declaradas no projeto *Business*. Portanto, são nessas classes que os comandos *Sql* de acesso a dados são elaborados de maneira indireta com as instruções *LINQ* do C#. Complementarmente, o *namespace* *Transactions* apresenta a classe *UnitOfWork*, que interage junto aos repositórios para criar operações consistentes e atômicas quando mais de uma entidade está envolvida em ações de *Insert*, *Update* e/ou *Delete*.
+
 ## LibHouse Authentication
 
 ## LibHouse Cache
