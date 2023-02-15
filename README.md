@@ -188,6 +188,14 @@ Enfim, o *namespace* *Repositories* reúne a implementação das interfaces de r
 
 ## LibHouse Authentication
 
+O projeto *Authentication* isola as regras de negócio das funcionalidades que englobam a autenticação de usuários da plataforma. Tendo isso em vista, *Business* não precisa lidar com classes e outras estruturas voltadas para o login/logout, que naturalmente fugiriam do escopo da camada. 
+
+Com o intuito de gerenciar os usuários cadastrados no website do *LibHouse*, *Authentication* faz o consumo do *framework* *Asp.Net Core Identity*, que providencia um conjunto de métodos já implementados para atender esta necessidade. De maneira complementar, o *Entity Framework Core* está sendo utilizado em parceria com o *Identity*, visando a persistência dos dados pertencentes aos usuários. Por isso, o *namespace* *Context* possui somente classes e arquivos que dizem respeito à conexão/configuração do banco de dados de autenticação, que é separado do banco de dados de negócio do projeto *Data*.
+
+Os *namespaces* *Login*, *Logout*, *Password* e *Register* definem implementações que seguem os contratos de interfaces criadas em *Business* para logar, deslogar, trocar a senha e registrar um novo usuário, respectivamente. Essas responsabilidades são satisfeitas justamente a partir dos objetos das classes do *framework* *Asp.Net Identity*, que encapsulam o comportamento dos recursos em questão.
+
+Finalizando a lista de *namespaces* com maior importância do projeto, *Token* compreende todas as classes que controlam o ciclo de vida dos *access tokens* e *refresh tokens* atrelados aos usuários. Logo, o *sub namespace* *Generators* reune a lógica de geração de ambos os tipos de *token*, cada uma em sua própria classe. Já *Services* apresenta exclusivamente a classe *IdentityRefreshTokenService*, que expõe métodos utilitários para manipular um *refresh token* específico. *Validations* segue um caminho parecido, verificando com a classe *RefreshTokenValidator* se um *refresh token* está em um estado válido.
+
 ## LibHouse Cache
 
 ## LibHouse Controllers
