@@ -192,11 +192,19 @@ O projeto *Authentication* isola as regras de negócio das funcionalidades que e
 
 Com o intuito de gerenciar os usuários cadastrados no website do *LibHouse*, *Authentication* faz o consumo do *framework* *Asp.Net Core Identity*, que providencia um conjunto de métodos já implementados para atender esta necessidade. De maneira complementar, o *Entity Framework Core* está sendo utilizado em parceria com o *Identity*, visando a persistência dos dados pertencentes aos usuários. Por isso, o *namespace* *Context* possui somente classes e arquivos que dizem respeito à conexão/configuração do banco de dados de autenticação, que é separado do banco de dados de negócio do projeto *Data*.
 
-Os *namespaces* *Login*, *Logout*, *Password* e *Register* definem implementações que seguem os contratos de interfaces criadas em *Business* para logar, deslogar, trocar a senha e registrar um novo usuário, respectivamente. Essas responsabilidades são satisfeitas justamente a partir dos objetos das classes do *framework* *Asp.Net Identity*, que encapsulam o comportamento dos recursos em questão.
+Os *namespaces* *Login*, *Logout*, *Password* e *Register* definem implementações que seguem os contratos de interfaces criadas em *Business* para logar, deslogar, trocar a senha e registrar um novo usuário, respectivamente. Essas responsabilidades são satisfeitas justamente a partir dos objetos das classes do *framework* *Asp.Net Identity*, que encapsulam os comportamentos mencionados.
 
 Finalizando a lista de *namespaces* com maior importância do projeto, *Token* compreende todas as classes que controlam o ciclo de vida dos *access tokens* e *refresh tokens* atrelados aos usuários. Logo, o *sub namespace* *Generators* reune a lógica de geração de ambos os tipos de *token*, cada uma em sua própria classe. Já *Services* apresenta exclusivamente a classe *IdentityRefreshTokenService*, que expõe métodos utilitários para manipular um *refresh token* específico. *Validations* segue um caminho parecido, verificando com a classe *RefreshTokenValidator* se um *refresh token* está em um estado válido.
 
 ## LibHouse Cache
+
+O projeto *Cache* provê a infraestrutura básica para que as demais classes das camadas tenham suporte ao recurso de *cache*. Isto posto, em cenários nos quais um objeto seja muito requisitado pelos clientes da *API*, e que este objeto dificilmente mude de estado com o passar do tempo, a utilização de uma estrutura de *cacheamento* pode ajudar na melhora do desempenho, evitando idas desnecessárias ao banco de dados ou outras fontes externas.
+
+Se considerarmos o *namespace* *Configurations*, nele temos as classes que recebem as configurações dinâmicas para os serviços de *cache*. Por exemplo, *MemoryCachingConfiguration* possui algumas propriedades que alteram o funcionamento do serviço de *cache* em memória existente no projeto, que é responsável por *cachear* os objetos no próprio servidor.
+
+Na sequência, o *namespace* *Decorators* incorpora as classes que implementam o *design pattern* chamado *Decorator*. Elas são encarregadas de disponibilizar uma funcionalidade mais robusta de *cache*, na qual os seus consumidores não enxergam o uso do serviço de *cacheamento*. Para elucidar, *AddressMemoryCachingDecorator* é uma das classes que adotam o mecanismo em questão. Em seu construtor, ela recebe o repositório real que consulta a base de dados, bem como o serviço que recupera em memória os objetos *cacheados*. Desse jeito, os métodos de pesquisa da classe podem ter um comportamento interessante, aonde o *cache* é consultado em primeiro lugar, antes de que a *query* no banco de dados seja executada. A função *GetFirstAddressFromPostalCodeAsync* se comporta exatamente dessa maneira.
+
+Por fim, o *namespace* *Providers* contém os tipos diferentes de serviços de *cache* que podem ser aplicados no sistema. A classe *MemoryCaching* se favorece do pacote *Microsoft.Extensions.Caching.Memory* para conceder funcionalidades que permitem verificar, consultar e armazenar quaisquer objetos na memória do servidor, sem exigir qualquer configuração adicional. 
 
 ## LibHouse Controllers
 
