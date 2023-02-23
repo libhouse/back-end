@@ -218,6 +218,16 @@ Os últimos *namespaces*, *Responses* e *ViewModels*, são complementares. O pri
 
 ## LibHouse Email
 
+O projeto *Email* disponibiliza os mecanismos para o envio de mensagens dinâmicas de e-mail aos usuários da plataforma. Em função disso, as outras camadas não precisam conhecer os detalhes de implementação que envolvem a construção e disparo dos e-mails, fato que contribui novamente para o isolamento das regras de negócio e dos demais setores da arquitetura *back-end*.
+
+Primeiramente, o *namespace* *Models* detém as classes que encapsulam os dados obrigatórios na montagem de cada mensagem de e-mail. Isto posto, *MailRequest* age como um modelo geral, declarando propriedades (*ToMail*, *Subject* e *Body*) que são utilizadas globalmente em todos os disparadores de e-mail.
+
+Seguindo, o *namespace* *Senders* é dividido logicamente pelas entidades principais presentes no projeto *Business*. Isso porque as classes com o sufixo *Sender* implementam diretamente as interfaces criadas na camada de regras de negócio, que por sua vez desacoplam o *domínio* dos requisitos de infraestrutura. Cada classe *Sender* envia uma mensagem específica para os seus destinatários. Por exemplo, *MailKitUserRegistrationSender* despacha um e-mail notificando o usuário sobre o seu novo cadastro no *website*.
+
+Tão relevante quanto o *namespace* anterior, *Services* possui um contrato chamado *IMailService*, que funciona como uma abstração de serviço de e-mail. A partir disso, a camada é capaz de fornecer *N* implementações de classes que se conectam com um servidor *SMTP* e fazem o envio das mensagens. Para elucidar, *MailKitService* consome a biblioteca *MailKit*, que provisiona uma *API* simples de comunicação com qualquer servidor de e-mails.
+
+Por fim, o *namespace* *Settings* compreende as classes de configuração tanto para os serviços de e-mail, quanto para os *Senders*. Todas as suas propriedades são definidas como públicas, de modo a suportar os recursos da injeção de dependência do **.NET Core**. Exemplificando, *MailSettings* apresenta os atributos essenciais (*Mail*, *DisplayName*, *Password*, *Host* e *Port*) para a conexão com o servidor *SMTP* usado pela aplicação no envio das mensagens aos seus usuários.
+
 ## LibHouse WebClients
 
 [(Voltar para o topo)](#índice)
