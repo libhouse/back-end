@@ -230,6 +230,14 @@ Por fim, o *namespace* *Settings* compreende as classes de configuração tanto 
 
 ## LibHouse WebClients
 
+O projeto *WebClients* faz o consumo de *APIs* externas à solução principal, desassociando as regras de negócio das particularidades técnicas que envolvem as chamadas para os *endpoints* dos serviços. Além disso, essa separação permite que as entidades, objetos de valor e casos de uso de *Business* não se misturem com os conceitos retornados por cada rota das *APIs*, que muitas vezes são diferentes e exigem um mapeamento (conversão) das suas propriedades.
+
+Os *namespaces* estão separados por *API*. Para tomar como exemplo, o *namespace* *ViaCep* é totalmente dedicado ao consumo da *API* de mesmo nome que fornece os dados de endereço (logradouro, bairro, cidade, estado, etc.) com base em um código de endereço postal. No geral, os *sub namespaces* são padronizados, mas podem variar conforme os detalhes do serviço *http* em questão.
+
+As classes que habilitam configurações personalizadas na comunicação com as *APIs* (tipo de retorno esperado dos *endpoints*, *url* base do serviço, etc.) costumam ficar localizadas em *Configurations*. Já os objetos de resposta das rotas consumidas podem ser encontrados no *namespace* de *Outputs*. Em contrapartida, os objetos que encapsulam os parâmetros utilizados nas requisições pertencem ao *namespace* *Parameters*.
+
+No que lhe diz respeito, o *namespace* de *Gateways* promove o desacoplamento entre a classe *Web Client* que de fato interage com a *API* e o caso de uso na camada de negócios. Para ilustrar, *ViaCepAddressGateway* consome o serviço da *ViaCep* através da sua dependência *ViaCepWebClient*. Depois disso, a classe *Gateway* se responsabiliza por converter a resposta dos *endpoints* em um objeto de *Output* que o caso de uso espera receber com o objetivo de continuar a orquestração das regras da aplicação.
+
 [(Voltar para o topo)](#índice)
 
 # Endpoints
