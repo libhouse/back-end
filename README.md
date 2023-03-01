@@ -100,6 +100,9 @@ Uma vez que o projeto foi baixado, basta abrir o arquivo de extensão *.sln* loc
   "KissLog.ApiUrl": "",
   "KissLog.ApplicationId": "",
   "KissLog.OrganizationId": "",
+  "LocationIQWebClient.AccessToken": "",
+  "LocationIQWebClient.EndpointResponseType": "",
+  "LocationIQWebClient.BaseUrl": "",
   "MailSettings.DisplayName": "",
   "MailSettings.Host": "",
   "MailSettings.Mail": "",
@@ -120,6 +123,9 @@ O conteúdo do *secrets.json* deve possuir exatamente as chaves retratadas acima
 | KissLog.ApiUrl | O endereço da *API* do serviço de logs *KissLog* usado para registrar todas as ações realizadas no *back-end* do LibHouse. O valor padrão para esta chave costuma ser *"https://api.kisslog.net"*. | string |
 | KissLog.ApplicationId | O identificador único da aplicação no serviço de logs *KissLog*. Os detalhes sobre esta configuração estão disponíveis adiante nesta seção. | string |
 | KissLog.OrganizationId | O identificador único da organização no serviço de logs *KissLog*. Os detalhes sobre esta configuração estão disponíveis adiante nesta seção. | string |
+| LocationIQWebClient.AccessToken | O *token* que autoriza o consumo gratuito da *API* de geolocalização *LocationIQ*. É necessário criar uma conta no *site* oficial do serviço para obter esta chave. | string |
+| LocationIQWebClient.EndpointResponseType | O tipo de resposta que se espera receber dos *endpoints* da *API* *LocationIQ*. Recomenda-se usar o valor padrão *json*. | string |
+| LocationIQWebClient.BaseUrl | A [*url* base](https://us1.locationiq.com/v1) do serviço *LocationIQ*. | string |
 | MailSettings.DisplayName | O nome de contato que será exibido para os usuários que receberem um e-mail do serviço *back-end* do LibHouse. O valor padrão para esta chave costuma ser *"LibHouse Team"*. | string |
 | MailSettings.Host | O endereço do serviço do *host* utilizado para enviar e-mails aos usuários da plataforma LibHouse. O valor padrão para esta chave costuma ser *"smtp.gmail.com"*, caso o endereço de e-mail tenha sido criado no gmail. | string |
 | MailSettings.Mail | O endereço de e-mail utilizado para enviar e-mails aos usuários da plataforma LibHouse. | string |
